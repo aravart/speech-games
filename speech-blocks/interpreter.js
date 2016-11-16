@@ -49,6 +49,7 @@ SpeechBlocks.Interpreter = function(controller) {
 * @public
 */
 SpeechBlocks.Interpreter.prototype.interpret = function(command) {
+   console.log(command)
    switch (command.action) {
       case 'run':
       this.run_(command);
@@ -81,7 +82,6 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
 */
 SpeechBlocks.Interpreter.prototype.run_ = function(command) {
    // TODO: Provide a way to override this function locally.
-   // try { this.controller_.run(); } catch (err) { console.log(err.message); }
    Turtle.runButtonClick(1);
 };
 
@@ -112,179 +112,134 @@ SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
          return this.deleteBlock_(command.block);
       } else if (command.where == 'away') {
          this.controller_.disconnectBlock(command.block);
-      } else if (command.where.block == null
-         || !this.isBlockIdValid_(command.where.block.toString())) {
-            return;
-         } else {
-            command.where.block = command.where.block.toString();
-         }
-
-         switch (command.where.position) {
-            case 'below':
-            this.controller_.moveBlock(command.block, new SpeechBlocks.Successor(command.where.block));
-            break;
-            case 'above':
-            this.controller_.moveBlock(command.block, new SpeechBlocks.Predecessor(command.where.block));
-            break;
-            case 'lhs':
-            case 'rhs':
-            case 'top':
-            case 'to the right of':
-            var inputList = this.controller_.getBlockValueInputs(command.where.block);
-            if (inputList.length < 1) {
-               console.log('NO VALUE INPUTS FOR SPECIFIED BLOCK');
-            } else if (command.where.position == 'rhs' || command.where.position == 'to the right of') {
-               this.controller_.moveBlock(
-                  command.block,
-                  new SpeechBlocks.ValueInput(command.where.block, inputList[inputList.length - 1]));
-               } else if (command.where.position == 'lhs' || command.where.position == 'top') {
-                  this.controller_.moveBlock(
-                     command.block, new SpeechBlocks.ValueInput(command.where.block, inputList[0]));
-                  }
-                  break;
-                  case 'inside':
-                  var inputList = this.controller_.getBlockValueInputs(command.where.block);
-                  var statementList = this.controller_.getBlockStatementInputs(command.where.block);
-
-                  try {
-                     this.controller_.moveBlock(
-                        command.block, new SpeechBlocks.ValueInput(command.where.block, inputList[0]));
-                     } catch (err) {
-                        console.log(err);
-                     }
-
-                     try {
-                        this.controller_.moveBlock(
-                           command.block,
-                           new SpeechBlocks.StatementInput(
-                              command.where.block,
-                              statementList[statementList.length - 1]));
-                           } catch (err) {
-                              console.log(err);
-                           }
-                           break;
-                           case 'away':
-                           this.controller_.disconnectBlock(command.block);
-                           break;
-                        }
-                     }
-                  };
-
-                  /**
-                  * Modifies a specified block.
-                  * @param {Object=} command Command object from parser.
-                  * @private
-                  */
-                  SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
-                     if (this.isBlockIdValid_(command.block.toString())) {
-                        command.block = command.block.toString();
-                        var fields = this.controller_.getFieldsForBlock(command.block).getKeys();
-
-                        switch (command.property) {
-                           case 'number':
-                           command.value = Number(command.value); // fall through
-                           case 'text':
-                           case 'comparison':
-                           case 'operation':
-                           case 'name':
-                           case 'value':
-                           this.controller_.setBlockField(command.block, fields[fields.length - 1], command.value);
-                           break;
-                        }
-                     }
-                  };
-
-                  /**
-                  * Undos last action.
-                  */
-                  SpeechBlocks.Interpreter.prototype.undo_ = function() {
-                     this.controller_.undo();
-                  }
-
-                  /**
-                  * Redos last action.
-                  */
-                  SpeechBlocks.Interpreter.prototype.redo_ = function() {
-                     this.controller_.redo();
-                  }
-
-                  /**
-                  * Delete a specified block.
-                  * @param {Object=} command Command object from parser.
-                  * @private
-                  */
-                  SpeechBlocks.Interpreter.prototype.deleteBlock_ = function(blockId) {
-                     if (blockId.toString() == 'all') {
-                        this.controller_.removeAllBlocks();
-                        this.id_ = 1;
-                     } else if (this.isBlockIdValid_(blockId.toString())) {
-                        this.controller_.removeBlock(blockId.toString());
-                     }
-                  };
-
-                  /**
-                  * Checks to see if a block Id is valid.
-                  * @param {!String=} blockId as string.
-                  * @private
-                  */
-                  SpeechBlocks.Interpreter.prototype.isBlockIdValid_ = function(blockRequestId) {
-                     return this.controller_.getAllBlockIds().contains(blockRequestId);
-                  }
-
-                  /**
-                  * Initialize the mapping of types that the parser uses and the types that Blockly understands.
-                  * @private
-                  */
-                  SpeechBlocks.Interpreter.prototype.initializeBlockTypeMap_ = function() {
-                     /* TODO: Do we need this function still?
-                     var inputText;
-                     var rawFile;
-                     try {
-                     console.log('a');
-                     rawFile = new XMLHttpRequest();
-                     rawFile.open("GET", 'https://aravart.github.io/speech-blocks/grammar/blockTypeMap.txt', true);
-                     rawFile.onreadystatechange = function () {
-                     //console.log(rawFile.readyState);
-                     if (rawFile.readyState == 4) {
-                     if (rawFile.status == 200 || rawFile.status == 0) {
-                     if (!inputReceived) {
-                     inputText = rawFile.responseText;
-                     inputReceived = true;
-                     // console.log('INPUT SET');
-                     console.log(inputText);
-                     inputText = inputText.split(/\r\n|\r|\n/g);
-                     var blockTypeMap = new goog.structs.Map();
-                     for (var i = 0; i < inputText.length; i++) {
-                     var keyValuePair = inputText[i].split(":");
-                     //console.log(keyValuePair[0]);
-                     //console.log(keyValuePair[1]);
-                     if (keyValuePair[0] != null && keyValuePair[1] != null) {
-                     blockTypeMap.set(keyValuePair[0], keyValuePair[1]);
-                  }
-               }
-               this.blockTypeMap_ = blockTypeMap;
-               console.log("SAVED");
-               console.log(this.blockTypeMap_.get('if'))
-               return;
-            } else {
-            console.log('input already set');
-         }
+      } else if (command.where.block == null  || !this.isBlockIdValid_(command.where.block.toString())) {
+         return;
+      } else {
+         command.where.block = command.where.block.toString();
       }
-   } else {}
-   if (rawFile.status == 200 || rawFile.status == 0) {
-   rawFile.send();
-}
-}
-} catch (err) {
-console.log(err.stack)
+
+      switch (command.where.position)
+      {
+         case 'below':
+         this.controller_.moveBlock(command.block, new SpeechBlocks.Successor(command.where.block));
+         break;
+         case 'above':
+         this.controller_.moveBlock(command.block, new SpeechBlocks.Predecessor(command.where.block));
+         break;
+         case 'lhs':
+         case 'rhs':
+         case 'top':
+         case 'to the right of':
+         var inputList = this.controller_.getBlockValueInputs(command.where.block);
+         if (inputList.length < 1) {
+            console.log('NO VALUE INPUTS FOR SPECIFIED BLOCK');
+         } else if (command.where.position == 'rhs' || command.where.position == 'to the right of') {
+            this.controller_.moveBlock(command.block, new SpeechBlocks.ValueInput(command.where.block, inputList[inputList.length - 1]));
+         } else if (command.where.position == 'lhs' || command.where.position == 'top') {
+            this.controller_.moveBlock(command.block, new SpeechBlocks.ValueInput(command.where.block, inputList[0]));
+         }
+         break;
+         case 'inside':
+         var inputList = this.controller_.getBlockValueInputs(command.where.block);
+         var statementList = this.controller_.getBlockStatementInputs(command.where.block);
+
+         try {
+            this.controller_.moveBlock(command.block, new SpeechBlocks.ValueInput(command.where.block, inputList[0]));
+         } catch (err) {
+            console.log(err);
+         }
+
+         try {
+            this.controller_.moveBlock(command.block, new SpeechBlocks.StatementInput(command.where.block, statementList[statementList.length - 1]));
+         } catch (err) {
+            console.log(err);
+         }
+         break;
+         case 'away':
+         this.controller_.disconnectBlock(command.block);
+         break;
+      }
+   }
+};
+
+/**
+* Modifies a specified block.
+* @param {Object=} command Command object from parser.
+* @private
+*/
+SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
+   if (this.isBlockIdValid_(command.block.toString())) {
+      command.block = command.block.toString();
+      var fields = this.controller_.getFieldsForBlock(command.block).getKeys();
+      var fieldIndex = fields.length - 1;
+      switch (command.ordinal)
+      {
+         case 'first':
+         fieldIndex = 0;
+         break;
+         case 'second':
+         fieldIndex = 1;
+         break;
+         case 'third':
+         fieldIndex = 2;
+         break;
+         case 'fourth':
+         fieldIndex = 3;
+         break;
+      }
+      switch (command.property)
+      {
+         case 'number':
+         command.value = Number(command.value); // fall through
+         case 'text':
+         case 'comparison':
+         case 'operation':
+         case 'name':
+         case 'value':
+         case 'field':
+         try {
+            this.controller_.setBlockField(command.block, fields[fieldIndex], command.value);
+         } catch (e) {
+            this.controller_.setBlockField(command.block, fields[fields.length - 1], command.value);
+         }
+         break;
+      }
+   }
+};
+
+/**
+* Undos last action.
+*/
+SpeechBlocks.Interpreter.prototype.undo_ = function() {
+   this.controller_.undo();
 }
 
-try {
-setTimeout(function () {
-rawFile.onreadystatechange();
-}, 3000);
-} catch (err) {
-console.log(err.stack)
-}
+/**
+* Redos last action.
 */
+SpeechBlocks.Interpreter.prototype.redo_ = function() {
+   this.controller_.redo();
+}
+
+/**
+* Delete a specified block.
+* @param {Object=} command Command object from parser.
+* @private
+*/
+SpeechBlocks.Interpreter.prototype.deleteBlock_ = function(blockId) {
+   if (blockId.toString() == 'all') {
+      this.controller_.removeAllBlocks();
+      this.id_ = 1;
+   } else if (this.isBlockIdValid_(blockId.toString())) {
+      this.controller_.removeBlock(blockId.toString());
+   }
+};
+
+/**
+* Checks to see if a block Id is valid.
+* @param {!String=} blockId as string.
+* @private
+*/
+SpeechBlocks.Interpreter.prototype.isBlockIdValid_ = function(blockRequestId) {
+   return this.controller_.getAllBlockIds().contains(blockRequestId);
 }

@@ -68,30 +68,39 @@ RemoveVerb = "delete" / "remove" / "erase"
 
 Change = Change1 / Change2 / Change3 / Change4
 
-Change1 = "in" _ block:BlockToken _ ("please" _)? ChangeVerb _ ("the")? _ pair:PropertyValuePair {
-    pair["action"] = "modify"
-    pair["block"] = block
-    return pair
-}
-
-Change2 = ChangeVerb _ ("the")? _ pair:PropertyValuePair _ "in" block:BlockToken ( _ "please")? {
-    pair["action"] = "modify"
-    pair["block"] = block
-    return pair;
-}
-
-Change3 = ChangeVerb _ ("the")? _ property:Property _ "in" _ block:BlockToken _ "to" _ value:Value ( _ "please")? { return {
-    "action": "modify",
-    "block": block,
-    "property": property,
-    "value": value
+Change1 = "in" _ block:BlockToken _ ("please" _)? ChangeVerb _ ("the")? _ ordinal:(Ordinal / "") _ pair:PropertyValuePair { console.log(pair); return  {
+      "action": "modify",
+      "property": pair.property,
+      "value": pair.value,
+      "block": block,
+      "ordinal": ordinal
 } }
 
-Change4 = ChangeVerb _ "in" _ block:BlockToken _ ("the")? _ pair:PropertyValuePair (_ "please")? {
-    pair["action"] = "modify"
-    pair["block"] = block
-    return pair;
-}
+Change2 = ChangeVerb _ ("the")? _ ordinal:(Ordinal / "") _ pair:PropertyValuePair _ "in" block:BlockToken ( _ "please")? { return {
+    "action": "modify",
+    "property": pair.property,
+    "value": pair.value,
+    "block": block,
+    "ordinal": ordinal
+} }
+
+Change3 = ChangeVerb _ ("the")? _ ordinal:(Ordinal /"") _ property:Property _ "in" _ block:BlockToken _ "to" _ value:Value ( _ "please")? { return {
+    "action": "modify",
+    "property": property,
+    "value": value,
+    "block": block,
+    "ordinal": ordinal
+} }
+
+Change4 = ChangeVerb _ "in" _ block:BlockToken _ ("the")? _ ordinal:(Ordinal / "") _ pair:PropertyValuePair (_ "please")? { return {
+   "action": "modify",
+   "property": pair.property,
+   "value": pair.value,
+   "block": block,
+   "ordinal": ordinal
+} }
+
+Ordinal = ord:("first" / "second" / "third" / "fourth" / "last") { return ord }
 
 ChangeVerb = "change" / "set"
 
