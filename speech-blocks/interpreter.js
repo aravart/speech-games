@@ -82,7 +82,7 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
 */
 SpeechBlocks.Interpreter.prototype.run_ = function(command) {
    // TODO: Provide a way to override this function locally.
-   Turtle.runButtonClick(1);
+   run();
 };
 
 /**
