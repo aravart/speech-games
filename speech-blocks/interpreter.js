@@ -49,7 +49,6 @@ SpeechBlocks.Interpreter = function(controller) {
 * @public
 */
 SpeechBlocks.Interpreter.prototype.interpret = function(command) {
-   console.log(command)
    switch (command.action) {
       case 'run':
       this.run_(command);
