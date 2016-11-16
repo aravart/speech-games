@@ -21,8 +21,15 @@ goog.require('goog.structs.Map');
 SpeechBlocks.Interpreter = function(controller) {
    /** @private @const */
    this.controller_ = controller;
+   /** @private */
+   this.id_ = 1;
 
-   /** @private @const */
+   this.createBlockTypeMap();
+
+   this.retrieveBlockTypes();
+}
+
+SpeechBlocks.Interpreter.prototype.createBlockTypeMap = function() {
    this.blockTypeMap_ = new goog.structs.Map();
    this.blockTypeMap_.set('if', 'controls_if');
    this.blockTypeMap_.set('comparison', 'logic_compare');
@@ -39,8 +46,17 @@ SpeechBlocks.Interpreter = function(controller) {
    this.blockTypeMap_.set('pen', 'turtle_pen');
    this.blockTypeMap_.set('repeat', 'turtle_repeat_internal');
    this.blockTypeMap_.set('color', 'turtle_colour_internal');
-   /** @private */
-   this.id_ = 1;
+}
+
+SpeechBlocks.Interpreter.prototype.retrieveBlockTypes = function() {
+   this.blockTypes = [];
+   var children = document.getElementById('toolbox').children;
+   for (var i = 0; i < children.length; i++) {
+      for (var j = 0; j < children[i].children.length; j++) {
+         this.blockTypes.push(children[i].children[j].getAttribute('type'));
+      }
+   }
+   console.log(this.blockTypes)
 }
 
 /**
@@ -90,6 +106,9 @@ SpeechBlocks.Interpreter.prototype.run_ = function(command) {
 * @private
 */
 SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
+   if (!this.blockTypes.includes(command.type)) {
+      throw "Block not available";
+   }
    this.controller_.addBlock(this.blockTypeMap_.get(command.type), (this.id_++).toString());
 
    if (command.where != null) {
