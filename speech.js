@@ -90,7 +90,7 @@ $(document).ready(function() {
 
 
 $("#runButton").on("click", run);
-
+$("#showButton").on("click", showCode);
 
 });
 
@@ -133,11 +133,19 @@ function newTurtle() {
     y: 120,
     angle: 0,
     color: 'grey',
-    width: 5
+    width: 5,
+    down: true
   };
 }
 
 var turtle = newTurtle();
+
+// Initialize canvas
+// turtle.color = 'grey'
+// for (var count = 0; count < 4; count++) {
+//   moveForward(100);
+//   turnRight(90);
+// }
 
 drawTurtle(canvas);
 
@@ -150,20 +158,48 @@ function endDraw() {
   drawTurtle(canvas);
 }
 
+function penUp() {
+  turtle.down = false
+}
+
+function penDown() {
+  turtle.down = true
+}
+
 function penColor(color) {
+  turtle.color = color
 };
 
 function moveForward(distance) {
   newX = turtle.x + Math.sin(turtle.angle) * distance
   newY = turtle.y - Math.cos(turtle.angle) * distance
-  canvas.add(new fabric.Line([turtle.x,turtle.y,newX,newY], {
-      fill: turtle.color,
-      stroke: turtle.color,
-      strokeWidth: turtle.width,
-      selectable: false,
-      originX: 'center',
-      originY: 'center'
-    }));
+  if(turtle.down) {
+    canvas.add(new fabric.Line([turtle.x,turtle.y,newX,newY], {
+        fill: turtle.color,
+        stroke: turtle.color,
+        strokeWidth: turtle.width,
+        selectable: false,
+        originX: 'center',
+        originY: 'center'
+      }));
+  }
+  turtle.x = newX
+  turtle.y = newY
+};
+
+function moveBackward(distance) {
+  newX = turtle.x - Math.sin(turtle.angle) * distance
+  newY = turtle.y + Math.cos(turtle.angle) * distance
+  if(turtle.down) {
+    canvas.add(new fabric.Line([turtle.x,turtle.y,newX,newY], {
+        fill: turtle.color,
+        stroke: turtle.color,
+        strokeWidth: turtle.width,
+        selectable: false,
+        originX: 'center',
+        originY: 'center'
+      }));
+  }
   turtle.x = newX
   turtle.y = newY
 };
@@ -178,14 +214,19 @@ function turnLeft(angle) {
 
 // var workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox') });
 
-function run() {
+function createCode() {
   Blockly.JavaScript.addReservedWords('code');
-  // var code = Blockly.JavaScript.workspaceToCode(workspace);
-  var code = Blockly.JavaScript.workspaceToCode(controller.workspace_);
+  return Blockly.JavaScript.workspaceToCode(controller.workspace_);
+}
+
+function showCode() {
+    alert(createCode())
+}
+
+function run() {
   try {
-    // alert(code);
     beginDraw();
-    eval(code);
+    eval(createCode());
     endDraw();
     // beginDraw();
     // var myInterpreter = new Interpreter(code);
