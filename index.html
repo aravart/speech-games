@@ -71,12 +71,17 @@
 </div>
 
 <div class="mui-row">
-<div class="mui-col-md-6"><canvas id="c" height="500" width="500" style="border:1px solid #ccc"></canvas></div>
+<div class="mui-col-md-6">
+  <canvas id="display" height="500" width="500" style="border:1px solid #ccc;"></canvas>
+  <canvas id="answer"  height="500" width="500" style="border:1px solid #ccc; display: none;"></canvas>
+  <canvas id="scratch" height="500" width="500" style="border:1px solid #ccc; display: none;"></canvas>
+</div>
 <div class="mui-col-md-6"><div id="blocklyDiv" style="height: 500"></div></div>
 </div>
 
 <div class="row">
 <button id="runButton" type="button" class="mui-btn mui-btn--primary mui-btn--raised">Run</button>
+<button id="resetButton" type="button" class="mui-btn mui-btn--primary mui-btn--raised">Reset</button>
 <button id="showButton" type="button" class="mui-btn mui-btn--accent">Show Code</button>
 </div>
 
@@ -96,5 +101,6 @@
 </xml>
 
 <script src="speech.js"></script>
+<script src="turtle.js"></script>
 </body>
 </html>
