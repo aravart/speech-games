@@ -3,7 +3,7 @@
   <script src="lib/closure-library/closure/goog/base.js"></script>
 
   <script src="lib/jquery-2.1.4.min.js"></script>
-  <script src="lib/bootstrap-3.3.4.min.js"></script>
+  <!-- <script src="lib/bootstrap-3.3.4.min.js"></script> -->
 
   <script src="lib/google-blockly/blockly_compressed.js"></script>
   <script src="lib/google-blockly/blocks_compressed.js"></script>
@@ -30,8 +30,14 @@
   <script src="blocks.js"></script>
   <script src="grammar/grammar.js"></script>
 
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css" rel="stylesheet">
+  <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css" rel="stylesheet"> -->
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://cdn.muicss.com/mui-0.9.4/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <script src="http://cdn.muicss.com/mui-0.9.4/js/mui.min.js"></script>
 
 <style>
 .block-id-style {
@@ -43,7 +49,7 @@
 
 <body>
 
-<div class="container">
+<div class="mui-container">
 
 <div class="row form-inline">
   <div class="col-md-12">
@@ -64,15 +70,14 @@
    </div>
 </div>
 
-<div class="row">
-<div class="col-md-6"><canvas id="c" height="500" width="500" style="border:1px solid #ccc"></canvas></div>
-<div class="col-md-6"><div id="blocklyDiv" style="height: 500"></div></div>
+<div class="mui-row">
+<div class="mui-col-md-6"><canvas id="c" height="500" width="500" style="border:1px solid #ccc"></canvas></div>
+<div class="mui-col-md-6"><div id="blocklyDiv" style="height: 500"></div></div>
 </div>
 
 <div class="row">
-<div class="col-md-3"><button id="runButton" type="button">Run</button></div>
-<div class="col-md-3"><button id="showButton" type="button">Show Code</button></div>
-<div class="col-md-6"></div>
+<button id="runButton" type="button" class="mui-btn mui-btn--primary mui-btn--raised">Run</button>
+<button id="showButton" type="button" class="mui-btn mui-btn--accent">Show Code</button>
 </div>
 
 <xml id="toolbox" style="display: none">

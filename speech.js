@@ -220,7 +220,13 @@ function createCode() {
 }
 
 function showCode() {
-    alert(createCode())
+  var modalEl = document.createElement('generatedCode');
+  modalEl.style.width = '400px';
+  modalEl.style.height = '300px';
+  modalEl.style.margin = '100px auto';
+  modalEl.style.backgroundColor = '#ff';
+  modalEl.textContent = createCode()
+  mui.overlay('on', modalEl);
 }
 
 function run() {
