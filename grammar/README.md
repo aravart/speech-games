@@ -1,24 +1,18 @@
 ___________________________________________________________________________________________________
 
-
-
 # GRAMMAR GUIDE FOR SPEECHBLOCKS
 ###### Updated 11/17/2016
 
-
+<br/><br/>
 ___________________________________________________________________________________________________
-
-
 
 ## INTRO
 
 This is a guide on the grammar for the SpeechBlocks interpreter. After reading this, the reader
 should be able to manipulate Blockly with speech/text input.
 
-
+<br/><br/>
 ___________________________________________________________________________________________________
-
-
 
 ## QUICK BASICS
 
@@ -37,10 +31,8 @@ Easy way for each:
 * note that when using speech, "please" before the command helps the TTS engine e.g.
    "please add a move block"
 
-
+<br/><br/>
 ___________________________________________________________________________________________________
-
-
 
 ## IN DEPTH GUIDE
 
@@ -50,7 +42,7 @@ there are sometimes a number of ways to get the same result but all such utteran
 enumerated. Reference https://github.com/aravart/speech-games/blob/master/grammar/grammar.pegjs
 for grammar specifics. Additional comments are in parentheses after the quotation marks. Note that
 while the parser may understand some commands and report "input parsed successfully" some commands
-may not yet be compatible with the controller.
+may not yet be compatible with the controller. <br/><br/>
 
 
 #### Notation:
@@ -62,14 +54,14 @@ may not yet be compatible with the controller.
    {where} means any of above, below, left, right, top, away, inside, and to
    {ordinal} means any of first, second, third, fourth, and last
    [block type] means that this command will only work (well) with the specified type(s)
-   Command (synonyms): means the synonyms can be used interchangeable with Command
+   Command (synonyms): means the synonyms can be used interchangeable with Command <br/><br/>
    
 
 #### Move (attach): Move a block
    "move block {id} {where} from block {id}" (same as "separate block 1 from block 2")
    "move block {id} to the trash" (delete {id})
 ##### Example: 
-   "move block 1 away from block 2"
+   "move block 1 away from block 2" <br/><br/>
    
 
 #### Separate: Separate block(s)
@@ -77,7 +69,7 @@ may not yet be compatible with the controller.
    "separate block {id} from block {id}"
    "separate block {id} and block {id}"
 ##### Example: 
-   "separate block 1 from block 2"s
+   "separate block 1 from block 2"s <br/><br/>
 
 
 #### Add (insert, make): Add a specific block type
@@ -89,14 +81,14 @@ may not yet be compatible with the controller.
    "add a [variable] block named {value}" (can only named variable blocks)
    "add a [variable] block named counter after block {id}"
 ##### Example: 
-   "add a variable block named counter after block 1"
+   "add a variable block named counter after block 1" <br/><br/>
    
 
 #### Remove (delete, erase): Remove block(s)
    "remove block {id}"
    "remove all" (deletes all blocks)
 ##### Example: 
-   "remove block 1"
+   "remove block 1" <br/><br/>
    
 
 #### Change (set, modify)
@@ -109,35 +101,34 @@ Change a block's properties (but not type)
    "change the {ordinal} {property} in block {id} to {value}"
 ##### Examples
    "in block 1 change the operation to addition"
-   "in block 1 change the first field to backwards"
+   "in block 1 change the first field to backwards" <br/><br/>
 
 
 #### Run
 Run the program defined by the blocks in the canvas
   "run"
   "run the program"
-  "run it"
+  "run it" <br/><br/>
 
 
 #### Undo
 Undoes the previous action. Repeatable.
-  "undo"
+  "undo" <br/><br/>
 
 
-#### Redo: Redoes the previous undo. Repeatable.
-  "redo"
+#### Redo
+Redoes the previous undo. Repeatable.
+  "redo" <br/><br/>
   
-  
+<br/><br/>
 ___________________________________________________________________________________________________
-
-
 
 ## EXAMPLE OBJECTS
 
 These are examples of the objects passed from the parser down to the interpreter for the most
 complex (most specifications) command of each command type. When a property could have been
 specified but wasn't (simple command given), the field in the parser's utterance object is just an
-empty string.
+empty string. <br/><br/>
 
 #### Move:
 "move block 1 after block 2":
@@ -148,7 +139,7 @@ empty string.
       "block": 2,
       "position": "below"
    }
-}
+} <br/><br/>
 
 
 #### Separate:
@@ -157,7 +148,7 @@ empty string.
    "action": "move",
    "block": 1,
    "where": "away"
-}
+} <br/><br/>
 
 
 #### Add:
@@ -170,7 +161,7 @@ empty string.
       "position": "below"
    },
    "value": "counter"
-}
+} <br/><br/>
 
 
 #### Remove:
@@ -178,7 +169,7 @@ empty string.
 {
    "action": "delete",
    "block": 1
-}
+} <br/><br/>
 
 
 #### Change:
@@ -189,25 +180,25 @@ empty string.
    "value": 100,
    "block": 1,
    "ordinal": ""
-}
+} <br/><br/>
 
 
 #### Run:
 "run":
 {
    "action": "run"
-}
+} <br/><br/>
 
 
 #### Undo:
 "undo":
 {
    "action": "undo"
-}
+} <br/><br/>
 
 
 #### Redo:
 "redo":
 {
    "action": "redo"
-}
+} <br/><br/>
