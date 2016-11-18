@@ -34,26 +34,30 @@ Add = Add4 / Add3 / Add2 / Add1
 
 Add1 = AddVerb _ type:BlockType { return {
     "action": "add",
-    "type": type
+    "type": type,
+    "where": "",
+    "value": ""
 } }
 
 Add2 = AddVerb _ type:BlockType _ where:Where { return {
     "action": "add",
     "type": type,
-    "where": where
+    "where": where,
+    "value": ""
 } }
 
 Add3 = AddVerb _ type:BlockType _ NameVerb _  name:Word{ return {
     "action": "add",
     "type": type,
+    "where": "",
     "value": name
 } }
 
 Add4 =  AddVerb _ type:BlockType _ NameVerb _  name:Word _ where:Where { return {
     "action": "add",
     "type": type,
-    "value": name,
-    "where": where
+    "where": where,
+    "value": name
 } }
 
 AddVerb = "add" / "insert" / "make"
@@ -102,7 +106,7 @@ Change4 = ChangeVerb _ "in" _ block:BlockToken _ ("the")? _ ordinal:(Ordinal / "
 
 Ordinal = ord:("first" / "second" / "third" / "fourth" / "last") { return ord }
 
-ChangeVerb = "change" / "set"
+ChangeVerb = "change" / "set" / "modify"
 
 Property = OperationName / ComparisonName / NumberName / FieldName / "variable name" / "name" / "text"
 
@@ -157,7 +161,7 @@ FieldPair = FieldName _ "to" _ text:(Number/Words) { return {
     "value": text
 } }
 
-FieldName = ("field" / "middle" / "blank" / "value")
+FieldName = ("field" / "middle" / "blank" / "value" / "property")
 
 Above = ("above" / "before") { return "above" }
 Below = ("below" / "after") { return "below" }
