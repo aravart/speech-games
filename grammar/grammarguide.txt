@@ -61,13 +61,13 @@ Separate: Separate block(s)
 Example: "separate block 1 from block 2"s
 
 Add (insert, make): Add a specific block type
-•	"add a {block type} block"
-•	"add a {block type} block after block {id}"
-•	"add a {block type} block inside of block {id}"
-•	"add a [number] block to the right of block {id}" (used for comparison blocks)
-•	"add a [number] block to the left of block {id}"
-•	"add a [variable] block named {value}" (can only named variable blocks)
-•	"add a [variable] block named counter after block {id}"
+•  "add a {block type} block"
+•  "add a {block type} block after block {id}"
+•  "add a {block type} block inside of block {id}"
+•  "add a [number] block to the right of block {id}" (used for comparison blocks)
+•  "add a [number] block to the left of block {id}"
+•  "add a [variable] block named {value}" (can only named variable blocks)
+•  "add a [variable] block named counter after block {id}"
 Example: "add a variable block named counter after block 1"
 
 Remove (delete, erase): Remove block(s)
