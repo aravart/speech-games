@@ -25,14 +25,14 @@
 
 goog.provide('Turtle');
 
-// goog.require('BlocklyDialogs');
+goog.require('BlocklyDialogs');
 // goog.require('BlocklyGames');
 // goog.require('BlocklyInterface');
 // goog.require('Slider');
 // goog.require('Turtle.Answers');
 // goog.require('Turtle.Blocks');
 // goog.require('Turtle.soy');
-
+goog.require('goog.string');
 
 // BlocklyGames.NAME = 'turtle';
 
@@ -540,7 +540,7 @@ Turtle.executeChunk_ = function() {
 Turtle.animate = function(id) {
   Turtle.display();
   if (id) {
-    Turtle.highlight(id);
+    BlocklyInterface.highlight(id);
     // Scale the speed non-linearly, to give better precision at the fast end.
     // var stepSpeed = 1000 * Math.pow(1 - Turtle.speedSlider.getValue(), 2);
     var stepSpeed = 1000 * Math.pow(1 - 0.5, 2);
@@ -675,12 +675,11 @@ Turtle.checkAnswer = function() {
     }
   }
   if (Turtle.isCorrect(delta)) {
-    BlocklyInterface.saveToLocalStorage();
-    if (BlocklyGames.LEVEL < BlocklyGames.MAX_LEVEL) {
+    // if (BlocklyGames.LEVEL < BlocklyGames.MAX_LEVEL) {
       // No congrats for last level, it is open ended.
-      BlocklyGames.workspace.playAudio('win', 0.5);
+      // BlocklyGames.workspace.playAudio('win', 0.5);
       BlocklyDialogs.congratulations();
-    }
+    // }
   } else {
     Turtle.penColor('#ff0000');
   }
@@ -788,20 +787,6 @@ Turtle.isCorrect = function(pixelErrors) {
   //   return false;
   // }
   return true;
-};
-
-/**
- * Highlight the block (or clear highlighting).
- * @param {?string} id ID of block that triggered this action.
- */
-Turtle.highlight = function(id) {
-  if (id) {
-    var m = id.match(/^block_id_([^']+)$/);
-    if (m) {
-      id = m[1];
-    }
-  }
-  SpeechGames.workspace.highlightBlock(id);
 };
 
 // TODO Extract to answer.js

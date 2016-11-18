@@ -39,6 +39,7 @@
     <link href="https://cdn.muicss.com/mui-0.9.4/css/mui.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.muicss.com/mui-0.9.4/js/mui.min.js"></script>
 
+    <link href="common.css" rel="stylesheet" type="text/css" />
 <style>
 .block-id-style {
   text-shadow: 2px 2px #000000;
@@ -100,6 +101,27 @@
   </category>
 </xml>
 
+<div id="dialogShadow" class="dialogAnimate"></div>
+<div id="dialogBorder"></div>
+<div id="dialog"></div>
+
+<div id="dialogDone" class="dialogHiddenContent">
+  <div style="font-size: large; margin: 1em;">Congratulations!</div>
+  <div id="dialogLinesText" style="font-size: large; margin: 1em;"></div>
+  <pre id="containerCode"></pre>
+  <div id="dialogDoneText" style="font-size: large; margin: 1em;"></div>
+  <div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0">
+    <button id="doneCancel">
+      Cancel
+    </button>
+    <button id="doneOk" class="secondary">
+      OK
+    </button>
+  </div>
+</div>
+
+<script src="lib-interface.js"></script>
+<script src="lib-dialogs.js"></script>
 <script src="speech.js"></script>
 <script src="turtle.js"></script>
 </body>
