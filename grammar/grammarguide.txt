@@ -15,14 +15,14 @@ QUICK BASICS
 Commands: Move, add, remove, change, run, undo, redo, separate.
 
 Easy way for each:
-•	"move block 1 after block 2"
-•	"separate block 1 from block 2"
-•	"add a move block"
-•	"remove block 1"
-•	"change the property in block 1 to 100"
-•	"run"
-•	"undo"
-•	"redo"
+•  "move block 1 after block 2"
+•  "separate block 1 from block 2"
+•  "add a move block"
+•  "remove block 1"
+•  "change the property in block 1 to 100"
+•  "run"
+•  "undo"
+•  "redo"
 
 * note that when using speech, "please" before the command helps the TTS engine
 
@@ -50,8 +50,8 @@ Note on notation:
 Command (synonyms): in the header means that command as well as its synonyms can be used interchangeably
 
 Move (attach): Move a block
-•	"move block {id} {where} from block {id}" (same as "separate block 1 from block 2")
-•	"move block {id} to the trash" (delete {id})
+•  "move block {id} {where} from block {id}" (same as "separate block 1 from block 2")
+•  "move block {id} to the trash" (delete {id})
 Example: "move block 1 away from block 2"
 
 Separate: Separate block(s)
