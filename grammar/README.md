@@ -80,35 +80,35 @@ specified but wasn't (simple command given), the field in the parser's utterance
 empty string.
 <br/>
 
-### Move:
+### MOVE
 #### "move block 1 after block 2": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "move", <br/> &ensp;&ensp;&ensp; "block": 1, <br/> &ensp;&ensp;&ensp; "where": { <br/>  &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; "block": 2, <br/> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; "position": "below" <br/>  &ensp;&ensp;&ensp; }, <br/> } <br/> <br/>
 
-### Separate:
+### SEPARATE
 #### "separate block 1 from block 2": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "move",  <br/> &ensp;&ensp;&ensp; "block": 1, <br/> &ensp;&ensp;&ensp; "where": "away" <br/> } <br/> <br/>
 
-### Add:
+### ADD
 #### "add a variable named counter after block 1": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "add", <br/> &ensp;&ensp;&ensp; "type": "variable", <br/> &ensp;&ensp;&ensp; "where": { <br/> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; "block": 1, <br/> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; "position": "below" <br/> &ensp;&ensp;&ensp; }, <br/> &ensp;&ensp;&ensp; "value": "counter" <br/> &ensp;&ensp;&ensp; <br/> <br/>
 
-### Remove:
+### REMOVE
 #### "remove block 1": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "delete", <br/> &ensp;&ensp;&ensp; "block": 1 <br/> } <br/>
 
-### Change:
+### CHANGE
 #### "change the property in block 1 to 100": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "modify", <br/> &ensp;&ensp;&ensp; "property": "field", <br/> &ensp;&ensp;&ensp; "value": 100, <br/> &ensp;&ensp;&ensp; "block": 1, <br/> &ensp;&ensp;&ensp; "ordinal": "" <br/> } <br/>
 
-### Run:
+### RUN
 #### "run": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "run" <br/> } <br/>
 
-### Undo:
+### UNDO
 #### "undo": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "undo" <br/> } <br/>
 
-### Redo:
+### REDO
 #### "redo": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "redo" <br/> } <br/>
 ___________________________________________________________________________________________________
