@@ -2,6 +2,58 @@ goog.provide('SpeechGames');
 
 SpeechGames.workspace = null
 
+/**
+ * Extracts a parameter from the URL.
+ * If the parameter is absent default_value is returned.
+ * @param {string} name The name of the parameter.
+ * @param {string} defaultValue Value to return if paramater not found.
+ * @return {string} The parameter value or the default value if not found.
+ */
+SpeechGames.getStringParamFromUrl = function(name, defaultValue) {
+  var val =
+      window.location.search.match(new RegExp('[?&]' + name + '=([^&]+)'));
+  return val ? decodeURIComponent(val[1].replace(/\+/g, '%20')) : defaultValue;
+};
+
+/**
+ * Extracts a numeric parameter from the URL.
+ * If the parameter is absent or less than min_value, min_value is
+ * returned.  If it is greater than max_value, max_value is returned.
+ * @param {string} name The name of the parameter.
+ * @param {number} minValue The minimum legal value.
+ * @param {number} maxValue The maximum legal value.
+ * @return {number} A number in the range [min_value, max_value].
+ */
+SpeechGames.getNumberParamFromUrl = function(name, minValue, maxValue) {
+  var val = Number(SpeechGames.getStringParamFromUrl(name, 'NaN'));
+  return isNaN(val) ? minValue : goog.math.clamp(minValue, val, maxValue);
+};
+
+/**
+ * Maximum number of levels.  Common to all apps.
+ */
+SpeechGames.MAX_LEVEL = 10;
+
+/**
+ * User's level (e.g. 5).
+ */
+SpeechGames.LEVEL =
+    SpeechGames.getNumberParamFromUrl('level', 1, SpeechGames.MAX_LEVEL);
+
+/**
+ * Bind a function to a button's click event.
+ * On touch-enabled browsers, ontouchend is treated as equivalent to onclick.
+ * @param {!Element|string} el Button element or ID thereof.
+ * @param {!Function} func Event handler to bind.
+ */
+SpeechGames.bindClick = function(el, func) {
+  if (typeof el == 'string') {
+    el = document.getElementById(el);
+  }
+  el.addEventListener('click', func, true);
+  el.addEventListener('touchend', func, true);
+};
+
 $(document).ready(function() {
   var oldQ = null;
   var parseTimer = null;

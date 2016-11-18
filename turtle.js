@@ -27,9 +27,9 @@ goog.provide('Turtle');
 
 goog.require('BlocklyDialogs');
 // goog.require('BlocklyGames');
-// goog.require('BlocklyInterface');
+goog.require('BlocklyInterface');
 // goog.require('Slider');
-// goog.require('Turtle.Answers');
+goog.require('Turtle.Answers');
 // goog.require('Turtle.Blocks');
 // goog.require('Turtle.soy');
 goog.require('goog.string');
@@ -155,8 +155,8 @@ Turtle.init = function() {
   Turtle.drawAnswer();
   Turtle.reset();
 
-  Turtle.bindClick('runButton', Turtle.runButtonClick);
-  Turtle.bindClick('resetButton', Turtle.resetButtonClick);
+  SpeechGames.bindClick('runButton', Turtle.runButtonClick);
+  SpeechGames.bindClick('resetButton', Turtle.resetButtonClick);
 
   // // Preload the win sound.
   // BlocklyGames.workspace.loadAudio_(['turtle/win.mp3', 'turtle/win.ogg'],
@@ -369,7 +369,7 @@ Turtle.display = function() {
  */
 Turtle.runButtonClick = function(e) {
   // Prevent double-clicks or double-taps.
-  if (Turtle.eventSpam(e)) {
+  if (BlocklyInterface.eventSpam(e)) {
     return;
   }
   var runButton = document.getElementById('runButton');
@@ -391,7 +391,7 @@ Turtle.runButtonClick = function(e) {
  */
 Turtle.resetButtonClick = function(e) {
   // Prevent double-clicks or double-taps.
-  if (Turtle.eventSpam(e)) {
+  if (BlocklyInterface.eventSpam(e)) {
     return;
   }
   var runButton = document.getElementById('runButton');
@@ -709,91 +709,3 @@ Turtle.checkAnswer = function() {
 //   // Submit the form.
 //   document.getElementById('t2r_form').submit();
 // };
-
-/**
- * Bind a function to a button's click event.
- * On touch-enabled browsers, ontouchend is treated as equivalent to onclick.
- * @param {!Element|string} el Button element or ID thereof.
- * @param {!Function} func Event handler to bind.
- */
-Turtle.bindClick = function(el, func) {
-  if (typeof el == 'string') {
-    el = document.getElementById(el);
-  }
-  el.addEventListener('click', func, true);
-  el.addEventListener('touchend', func, true);
-};
-
-/**
- * Determine if this event is unwanted.
- * @param {!Event} e Mouse or touch event.
- * @return {boolean} True if spam.
- */
-Turtle.eventSpam = function(e) {
-  // Touch screens can generate 'touchend' followed shortly thereafter by
-  // 'click'.  For now, just look for this very specific combination.
-  // Some devices have both mice and touch, but assume the two won't occur
-  // within two seconds of each other.
-  var touchMouseTime = 2000;
-  if (e.type == 'click' &&
-      Turtle.eventSpam.previousType_ == 'touchend' &&
-      Turtle.eventSpam.previousDate_ + touchMouseTime > Date.now()) {
-    e.preventDefault();
-    e.stopPropagation();
-    return true;
-  }
-  // Users double-click or double-tap accidentally.
-  var doubleClickTime = 400;
-  if (Turtle.eventSpam.previousType_ == e.type &&
-      Turtle.eventSpam.previousDate_ + doubleClickTime > Date.now()) {
-    e.preventDefault();
-    e.stopPropagation();
-    return true;
-  }
-  Turtle.eventSpam.previousType_ = e.type;
-  Turtle.eventSpam.previousDate_ = Date.now();
-  return false;
-};
-
-/**
- * Validate whether the user's answer is correct.
- * @param {number} pixelErrors Number of pixels that are wrong.
- * @return {boolean} True if the level is solved, false otherwise.
- */
-Turtle.isCorrect = function(pixelErrors) {
-  // if (BlocklyGames.LEVEL == BlocklyGames.MAX_LEVEL) {
-  //   // Any non-null answer is correct.
-  //   return BlocklyGames.workspace.getAllBlocks().length > 1;
-  // }
-  // console.log('Pixel errors: ' + pixelErrors);
-  if (pixelErrors > 100) {
-    // Too many errors.
-    return false;
-  }
-  // if ((BlocklyGames.LEVEL <= 2 &&
-  //      BlocklyGames.workspace.getAllBlocks().length > 3) ||
-  //     (BlocklyGames.LEVEL == 3 &&
-  //      BlocklyGames.workspace.getAllBlocks().length > 4)) {
-  //   // Use a loop, dummy.
-  //   var content = document.getElementById('helpUseLoop');
-  //   var style = {
-  //     'width': '30%',
-  //     'left': '35%',
-  //     'top': '12em'
-  //   };
-  //   BlocklyDialogs.showDialog(content, null, false, true, style,
-  //       BlocklyDialogs.stopDialogKeyDown);
-  //   BlocklyDialogs.startDialogKeyDown();
-  //   return false;
-  // }
-  return true;
-};
-
-// TODO Extract to answer.js
-Turtle.answer = function() {
-    for (var count = 0; count < 4; count++) {
-        Turtle.move(100);
-        Turtle.turn(90);
-    }
-}
-

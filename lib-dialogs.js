@@ -385,12 +385,12 @@ BlocklyDialogs.congratulations = function() {
     linesText.appendChild(document.createTextNode(text));
   }
 
-  // if (BlocklyGames.LEVEL < BlocklyGames.MAX_LEVEL) {
-  //   var text = BlocklyGames.getMsg('Games_nextLevel')
-  //       .replace('%1', BlocklyGames.LEVEL + 1);
-  // } else {
-  //   var text = BlocklyGames.getMsg('Games_finalLevel');
-  // }
+  if (SpeechGames.LEVEL < SpeechGames.MAX_LEVEL) {
+    var text = "Are you ready for level %1?"
+        .replace('%1', SpeechGames.LEVEL + 1);
+  } else {
+    var text = "Are you ready for the next challenge?"
+  }
 
   var cancel = document.getElementById('doneCancel');
   cancel.addEventListener('click', BlocklyDialogs.hideDialog, true);

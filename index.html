@@ -52,6 +52,29 @@
 
 <div class="mui-container">
 
+<table width="100%">
+  <tbody>
+    <tr>
+      <td>
+        <h1 id="levels">
+          <span>
+            <a href="./?lang=en">Speech Games</a> : Turtle</span> &nbsp;
+            <!-- <span class="level_number level_done" id="level1">1</span> -->
+            <!-- <a class="level_dot level_done" id="level2" href="?level=2"></a> -->
+            <!-- <a class="level_dot" id="level3" href="?level=3"></a> -->
+            <!-- <a class="level_dot level_done" id="level4" href="?level=4"></a> -->
+            <!-- <a class="level_dot" id="level5" href="?level=5"></a> -->
+            <!-- <a class="level_dot" id="level6" href="?level=6"></a> -->
+            <!-- <a class="level_dot" id="level7" href="?level=7"></a> -->
+            <!-- <a class="level_dot" id="level8" href="?level=8"></a> -->
+            <!-- <a class="level_dot" id="level9" href="?level=9"></a> -->
+            <!-- <a class="level_number" id="level10" href="?level=10">10</a> -->
+        </h1>
+      </td>
+</tr>
+</tbody>
+</table>
+
 <div class="row form-inline">
   <div class="col-md-12">
     <img id="microphone" style="width: 5.5%;" src="https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif"/>
@@ -71,6 +94,12 @@
    </div>
 </div>
 
+<!-- <div id="visualization"> -->
+<!--   <canvas id="scratch" width="400" height="400" style="display: none"></canvas> -->
+<!--   <canvas id="answer" width="400" height="400" style="display: none"></canvas> -->
+<!--   <canvas id="display" width="400" height="400"></canvas> -->
+<!-- </div> -->
+
 <div class="mui-row">
 <div class="mui-col-md-6">
   <canvas id="display" height="500" width="500" style="border:1px solid #ccc;"></canvas>
@@ -79,6 +108,7 @@
 </div>
 <div class="mui-col-md-6"><div id="blocklyDiv" style="height: 500"></div></div>
 </div>
+<div id="blocklyDiv" style="top: 112px; left: 420px; width: 348px;"></div>
 
 <div class="row">
 <button id="runButton" type="button" class="mui-btn mui-btn--primary mui-btn--raised">Run</button>
@@ -122,7 +152,10 @@
 
 <script src="lib-interface.js"></script>
 <script src="lib-dialogs.js"></script>
+<script src="answers.js"></script>
 <script src="speech.js"></script>
 <script src="turtle.js"></script>
+<script src="ui.js"></script>
+
 </body>
 </html>
