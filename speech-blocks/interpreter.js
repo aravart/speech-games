@@ -56,7 +56,6 @@ SpeechBlocks.Interpreter.prototype.retrieveBlockTypes = function() {
          this.blockTypes.push(children[i].children[j].getAttribute('type'));
       }
    }
-   console.log(this.blockTypes)
 }
 
 /**
@@ -97,7 +96,7 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
 */
 SpeechBlocks.Interpreter.prototype.run_ = function(command) {
    // TODO: Provide a way to override this function locally.
-   run();
+   document.getElementById('runButton').click();
 };
 
 /**
@@ -106,7 +105,7 @@ SpeechBlocks.Interpreter.prototype.run_ = function(command) {
 * @private
 */
 SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
-   if (!this.blockTypes.includes(command.type)) {
+   if (!this.blockTypes.includes(this.blockTypeMap_.get(command.type))) {
       throw "Block not available";
    }
    this.controller_.addBlock(this.blockTypeMap_.get(command.type), (this.id_++).toString());
