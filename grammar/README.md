@@ -16,9 +16,9 @@ ________________________________________________________________________________
 
 ## QUICK BASICS
 
-#### Commands: Move, add, remove, change, run, undo, redo, separate.
+### Commands: Move, add, remove, change, run, undo, redo, separate.
 
-Easy way for each:
+#### Easy sample command for each command type
    "move block 1 after block 2"
    "separate block 1 from block 2"
    "add a move block"
@@ -44,8 +44,7 @@ for grammar specifics. Additional comments are in parentheses after the quotatio
 while the parser may understand some commands and report "input parsed successfully" some commands
 may not yet be compatible with the controller. <br/><br/>
 
-
-#### Notation:
+### Notation:
    {block type} means a block type like "if," "repeat," etc.
    {id} means an ID such as "1," "2," etc.
    {property} means any of "field," "blank," "property," "operation". Note that the grammar treats
@@ -56,23 +55,21 @@ may not yet be compatible with the controller. <br/><br/>
    [block type] means that this command will only work (well) with the specified type(s)
    Command (synonyms): means the synonyms can be used interchangeable with Command <br/><br/>
    
-
-#### Move (attach): Move a block
+### Move (attach): Move a block
    "move block {id} {where} from block {id}" (same as "separate block 1 from block 2")
    "move block {id} to the trash" (delete {id})
-##### Example: 
+#### Example: 
    "move block 1 away from block 2" <br/><br/>
    
-
-#### Separate: Separate block(s)
+### Separate: Separate block(s)
    "separate block {id}" (separates block {id} from its predecessor and successor)
    "separate block {id} from block {id}"
    "separate block {id} and block {id}"
-##### Example: 
+#### Example: 
    "separate block 1 from block 2"s <br/><br/>
 
 
-#### Add (insert, make): Add a specific block type
+### Add (insert, make): Add a specific block type
    "add a {block type} block"
    "add a {block type} block after block {id}"
    "add a {block type} block inside of block {id}"
@@ -80,18 +77,18 @@ may not yet be compatible with the controller. <br/><br/>
    "add a [number] block to the left of block {id}"
    "add a [variable] block named {value}" (can only named variable blocks)
    "add a [variable] block named counter after block {id}"
-##### Example: 
+#### Example: 
    "add a variable block named counter after block 1" <br/><br/>
    
 
-#### Remove (delete, erase): Remove block(s)
+### Remove (delete, erase): Remove block(s)
    "remove block {id}"
    "remove all" (deletes all blocks)
-##### Example: 
+#### Example: 
    "remove block 1" <br/><br/>
    
 
-#### Change (set, modify)
+### Change (set, modify)
 Change a block's properties (but not type)
    "in block {id} change the {property} to {value}"
    "change the {property} to {value} in block {id}" (value ends when "in block" is encountered)
@@ -99,24 +96,24 @@ Change a block's properties (but not type)
    "change in block {id} the {property} to {value}"
    The change commands can also optionally specify the property by order.
    "change the {ordinal} {property} in block {id} to {value}"
-##### Examples
+#### Examples
    "in block 1 change the operation to addition"
    "in block 1 change the first field to backwards" <br/><br/>
 
 
-#### Run
+### Run
 Run the program defined by the blocks in the canvas
   "run"
   "run the program"
   "run it" <br/><br/>
 
 
-#### Undo
+### Undo
 Undoes the previous action. Repeatable.
   "undo" <br/><br/>
 
 
-#### Redo
+### Redo
 Redoes the previous undo. Repeatable.
   "redo" <br/><br/>
   
@@ -130,7 +127,7 @@ complex (most specifications) command of each command type. When a property coul
 specified but wasn't (simple command given), the field in the parser's utterance object is just an
 empty string. <br/><br/>
 
-#### Move:
+### Move:
 "move block 1 after block 2":
 {
    "action": "move",
@@ -142,7 +139,7 @@ empty string. <br/><br/>
 } <br/><br/>
 
 
-#### Separate:
+### Separate:
 "separate block 1 from block 2":
 {
    "action": "move",
@@ -151,7 +148,7 @@ empty string. <br/><br/>
 } <br/><br/>
 
 
-#### Add:
+### Add:
 "add a variable named counter after block 1":
 {
    "action": "add",
@@ -164,7 +161,7 @@ empty string. <br/><br/>
 } <br/><br/>
 
 
-#### Remove:
+### Remove:
 "remove block 1":
 {
    "action": "delete",
@@ -172,7 +169,7 @@ empty string. <br/><br/>
 } <br/><br/>
 
 
-#### Change:
+### Change:
 "change the property in block 1 to 100":
 {
    "action": "modify",
@@ -183,21 +180,21 @@ empty string. <br/><br/>
 } <br/><br/>
 
 
-#### Run:
+### Run:
 "run":
 {
    "action": "run"
 } <br/><br/>
 
 
-#### Undo:
+### Undo:
 "undo":
 {
    "action": "undo"
 } <br/><br/>
 
 
-#### Redo:
+### Redo:
 "redo":
 {
    "action": "redo"
