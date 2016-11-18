@@ -1,18 +1,18 @@
-GRAMMAR GUIDE FOR SPEECHBLOCKS
-Updated 11/17/2016
+# GRAMMAR GUIDE FOR SPEECHBLOCKS
+###### Updated 11/17/2016
 
 ___________________________________________________________________________________________________
 
-INTRO
+## INTRO
 
 This is a guide on the grammar for the SpeechBlocks interpreter. After reading this, the reader
 should be able to manipulate Blockly with speech/text input.
 
 ___________________________________________________________________________________________________
 
-QUICK BASICS
+## QUICK BASICS
 
-Commands: Move, add, remove, change, run, undo, redo, separate.
+#### Commands: Move, add, remove, change, run, undo, redo, separate.
 
 Easy way for each:
    "move block 1 after block 2"
@@ -29,7 +29,7 @@ Easy way for each:
 
 ___________________________________________________________________________________________________
 
-IN DEPTH GUIDE
+## IN DEPTH GUIDE
 
 The grammar understands a little bit more than what’s above. Here are some more ways to specify
 each command. The portion inside (and not including) the quotation marks can be input. Note that
@@ -39,7 +39,7 @@ for grammar specifics. Additional comments are in parentheses after the quotatio
 while the parser may understand some commands and report "input parsed successfully" some commands
 may not yet be compatible with the controller.
 
-Notation:
+#### Notation:
    {block type} means a block type like "if," "repeat," etc.
    {id} means an ID such as "1," "2," etc.
    {property} means any of "field," "blank," "property," "operation". Note that the grammar treats
@@ -50,18 +50,20 @@ Notation:
    [block type] means that this command will only work (well) with the specified type(s)
    Command (synonyms): means the synonyms can be used interchangeable with Command
 
-Move (attach): Move a block
+#### Move (attach): Move a block
    "move block {id} {where} from block {id}" (same as "separate block 1 from block 2")
    "move block {id} to the trash" (delete {id})
-Example: "move block 1 away from block 2"
+###### Example: 
+   "move block 1 away from block 2"
 
-Separate: Separate block(s)
+#### Separate: Separate block(s)
    "separate block {id}" (separates block {id} from its predecessor and successor)
    "separate block {id} from block {id}"
    "separate block {id} and block {id}"
-Example: "separate block 1 from block 2"s
+###### Example: 
+"separate block 1 from block 2"s
 
-Add (insert, make): Add a specific block type
+#### Add (insert, make): Add a specific block type
    "add a {block type} block"
    "add a {block type} block after block {id}"
    "add a {block type} block inside of block {id}"
@@ -69,43 +71,50 @@ Add (insert, make): Add a specific block type
    "add a [number] block to the left of block {id}"
    "add a [variable] block named {value}" (can only named variable blocks)
    "add a [variable] block named counter after block {id}"
-Example: "add a variable block named counter after block 1"
+###### Example: 
+   "add a variable block named counter after block 1"
 
-Remove (delete, erase): Remove block(s)
+#### Remove (delete, erase): Remove block(s)
    "remove block {id}"
    "remove all" (deletes all blocks)
-Example: "remove block 1"
+###### Example: 
+   "remove block 1"
 
-Change (set, modify): Change a block's properties (but not type)
+#### Change (set, modify)
+Change a block's properties (but not type)
    "in block {id} change the {property} to {value}"
    "change the {property} to {value} in block {id}" (value ends when "in block" is encountered)
    "change the {property} in block {id} to {value}"
    "change in block {id} the {property} to {value}"
-The change commands can also optionally specify the property by order.
+   The change commands can also optionally specify the property by order.
    "change the {ordinal} {property} in block {id} to {value}"
-Examples: "in block 1 change the operation to addition"
-          "in block 1 change the first field to backwards"
+###### Examples
+   "in block 1 change the operation to addition"
+   "in block 1 change the first field to backwards"
 
-Run: Run the program defined by the blocks in the canvas
+#### Run
+Run the program defined by the blocks in the canvas
   "run"
   "run the program"
   "run it"
 
-Undo: Undoes the previous action. Repeatable.
+#### Undo
+Undoes the previous action. Repeatable.
   "undo"
 
-Redo: Redoes the previous undo. Repeatable.
+#### Redo: Redoes the previous undo. Repeatable.
   "redo"
 
 ___________________________________________________________________________________________________
 
-EXAMPLE OBJECTS
+## EXAMPLE OBJECTS
 
 These are examples of the objects passed from the parser down to the interpreter for the most
 complex (most specifications) command of each command type. When a property could have been
 specified but wasn't (simple command given), the field in the parser's utterance object is just an
 empty string.
 
+#### Move:
 "move block 1 after block 2":
 {
    "action": "move",
