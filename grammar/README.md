@@ -1,14 +1,24 @@
+___________________________________________________________________________________________________
+
+
+
 # GRAMMAR GUIDE FOR SPEECHBLOCKS
 ###### Updated 11/17/2016
 
+
 ___________________________________________________________________________________________________
+
+
 
 ## INTRO
 
 This is a guide on the grammar for the SpeechBlocks interpreter. After reading this, the reader
 should be able to manipulate Blockly with speech/text input.
 
+
 ___________________________________________________________________________________________________
+
+
 
 ## QUICK BASICS
 
@@ -25,9 +35,12 @@ Easy way for each:
    "redo"
 
 * note that when using speech, "please" before the command helps the TTS engine e.g.
-"please add a move block"
+   "please add a move block"
+
 
 ___________________________________________________________________________________________________
+
+
 
 ## IN DEPTH GUIDE
 
@@ -39,6 +52,7 @@ for grammar specifics. Additional comments are in parentheses after the quotatio
 while the parser may understand some commands and report "input parsed successfully" some commands
 may not yet be compatible with the controller.
 
+
 #### Notation:
    {block type} means a block type like "if," "repeat," etc.
    {id} means an ID such as "1," "2," etc.
@@ -49,19 +63,22 @@ may not yet be compatible with the controller.
    {ordinal} means any of first, second, third, fourth, and last
    [block type] means that this command will only work (well) with the specified type(s)
    Command (synonyms): means the synonyms can be used interchangeable with Command
+   
 
 #### Move (attach): Move a block
    "move block {id} {where} from block {id}" (same as "separate block 1 from block 2")
    "move block {id} to the trash" (delete {id})
-###### Example: 
+##### Example: 
    "move block 1 away from block 2"
+   
 
 #### Separate: Separate block(s)
    "separate block {id}" (separates block {id} from its predecessor and successor)
    "separate block {id} from block {id}"
    "separate block {id} and block {id}"
-###### Example: 
-"separate block 1 from block 2"s
+##### Example: 
+   "separate block 1 from block 2"s
+
 
 #### Add (insert, make): Add a specific block type
    "add a {block type} block"
@@ -71,14 +88,16 @@ may not yet be compatible with the controller.
    "add a [number] block to the left of block {id}"
    "add a [variable] block named {value}" (can only named variable blocks)
    "add a [variable] block named counter after block {id}"
-###### Example: 
+##### Example: 
    "add a variable block named counter after block 1"
+   
 
 #### Remove (delete, erase): Remove block(s)
    "remove block {id}"
    "remove all" (deletes all blocks)
-###### Example: 
+##### Example: 
    "remove block 1"
+   
 
 #### Change (set, modify)
 Change a block's properties (but not type)
@@ -88,9 +107,10 @@ Change a block's properties (but not type)
    "change in block {id} the {property} to {value}"
    The change commands can also optionally specify the property by order.
    "change the {ordinal} {property} in block {id} to {value}"
-###### Examples
+##### Examples
    "in block 1 change the operation to addition"
    "in block 1 change the first field to backwards"
+
 
 #### Run
 Run the program defined by the blocks in the canvas
@@ -98,14 +118,19 @@ Run the program defined by the blocks in the canvas
   "run the program"
   "run it"
 
+
 #### Undo
 Undoes the previous action. Repeatable.
   "undo"
 
+
 #### Redo: Redoes the previous undo. Repeatable.
   "redo"
-
+  
+  
 ___________________________________________________________________________________________________
+
+
 
 ## EXAMPLE OBJECTS
 
@@ -125,6 +150,8 @@ empty string.
    }
 }
 
+
+#### Separate:
 "separate block 1 from block 2":
 {
    "action": "move",
@@ -132,6 +159,8 @@ empty string.
    "where": "away"
 }
 
+
+#### Add:
 "add a variable named counter after block 1":
 {
    "action": "add",
@@ -143,12 +172,16 @@ empty string.
    "value": "counter"
 }
 
+
+#### Remove:
 "remove block 1":
 {
    "action": "delete",
    "block": 1
 }
 
+
+#### Change:
 "change the property in block 1 to 100":
 {
    "action": "modify",
@@ -158,16 +191,22 @@ empty string.
    "ordinal": ""
 }
 
+
+#### Run:
 "run":
 {
    "action": "run"
 }
 
+
+#### Undo:
 "undo":
 {
    "action": "undo"
 }
 
+
+#### Redo:
 "redo":
 {
    "action": "redo"
