@@ -71,8 +71,8 @@ Add (insert, make): Add a specific block type
 Example: "add a variable block named counter after block 1"
 
 Remove (delete, erase): Remove block(s)
-•	"remove block {id}"
-•	"remove all" (deletes all blocks)
+•  "remove block {id}"
+•  "remove all" (deletes all blocks)
 Example: "remove block 1"
 
 Change (set, modify): Change a block's properties (but not type)
