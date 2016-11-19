@@ -46,6 +46,16 @@ SpeechBlocks.Controller = function(workspace) {
       newBlock.appendDummyInput().appendField(new Blockly.FieldLabel(newBlock.id, 'block-id-style'));
     }
   }.bind(this));
+
+  // Create a map of block definitions
+  this.blockXmlMap_ = new goog.structs.Map();
+  var tree = this.workspace_.toolbox_.tree_.children_
+  for(var i = 0; i < tree.length; i++) {
+    var blocks = tree[i].blocks
+    for(var j = 0; j < blocks.length; j++) {
+      this.blockXmlMap_.set(blocks[j].getAttribute('type'), blocks[j]);
+    }
+  }
 };
 
 /**
@@ -82,7 +92,10 @@ SpeechBlocks.Controller.constructFromXml = function(xml) {
  * @public
  */
 SpeechBlocks.Controller.prototype.addBlock = function(type, blockId, opt_where  ) {
-  var newBlock = this.workspace_.newBlock(type, blockId);
+  var xml = this.blockXmlMap_.get(type)
+  xml = xml.cloneNode(true)
+  xml.id = blockId
+  var newBlock = Blockly.Xml.domToBlock(xml, controller.workspace_);
   newBlock.initSvg();
   if (opt_where) {
     this.moveBlock(blockId, goog.asserts.assertInstanceof(opt_where, SpeechBlocks.Where));
