@@ -13,6 +13,8 @@ goog.require('SpeechBlocks.Translation');
 goog.require('SpeechBlocks.ValueInput');
 goog.require('goog.structs.Map');
 
+SpeechBlocks.BlockCounter = 1;
+
 /**
 * Constructs an interpreter that takes actions as input and controls the Blockly Workspace.
 * @param {!SpeechBlocks.Controller} controller The Blockly Workspace controller.
@@ -21,12 +23,15 @@ goog.require('goog.structs.Map');
 SpeechBlocks.Interpreter = function(controller) {
    /** @private @const */
    this.controller_ = controller;
-   /** @private */
-   this.id_ = 1;
 
    this.createBlockTypeMap();
 
    this.retrieveBlockTypes();
+
+   this.controller_.workspace_.newBlockOld = this.controller_.workspace_.newBlock
+   this.controller_.workspace_.newBlock = function(prototypeName, opt_id) {
+     return this.newBlockOld(prototypeName, (SpeechBlocks.BlockCounter++).toString())
+   };
 }
 
 SpeechBlocks.Interpreter.prototype.createBlockTypeMap = function() {
@@ -108,10 +113,9 @@ SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
    if (!this.blockTypes.includes(this.blockTypeMap_.get(command.type))) {
       throw "Block not available";
    }
-   this.controller_.addBlock(this.blockTypeMap_.get(command.type), (this.id_++).toString());
-
+   var newBlock = this.controller_.addBlock(this.blockTypeMap_.get(command.type))
    if (command.where != null) {
-      command.block = (this.id_ - 1).toString();
+      command.block = newBlock.id
       this.moveBlock_(command);
    }
 };
@@ -246,7 +250,7 @@ SpeechBlocks.Interpreter.prototype.redo_ = function() {
 SpeechBlocks.Interpreter.prototype.deleteBlock_ = function(blockId) {
    if (blockId.toString() == 'all') {
       this.controller_.removeAllBlocks();
-      this.id_ = 1;
+      SpeechBlocks.BlockCounter = 1;
    } else if (this.isBlockIdValid_(blockId.toString())) {
       this.controller_.removeBlock(blockId.toString());
    }

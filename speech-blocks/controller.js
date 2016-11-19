@@ -91,17 +91,17 @@ SpeechBlocks.Controller.constructFromXml = function(xml) {
  *     workspace to place the new block.
  * @public
  */
-SpeechBlocks.Controller.prototype.addBlock = function(type, blockId, opt_where  ) {
+SpeechBlocks.Controller.prototype.addBlock = function(type, opt_where  ) {
   var xml = this.blockXmlMap_.get(type)
   xml = xml.cloneNode(true)
-  xml.id = blockId
   var newBlock = Blockly.Xml.domToBlock(xml, controller.workspace_);
   newBlock.initSvg();
   if (opt_where) {
-    this.moveBlock(blockId, goog.asserts.assertInstanceof(opt_where, SpeechBlocks.Where));
+    this.moveBlock(newBlock.id, goog.asserts.assertInstanceof(opt_where, SpeechBlocks.Where));
   } else {
     this.workspace_.render();
   }
+  return newBlock
 };
 
 /**
