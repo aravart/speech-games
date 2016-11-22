@@ -69,6 +69,7 @@ SpeechBlocks.Interpreter.prototype.retrieveBlockTypes = function() {
 * @public
 */
 SpeechBlocks.Interpreter.prototype.interpret = function(command) {
+   this.controller_.workspace_.toolbox_.clearSelection()
    switch (command.action) {
       case 'run':
       this.run_(command);
@@ -90,6 +91,13 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
       break;
       case 'redo':
       this.redo_();
+      break;
+      case 'menu':
+      if(command.actionType == "open") {
+        this.openMenu_(command.menu);
+      } else {
+        this.closeMenu_();
+      }
       break;
    }
 };
@@ -263,4 +271,25 @@ SpeechBlocks.Interpreter.prototype.deleteBlock_ = function(blockId) {
 */
 SpeechBlocks.Interpreter.prototype.isBlockIdValid_ = function(blockRequestId) {
    return this.controller_.getAllBlockIds().contains(blockRequestId);
+}
+
+/**
+* Open the specified toolbox menus
+*/
+SpeechBlocks.Interpreter.prototype.openMenu_ = function(menuName) {
+   var menus = this.controller_.workspace_.toolbox_.tree_.children_
+   for(var i = 0; i < menus.length; i++) {
+     if (menus[i].getText().toLowerCase() == menuName) {
+        menus[i].onMouseDown();
+        break;
+     }
+   }
+   throw "Menu not found";
+}
+
+/**
+* Close any open toolbox menus
+*/
+SpeechBlocks.Interpreter.prototype.closeMenu_ = function() {
+   this.controller_.workspace_.toolbox_.clearSelection()
 }

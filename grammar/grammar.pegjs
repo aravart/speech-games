@@ -1,4 +1,4 @@
-Start = ("please" _)? command:( Move / Add / Remove / Change / Run / Undo / Redo / Separate) { return command }
+Start = ("please" _)? command:( Move / Add / Remove / Change / Run / Undo / Redo / Separate / Menu ) { return command }
 
 Article = "an" / "a" / "the"
 Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "move" / "turn" / "pen" / "color"
@@ -188,6 +188,13 @@ Separate = SeparateVerb _ block:BlockToken _ (("from"/"and") _ BlockToken)? { re
     "block": block,
     "where": "away"
 } }
+
+Menu = actionType:MenuVerb _ "the"?  _ menuName:Word _ ("menu"/"toolbox") { return {
+    "action": "menu",
+    "actionType": actionType,
+    "menu": menuName
+} }
+MenuVerb = "open" / "close"
 
 SeparateVerb = "separate" / "disconnect" / "break apart"
 
