@@ -68,13 +68,17 @@ $(document).ready(function() {
     speech = speech.replace(/\batom\b/,"add a");
     speech = speech.replace(/\badam's\b/,"add a");
     speech = speech.replace(/\bblack\b/,"block");
+    speech = speech.replace(/\block\b/,"block");
+    speech = speech.replace(/\bnumber to\b/,"number 2");
+    speech = speech.replace(/\bone\b/,"1");
+    speech = speech.replace(/\b425\b/,"4 to 5");
     return speech;
   }
 
   function startDictation() {
     if (window.hasOwnProperty('webkitSpeechRecognition')) {
-      var mic_animate = 'http://www.google.com/intl/en/chrome/assets/common/images/content/mic-animate.gif';
-      var mic = 'http://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
+      var mic_animate = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic-animate.gif';
+      var mic = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
       var recognition = new webkitSpeechRecognition();
       recognition.continuous = false;
       recognition.interimResults = false;
@@ -157,7 +161,9 @@ $(document).ready(function() {
 
 
 // $("#runButton").on("click", run);
-$("#showButton").on("click", showCode);
+// $("#showButton").on("click", showCode);
+$("#debug").hide();
+$("#debugButton").on("click", function() { $("#debug").toggle() });
 
 });
 
