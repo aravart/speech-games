@@ -194,7 +194,9 @@ Menu = actionType:MenuVerb _ "the"?  _ menuName:Word _ ("menu"/"toolbox") { retu
     "actionType": actionType,
     "menu": menuName
 } }
-MenuVerb = "open" / "close"
+MenuVerb = OpenMenuVerb / CloseMenuVerb
+OpenMenuVerb = ("open" / "show") { return "open" }
+CloseMenuVerb = "close"
 
 SeparateVerb = "separate" / "disconnect" / "break apart"
 

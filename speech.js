@@ -63,6 +63,14 @@ $(document).ready(function() {
   SpeechGames.workspace = controller.workspace_
   var interpreter = new SpeechBlocks.Interpreter(controller);
 
+  function speechCorrections(speech) {
+    speech = speech.toLowerCase();
+    speech = speech.replace(/\batom\b/,"add a");
+    speech = speech.replace(/\badam's\b/,"add a");
+    speech = speech.replace(/\bblack\b/,"block");
+    return speech;
+  }
+
   function startDictation() {
     if (window.hasOwnProperty('webkitSpeechRecognition')) {
       var mic_animate = 'http://www.google.com/intl/en/chrome/assets/common/images/content/mic-animate.gif';
@@ -74,7 +82,9 @@ $(document).ready(function() {
       document.getElementById('microphone').src = mic_animate;
       recognition.start();
       recognition.onresult = function(e) {
-        document.getElementById('q').value = e.results[0][0].transcript;
+        unfiltered = e.results[0][0].transcript;
+        corrections = speechCorrections(unfiltered)
+        document.getElementById('q').value = corrections;
         recognition.stop();
         document.getElementById('microphone').src = mic;
         parseSpeech();
