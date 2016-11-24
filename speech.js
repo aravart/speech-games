@@ -69,6 +69,7 @@ $(document).ready(function() {
     speech = speech.replace(/\badam's\b/,"add a");
     speech = speech.replace(/\bblack\b/,"block");
     speech = speech.replace(/\block\b/,"block");
+    speech = speech.replace(/\badam block\b/,"add a move block");
     speech = speech.replace(/\bnumber to\b/,"number 2");
     speech = speech.replace(/\bone\b/,"1");
     speech = speech.replace(/\b425\b/,"4 to 5");
