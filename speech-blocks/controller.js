@@ -29,6 +29,9 @@ goog.require('goog.asserts');
 goog.require('goog.structs.Map');
 goog.require('goog.structs.Set');
 
+// TODO(evanfredhernandez): Remove direct access of private fields of workspace
+// (particularly workspace.toolbox_) once accessors are provided.
+
 /**
  * @param {!Blockly.Workspace} workspace
  * @private
@@ -38,24 +41,33 @@ SpeechBlocks.Controller = function(workspace) {
   /** @private @const {!Blockly.Workspace} */
   this.workspace_ = workspace;
 
+  /** @private */
+  this.blockCounter_ = 1;
+
+  // Override the newBlock function to use our default IDs.
+  var nextId = function() { return (this.blockCounter_++).toString(); }.bind(this);
+  var newBlockOld = this.workspace_.newBlock.bind(this.workspace_);
+  this.workspace_.newBlock = function(prototypeName) {
+    return newBlockOld(prototypeName, nextId());
+  };
+
   // Listen for create events and tag the block with its ID.
   this.workspace_.addChangeListener(function(event) {
     if (event.type == Blockly.Events.CREATE) {
       var newBlock =
           SpeechBlocks.Blocks.getBlock(event.blockId, this.workspace_);
-      newBlock.appendDummyInput().appendField(new Blockly.FieldLabel(newBlock.id, 'block-id-style'));
+      newBlock.appendDummyInput().appendField(
+          new Blockly.FieldLabel(newBlock.id, 'block-id-style'));
     }
   }.bind(this));
 
-  // Create a map of block definitions
+  // Create a map of block definitions.
   this.blockXmlMap_ = new goog.structs.Map();
-  var tree = this.workspace_.toolbox_.tree_.children_
-  for(var i = 0; i < tree.length; i++) {
-    var blocks = tree[i].blocks
-    for(var j = 0; j < blocks.length; j++) {
-      this.blockXmlMap_.set(blocks[j].getAttribute('type'), blocks[j]);
-    }
-  }
+  this.workspace_.toolbox_.tree_.forEachChild(function(blockTab) {
+    blockTab.blocks.forEach(function(block) {
+      this.blockXmlMap_.set(block.getAttribute('type'), block);
+    }, this)
+  }, this);
 };
 
 /**
@@ -86,22 +98,21 @@ SpeechBlocks.Controller.constructFromXml = function(xml) {
  * Adds and renders a new block to the workspace.
  * @param {string} type Name of the language object containing
  *     type-specific functions for this block.
- * @param {string} blockId ID for the block.
  * @param {SpeechBlocks.Where=} opt_where Optional location on the
  *     workspace to place the new block.
+ * @return {string} ID of the newly created block.
  * @public
  */
 SpeechBlocks.Controller.prototype.addBlock = function(type, opt_where  ) {
-  var xml = this.blockXmlMap_.get(type)
-  xml = xml.cloneNode(true)
-  var newBlock = Blockly.Xml.domToBlock(xml, controller.workspace_);
+  var xml = this.blockXmlMap_.get(type).cloneNode(true);
+  var newBlock = Blockly.Xml.domToBlock(xml, this.workspace_);
   newBlock.initSvg();
   if (opt_where) {
     this.moveBlock(newBlock.id, goog.asserts.assertInstanceof(opt_where, SpeechBlocks.Where));
   } else {
     this.workspace_.render();
   }
-  return newBlock
+  return newBlock.id;
 };
 
 /**
@@ -143,6 +154,7 @@ SpeechBlocks.Controller.prototype.removeBlock = function(blockId) {
  */
  SpeechBlocks.Controller.prototype.removeAllBlocks = function() {
    this.workspace_.clear();
+   this.blockCounter_ = 1;
  };
 
 /**
@@ -319,3 +331,27 @@ SpeechBlocks.Controller.getFieldType_ = function(field) {
 SpeechBlocks.Controller.prototype.setBlockField = function(blockId, fieldName, fieldValue) {
   SpeechBlocks.Blocks.getBlock(blockId, this.workspace_).setFieldValue(fieldValue, fieldName);
 };
+
+/**
+ * Open the specified toolbox menus
+ * @param {string} menuName Name of the menu to open.
+ * @public
+ */
+SpeechBlocks.Controller.prototype.openMenu = function(menuName) {
+  var menus = this.workspace_.toolbox_.tree_.children_;
+  for (var i = 0; i < menus.length; i++) {
+    if (menus[i].getText().toLowerCase() == menuName) {
+      menus[i].onMouseDown();
+      return;
+    }
+  }
+  throw 'Menu not found';
+}
+
+/**
+ * Close any open toolbox menus.
+ * @public
+ */
+SpeechBlocks.Controller.prototype.closeMenu = function() {
+   this.workspace_.toolbox_.clearSelection()
+}
