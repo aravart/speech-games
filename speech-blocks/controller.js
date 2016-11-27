@@ -271,16 +271,41 @@ SpeechBlocks.Controller.prototype.getBlockXInputs_ = function (blockId, type) {
  * @public
  */
 SpeechBlocks.Controller.prototype.getFieldsForBlock = function(blockId) {
+  /** @type {!goog.structs.Map<string, number>} */
   var blockFields = new goog.structs.Map();
   SpeechBlocks.Blocks.getBlock(blockId, this.workspace_).inputList.forEach(function(input) {
     input.fieldRow.forEach(function(field) {
       var type = SpeechBlocks.Controller.getFieldType_(field);
+
+      // TODO(evanfredhernandez): How to handle nameless fields?
       if (field.name && type != SpeechBlocks.FieldTypes.IRRELEVANT) {
         blockFields.set(field.name, type);
       }
     });
   });
   return blockFields;
+};
+
+/**
+ * Returns a mapping from field names to current values.
+ * @param {string} blockId The ID of the block.
+ * @return {!goog.structs.Map<string, string>} A mapping of field names to values.
+ * @public
+ */
+SpeechBlocks.Controller.prototype.getFieldValuesForBlock = function(blockId) {
+  /** @type {!goog.structs.Map<string, string>} */
+  var blockFieldValues = new goog.structs.Map();
+  SpeechBlocks.Blocks.getBlock(blockId, this.workspace_).inputList.forEach(function(input) {
+    input.fieldRow.forEach(function(field) {
+      var type = SpeechBlocks.Controller.getFieldType_(field)
+
+      // TODO(evanfredhernandez): How to handle nameless fields?
+      if (field.name && type != SpeechBlocks.IRRELEVANT) {
+        blockFieldValues.set(field.name, field.getValue());
+      }
+    });
+  });
+  return blockFieldValues;
 };
 
 /**
@@ -330,6 +355,30 @@ SpeechBlocks.Controller.getFieldType_ = function(field) {
  */
 SpeechBlocks.Controller.prototype.setBlockField = function(blockId, fieldName, fieldValue) {
   SpeechBlocks.Blocks.getBlock(blockId, this.workspace_).setFieldValue(fieldValue, fieldName);
+};
+
+/**
+ * Checks that the given value is valid for the given field.
+ * @param {string} blockId The ID of the block.
+ * @param {string} fieldName The name of the field to validate.
+ * @param {string} value The value to validate.
+ * @return {boolean} True if given value is valid; false otherwise.
+ * @public
+ */
+SpeechBlocks.Controller.prototype.isFieldValueValid = function(blockId, fieldName, value) {
+  return !goog.isNull(this.getField_(blockId, fieldName).callValidator(value));
+};
+
+/**
+ * Asserts that the field with the given name exists and returns it.
+ * @param {string} blockId The ID of the block.
+ * @oaram {string} fieldName The name of the field.
+ * @return {!Blockly.Field} Field with given name in given block.
+ * @public
+ */
+SpeechBlocks.Controller.prototype.getField_ = function(blockId, fieldName) {
+  return goog.asserts.assertInstanceof(
+      SpeechBlocks.Blocks.getBlock(blockId, this.workspace_)).getField(fieldName);
 };
 
 /**
