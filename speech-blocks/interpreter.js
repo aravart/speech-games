@@ -104,7 +104,7 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
         this.controller_.closeMenu();
       }
       break;
-   }
+  }
 };
 
 /**
@@ -124,12 +124,17 @@ SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
   if (!this.blockTypes_.includes(this.blockTypeMap_.get(command.type))) {
     throw 'Block not available';
   }
-
-  // TODO: Rather than calling add followed by move, we should create the Where object
-  // here and then pass that object to addBlock.
   command.block = this.controller_.addBlock(this.blockTypeMap_.get(command.type));
-  if (command.where != null) {
-    this.moveBlock_(command);
+  var wheres = this.getWheres_(command);
+  for (var i = 0; i < wheres.length; i++) {
+    console.log(wheres[i]);
+    try {
+      this.controller_.moveBlock(command.block, wheres[i]);
+    } catch (e) {
+      console.log(e);
+      continue;
+    }
+    break;
   }
 };
 
@@ -140,6 +145,7 @@ SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
  */
 SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
   command.block = command.block.toString();
+  console.log(command)
   if (!this.isBlockIdValid_(command.block)) {
     throw 'Block ' + command.block.toString() + ' does not exist!';
   }
@@ -155,18 +161,41 @@ SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
 
   // Handle cases where target is a block.
   command.where.block = command.where.block.toString();
-  if (command.where.block == null
-      || !this.isBlockIdValid_(command.where.block)) {
+  if (command.where.block == null ||
+    !this.isBlockIdValid_(command.where.block)) {
+    throw 'Block ' + command.where.block + ' does not exist!';
+  }
+  var wheres = this.getWheres_(command);
+  for (var i = 0; i < wheres.length; i++) {
+    console.log(wheres[i]);
+    try {
+      this.controller_.moveBlock(command.block, wheres[i]);
+    } catch (e) {
+      console.log(e);
+      continue;
+    }
+    break;
+  }
+};
+
+/**
+ * Returns a list of potential wheres.
+ */
+SpeechBlocks.Interpreter.prototype.getWheres_ = function(command) {
+  command.where.block = command.where.block.toString();
+  if (command.where.block == null ||
+    !this.isBlockIdValid_(command.where.block)) {
     throw 'Block ' + command.where.block + ' does not exist!';
   }
 
+  var wheres = [];
   switch (command.where.position) {
     case 'below':
-      this.controller_.moveBlock(command.block, new SpeechBlocks.Successor(command.where.block));
+      wheres.push(new SpeechBlocks.Successor(command.where.block));
       break;
 
     case 'above':
-      this.controller_.moveBlock(command.block, new SpeechBlocks.Predecessor(command.where.block));
+      where.push(new SpeechBlocks.Predecessor(command.where.block));
       break;
 
     case 'lhs':
@@ -176,47 +205,32 @@ SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
       var inputList = this.controller_.getBlockValueInputs(command.where.block);
       if (inputList.length == 0) {
         throw 'Block ' + command.where.block + ' has no value inputs!';
-      } else if (command.where.position == 'rhs'
-          || command.where.position == 'to the right of') {
-        this.controller_.moveBlock(
-            command.block,
-            new SpeechBlocks.ValueInput(command.where.block, inputList[inputList.length - 1]));
-      } else if (command.where.position == 'lhs' || command.where.position == 'top') {
-        this.controller_.moveBlock(
-            command.block,
-            new SpeechBlocks.ValueInput(command.where.block, inputList[0]));
+      } else if (command.where.position == 'rhs' ||
+        command.where.position == 'to the right of') {
+        wheres.push(new SpeechBlocks.ValueInput(command.where.block, inputList[inputList.length - 1]));
+      } else if (command.where.position == 'lhs' ||
+        command.where.position == 'top') {
+        wheres.push(new SpeechBlocks.ValueInput(command.where.block, inputList[0]));
       }
       break;
 
     case 'inside':
-      var inputList = this.controller_.getBlockValueInputs(command.where.block);
-      var statementList = this.controller_.getBlockStatementInputs(command.where.block);
-
       // TODO: We should be handling case-by-case scenarios, where we check if the
       // "where" block has value or statement inputs, as well as if the "to place" block
       // has a previous/output connections.
-      try {
-        this.controller_.moveBlock(
-            command.block, new SpeechBlocks.ValueInput(command.where.block, inputList[0]));
-      } catch (err) {
-        console.log(err);
+      var inputList = this.controller_.getBlockValueInputs(command.where.block);
+      var statementList = this.controller_.getBlockStatementInputs(command.where.block);
+      for (var i = 0; i < inputList.length; i++) {
+        wheres.push(new SpeechBlocks.ValueInput(command.where.block, inputList[i]));
       }
-
-      try {
-        this.controller_.moveBlock(
-            command.block,
-            new SpeechBlocks.StatementInput(
-                command.where.block, statementList[statementList.length - 1]));
-      } catch (err) {
-        console.log(err);
+      for (var i = 0; i < statementList.length; i++) {
+        wheres.push(new SpeechBlocks.StatementInput(command.where.block, statementList[statementList.length - 1]));
       }
-      break;
-
-    case 'away':
-      this.controller_.disconnectBlock(command.block);
       break;
   }
-};
+
+  return wheres;
+}
 
 /**
  * Modifies a specified block.
@@ -230,40 +244,49 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
   }
 
   var fields = this.controller_.getFieldsForBlock(command.block).getKeys();
-  var fieldIndex = fields.length - 1;
-
-  switch (command.ordinal) {
-    case 'first':
-      fieldIndex = 0;
-      break;
-    case 'second':
-      fieldIndex = 1;
-      break;
-    case 'third':
-      fieldIndex = 2;
-      break;
-    case 'fourth':
-      fieldIndex = 3;
-      break;
-  }
-
-  // TODO: Is this switch statement necessary?
-  switch (command.property) {
-    case 'number':
-      command.value = Number(command.value); // fall through
-    case 'text':
-    case 'comparison':
-    case 'operation':
-    case 'name':
-    case 'value':
-    case 'field':
-      try {
-        this.controller_.setBlockField(command.block, fields[fieldIndex], command.value);
-      } catch (e) {
-        this.controller_.setBlockField(command.block, fields[fields.length - 1], command.value);
+  var fieldIndex;
+  if (command.ordinal) {
+    switch (command.ordinal) {
+      case 'first':
+        fieldIndex = 0;
+        break;
+      case 'second':
+        fieldIndex = 1;
+        break;
+      case 'third':
+        fieldIndex = 2;
+        break;
+      case 'fourth':
+        fieldIndex = 3;
+        break;
+    }
+  } else {
+    var fieldValuesMap = this.controller_.getFieldValuesForBlock(command.block);
+    var valueType = typeof(command.value);
+    if (valueType == "string") {
+      for (var i = 0; i < fieldValuesMap.keys_.length; i++) {
+        if (this.controller_.isFieldValueValid(command.block, fieldValuesMap.keys_[i], command.value) && valueType == typeof(fieldValuesMap.get(fieldValuesMap.keys_[i]))) {
+          fieldIndex = i;
+          break;
+        }
       }
-      break;
+    } else if (valueType == "number") {
+      command.value += "";
+      for (var i = 0; i < fieldValuesMap.keys_.length; i++) {
+        if (!this.controller_.isFieldValueValid(command.block, fieldValuesMap.keys_[i], command.value) || isNaN(parseInt(fieldValuesMap.get(fieldValuesMap.keys_[i])))) {
+          continue;
+        } else {
+          fieldIndex = i;
+          break;
+        }
+      }
+    }
+    if (!fieldIndex) {
+      console.log("Couldn't determine which field to modify");
+      return;
+    }
   }
+  this.controller_.setBlockField(command.block, fields[fieldIndex], command.value);
 };
 
 /**
