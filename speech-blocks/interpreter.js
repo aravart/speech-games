@@ -222,7 +222,7 @@ SpeechBlocks.Interpreter.prototype.getWheres_ = function(command) {
       break;
 
     case 'above':
-      where.push(new SpeechBlocks.Predecessor(command.where.block));
+      wheres.push(new SpeechBlocks.Predecessor(command.where.block));
       break;
 
     case 'lhs':
