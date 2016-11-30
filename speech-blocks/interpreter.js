@@ -74,16 +74,31 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
       break;
 
     case 'add':
-      this.addBlock_(command);
-      break;
+      try {
+        this.addBlock_(command);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        break;
+      }
 
     case 'move':
-      this.moveBlock_(command);
-      break;
+      try {
+        this.moveBlock_(command);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        break;
+      }
 
     case 'modify':
-      this.modifyBlock_(command);
-      break;
+      try {
+        this.modifyBlock_(command);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        break;
+      }
 
     case 'delete':
       this.deleteBlock_(command.block.toString());
@@ -100,7 +115,7 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
     case 'menu':
       if (command.actionType == 'open') {
         this.controller_.openMenu(command.menu);
-      } else {
+      } else if (command.actionType == 'close'){
         this.controller_.closeMenu();
       }
       break;
@@ -122,10 +137,16 @@ SpeechBlocks.Interpreter.prototype.run_ = function() {
  */
 SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
   if (!this.blockTypes_.includes(this.blockTypeMap_.get(command.type))) {
-    throw 'Block not available';
+    throw 'Block type ' + this.blockTypes_.toString() + 'not available';
   }
   command.block = this.controller_.addBlock(this.blockTypeMap_.get(command.type));
-  var wheres = this.getWheres_(command);
+  var wheres = []
+  try {
+    wheres = this.getWheres_(command);
+  } catch (e) {
+    console.log(e);
+    return;
+  }
   for (var i = 0; i < wheres.length; i++) {
     console.log(wheres[i]);
     try {
@@ -165,7 +186,13 @@ SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
     !this.isBlockIdValid_(command.where.block)) {
     throw 'Block ' + command.where.block + ' does not exist!';
   }
-  var wheres = this.getWheres_(command);
+  var wheres = []
+  try {
+    wheres = this.getWheres_(command);
+  } catch (e) {
+    console.log(e);
+    return;
+  }
   for (var i = 0; i < wheres.length; i++) {
     console.log(wheres[i]);
     try {
@@ -185,7 +212,7 @@ SpeechBlocks.Interpreter.prototype.getWheres_ = function(command) {
   command.where.block = command.where.block.toString();
   if (command.where.block == null ||
     !this.isBlockIdValid_(command.where.block)) {
-    throw 'Block ' + command.where.block + ' does not exist!';
+    throw 'Block ' + command.where.block + ' does not exist or not given!';
   }
 
   var wheres = [];
