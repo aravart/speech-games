@@ -58,7 +58,10 @@ $(document).ready(function() {
   var oldQ = null;
   var parseTimer = null;
   var output = null;
-  controller = SpeechBlocks.Controller.injectIntoDiv('blocklyDiv', { media: 'lib/google-blockly/media/',
+  controller = SpeechBlocks.Controller.injectIntoDiv('blocklyDiv', { 
+       media: 'lib/google-blockly/media/',
+       trashcan: false,
+       scrollbars: false,
        toolbox: document.getElementById('toolbox')}); 
   SpeechGames.workspace = controller.workspace_
   var interpreter = new SpeechBlocks.Interpreter(controller);
