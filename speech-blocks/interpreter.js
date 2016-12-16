@@ -28,8 +28,7 @@ SpeechBlocks.Interpreter = function(controller) {
   this.createBlockTypeMap_();
 
   /** @private {!Array<string>} */
-  this.blockTypes_ = [];
-  this.retrieveBlockTypes_();
+  this.blockTypes_ = controller.blockXmlMap_.keys_.slice()
 }
 
 /** @private */
@@ -49,16 +48,6 @@ SpeechBlocks.Interpreter.prototype.createBlockTypeMap_ = function() {
   this.blockTypeMap_.set('pen', 'turtle_pen');
   this.blockTypeMap_.set('repeat', 'turtle_repeat_internal');
   this.blockTypeMap_.set('color', 'turtle_colour_internal');
-}
-
-/** @private */
-SpeechBlocks.Interpreter.prototype.retrieveBlockTypes_ = function() {
-  var children = document.getElementById('toolbox').children;
-  for (var i = 0; i < children.length; i++) {
-    for (var j = 0; j < children[i].children.length; j++) {
-      this.blockTypes_.push(children[i].children[j].getAttribute('type'));
-    }
-  }
 }
 
 /**

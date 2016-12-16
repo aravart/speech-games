@@ -63,11 +63,18 @@ SpeechBlocks.Controller = function(workspace) {
 
   // Create a map of block definitions.
   this.blockXmlMap_ = new goog.structs.Map();
-  this.workspace_.toolbox_.tree_.forEachChild(function(blockTab) {
-    blockTab.blocks.forEach(function(block) {
-      this.blockXmlMap_.set(block.getAttribute('type'), block);
-    }, this)
-  }, this);
+  if(this.workspace_.options.hasCategories) {
+    this.workspace_.toolbox_.tree_.forEachChild(function(blockTab) {
+      blockTab.blocks.forEach(function(block) {
+        this.blockXmlMap_.set(block.getAttribute('type'), block);
+      }, this)
+    }, this);
+  } else {
+    var arr = this.workspace_.options.languageTree.children;
+    for(var i = 0, len = arr.length; i < len; i++) {
+        this.blockXmlMap_.set(arr[i].getAttribute('type'), arr[i]);
+    }
+  }
 };
 
 /**
@@ -402,5 +409,7 @@ SpeechBlocks.Controller.prototype.openMenu = function(menuName) {
  * @public
  */
 SpeechBlocks.Controller.prototype.closeMenu = function() {
-   this.workspace_.toolbox_.clearSelection()
+   if(this.workspace_.options.hasCategories) {
+     this.workspace_.toolbox_.clearSelection()
+   }
 }
