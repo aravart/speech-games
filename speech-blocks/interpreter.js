@@ -48,6 +48,7 @@ SpeechBlocks.Interpreter.prototype.createBlockTypeMap_ = function() {
   this.blockTypeMap_.set('pen', 'turtle_pen');
   this.blockTypeMap_.set('repeat', 'turtle_repeat_internal');
   this.blockTypeMap_.set('color', 'turtle_colour_internal');
+  this.blockTypeMap_.set('walk', 'turtle_walk');
 }
 
 /**

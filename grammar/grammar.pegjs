@@ -1,7 +1,7 @@
 Start = ("please" _)? command:( Move / Add / Remove / Change / Run / Undo / Redo / Separate / Menu ) { return command }
 
 Article = "an" / "a" / "the"
-Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "move" / "turn" / "pen" / "color"
+Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "move" / "turn" / "pen" / "color" / "walk"
 
 Move = MoveVerb _ block:BlockToken _ where:(Where / "away") { return {
     "action": "move",

@@ -118,7 +118,7 @@ Turtle.init = function() {
   // // Prevent collisions with user-defined functions or variables.
   Blockly.JavaScript.addReservedWords('moveForward,moveBackward,' +
       'turnRight,turnLeft,penUp,penDown,penWidth,penColor,' +
-      'hideTurtle,showTurtle,print,font');
+      'hideTurtle,showTurtle,print,font,walk');
 
   // if (document.getElementById('submitButton')) {
   //   BlocklyGames.bindClick('submitButton', Turtle.submitToReddit);
@@ -413,15 +413,11 @@ Turtle.resetButtonClick = function(e) {
 Turtle.initInterpreter = function(interpreter, scope) {
   // API
   var wrapper;
-  wrapper = function(distance, id) {
-    Turtle.move(distance.valueOf(), id.toString());
+
+  wrapper = function(id) {
+    Turtle.walk(id.toString());
   };
-  interpreter.setProperty(scope, 'moveForward',
-      interpreter.createNativeFunction(wrapper));
-  wrapper = function(distance, id) {
-    Turtle.move(-distance.valueOf(), id.toString());
-  };
-  interpreter.setProperty(scope, 'moveBackward',
+  interpreter.setProperty(scope, 'walk',
       interpreter.createNativeFunction(wrapper));
 
   wrapper = function(angle, id) {
@@ -546,6 +542,14 @@ Turtle.animate = function(id) {
     var stepSpeed = 1000 * Math.pow(1 - 0.5, 2);
     Turtle.pause = Math.max(1, stepSpeed);
   }
+};
+
+/**
+ * Move the turtle forward.
+ * @param {?string} id ID of block.
+ */
+Turtle.walk = function(id) {
+  Turtle.move(100, id);
 };
 
 /**
