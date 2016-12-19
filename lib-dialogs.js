@@ -392,9 +392,11 @@ BlocklyDialogs.congratulations = function() {
     var text = "Are you ready for the next challenge?"
   }
 
-  var cancel = document.getElementById('doneCancel');
-  cancel.addEventListener('click', BlocklyDialogs.hideDialog, true);
-  cancel.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
+  if(document.getElementById('doneCancel')) {
+    var cancel = document.getElementById('doneCancel');
+    cancel.addEventListener('click', BlocklyDialogs.hideDialog, true);
+    cancel.addEventListener('touchend', BlocklyDialogs.hideDialog, true);
+  }
   var ok = document.getElementById('doneOk');
   ok.addEventListener('click', BlocklyInterface.nextLevel, true);
   ok.addEventListener('touchend', BlocklyInterface.nextLevel, true);
