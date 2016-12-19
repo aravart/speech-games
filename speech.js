@@ -32,7 +32,7 @@ SpeechGames.getNumberParamFromUrl = function(name, minValue, maxValue) {
 /**
  * Maximum number of levels.  Common to all apps.
  */
-SpeechGames.MAX_LEVEL = 10;
+SpeechGames.MAX_LEVEL = 12;
 
 /**
  * User's level (e.g. 5).

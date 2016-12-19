@@ -43,25 +43,35 @@ Turtle.answer = function() {
 
   switch (SpeechGames.LEVEL) {
     case 1:
+      // Line.
+      Turtle.move(100);
+      break;
+    case 2:
+      // Two Lines.
+      Turtle.move(100);
+      Turtle.turn(90);
+      Turtle.move(100);
+      break;
+    case 3:
       // Square.
       for (var count = 0; count < 4; count++) {
         Turtle.move(100);
         Turtle.turn(90);
       }
       break;
-    case 2:
+    case 4:
       // Pentagon.
       for (var count = 0; count < 5; count++) {
         Turtle.move(100);
         Turtle.turn(72);
       }
       break;
-    case 3:
+    case 5:
       // Star.
       Turtle.penColor('#ffff00');
       drawStar(100);
       break;
-    case 4:
+    case 6:
       // Pen up/down.
       Turtle.penColor('#ffff00');
       drawStar(50);
@@ -70,7 +80,7 @@ Turtle.answer = function() {
       Turtle.penDown(true);
       Turtle.move(20);
       break;
-    case 5:
+    case 7:
       // Four stars.
       Turtle.penColor('#ffff00');
       for (var count = 0; count < 4; count++) {
@@ -81,7 +91,7 @@ Turtle.answer = function() {
         drawStar(50);
       }
       break;
-    case 6:
+    case 8:
       // Three stars and a line.
       Turtle.penColor('#ffff00');
       for (var count = 0; count < 3; count++) {
@@ -98,7 +108,7 @@ Turtle.answer = function() {
       Turtle.penColor('#ffffff');
       Turtle.move(50);
       break;
-    case 7:
+    case 9:
       // Three stars and 4 lines.
       Turtle.penColor('#ffff00');
       for (var count = 0; count < 3; count++) {
@@ -119,7 +129,7 @@ Turtle.answer = function() {
         Turtle.turn(45);
       }
       break;
-    case 8:
+    case 10:
       // Three stars and a circle.
       Turtle.penColor('#ffff00');
       for (var count = 0; count < 3; count++) {
@@ -140,7 +150,7 @@ Turtle.answer = function() {
         Turtle.turn(1);
       }
       break;
-    case 9:
+    case 11:
       // Three stars and a crescent.
       Turtle.penColor('#ffff00');
       for (var count = 0; count < 3; count++) {
