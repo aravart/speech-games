@@ -23,6 +23,7 @@ goog.require('Blockly.constants');
 goog.require('Blockly.inject');
 goog.require('SpeechBlocks.Blocks');
 goog.require('SpeechBlocks.FieldTypes');
+goog.require('SpeechBlocks.Position');
 goog.require('SpeechBlocks.Translation');
 goog.require('SpeechBlocks.Where');
 goog.require('goog.asserts');
@@ -110,7 +111,7 @@ SpeechBlocks.Controller.constructFromXml = function(xml) {
  * @return {string} ID of the newly created block.
  * @public
  */
-SpeechBlocks.Controller.prototype.addBlock = function(type, opt_where  ) {
+SpeechBlocks.Controller.prototype.addBlock = function(type, opt_where) {
   var xml = this.blockXmlMap_.get(type).cloneNode(true);
   var newBlock = Blockly.Xml.domToBlock(xml, this.workspace_);
   newBlock.initSvg();

@@ -10,6 +10,7 @@ goog.provide('SpeechBlocks.Interpreter');
 goog.require('SpeechBlocks.Predecessor');
 goog.require('SpeechBlocks.StatementInput')
 goog.require('SpeechBlocks.Successor');
+goog.require('SpeechBlocks.Position');
 goog.require('SpeechBlocks.Translation');
 goog.require('SpeechBlocks.ValueInput');
 goog.require('goog.structs.Map');
@@ -129,25 +130,50 @@ SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
   if (!this.blockTypes_.includes(this.blockTypeMap_.get(command.type))) {
     throw 'Block type ' + this.blockTypes_.toString() + 'not available';
   }
-  command.block = this.controller_.addBlock(this.blockTypeMap_.get(command.type));
-  var wheres = []
-  try {
-    wheres = this.getWheres_(command);
-  } catch (e) {
-    console.log(e);
-    return;
-  }
-  for (var i = 0; i < wheres.length; i++) {
-    console.log(wheres[i]);
+  // An empty where means the user did not specify a location
+  // And we place the block in some empty region of the canvas
+  if(command.where == "") {
+    command.block = this.controller_.addBlock(
+      this.blockTypeMap_.get(command.type),
+      this.getNewPosition_());
+  } else {
+    // TODO Revise this code not to use exceptions as control flow
+    command.block = this.controller_.addBlock(this.blockTypeMap_.get(command.type));
+    var wheres = []
     try {
-      this.controller_.moveBlock(command.block, wheres[i]);
+      wheres = this.getWheres_(command);
     } catch (e) {
       console.log(e);
-      continue;
+      return;
     }
-    break;
+    for (var i = 0; i < wheres.length; i++) {
+      console.log(wheres[i]);
+      try {
+        this.controller_.moveBlock(command.block, wheres[i]);
+      } catch (e) {
+        console.log(e);
+        continue;
+      }
+      break;
+    }
   }
 };
+
+/**
+ * Returns coordinates of some empty space in the workspace
+ * @private
+ */
+SpeechBlocks.Interpreter.prototype.getNewPosition_ = function(command) {
+  var blocks = SpeechGames.workspace.getTopBlocks();
+  if(blocks.length == 0) {
+    return new SpeechBlocks.Position(10,10);
+  }
+  var maxy = 0;
+  for(var i = 0; i < blocks.length; i++) {
+    maxy = Math.max(maxy, blocks[i].getRelativeToSurfaceXY().y + blocks[i].height);
+  }
+  return new SpeechBlocks.Position(10, maxy + 10);
+}
 
 /**
  * Moves a specified block.
