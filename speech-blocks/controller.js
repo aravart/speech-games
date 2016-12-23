@@ -23,7 +23,6 @@ goog.require('Blockly.constants');
 goog.require('Blockly.inject');
 goog.require('SpeechBlocks.Blocks');
 goog.require('SpeechBlocks.FieldTypes');
-goog.require('SpeechBlocks.Position');
 goog.require('SpeechBlocks.Translation');
 goog.require('SpeechBlocks.Where');
 goog.require('goog.asserts');

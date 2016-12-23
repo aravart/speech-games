@@ -10,7 +10,6 @@ goog.provide('SpeechBlocks.Interpreter');
 goog.require('SpeechBlocks.Predecessor');
 goog.require('SpeechBlocks.StatementInput')
 goog.require('SpeechBlocks.Successor');
-goog.require('SpeechBlocks.Position');
 goog.require('SpeechBlocks.Translation');
 goog.require('SpeechBlocks.ValueInput');
 goog.require('goog.structs.Map');
@@ -147,7 +146,6 @@ SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
       return;
     }
     for (var i = 0; i < wheres.length; i++) {
-      console.log(wheres[i]);
       try {
         this.controller_.moveBlock(command.block, wheres[i]);
       } catch (e) {
@@ -164,15 +162,16 @@ SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
  * @private
  */
 SpeechBlocks.Interpreter.prototype.getNewPosition_ = function(command) {
-  var blocks = SpeechGames.workspace.getTopBlocks();
+  var blocks = SpeechGames.workspace.getAllBlocks();
   if(blocks.length == 0) {
-    return new SpeechBlocks.Position(10,10);
+    return new SpeechBlocks.Translation(10,10);
   }
   var maxy = 0;
   for(var i = 0; i < blocks.length; i++) {
     maxy = Math.max(maxy, blocks[i].getRelativeToSurfaceXY().y + blocks[i].height);
   }
-  return new SpeechBlocks.Position(10, maxy + 10);
+  // If you use fewer than 20, Blockly shifts it rightward a bit because there is a zone under the block where it'd be connected
+  return new SpeechBlocks.Translation(10, maxy + 20);
 }
 
 /**
@@ -182,7 +181,7 @@ SpeechBlocks.Interpreter.prototype.getNewPosition_ = function(command) {
  */
 SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
   command.block = command.block.toString();
-  console.log(command)
+  // console.log(command)
   if (!this.isBlockIdValid_(command.block)) {
     throw 'Block ' + command.block.toString() + ' does not exist!';
   }
@@ -210,7 +209,6 @@ SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
     return;
   }
   for (var i = 0; i < wheres.length; i++) {
-    console.log(wheres[i]);
     try {
       this.controller_.moveBlock(command.block, wheres[i]);
     } catch (e) {
