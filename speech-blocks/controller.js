@@ -140,8 +140,9 @@ SpeechBlocks.Controller.prototype.moveBlock = function(blockId, where) {
  * @public
  */
 SpeechBlocks.Controller.prototype.disconnectBlock = function(blockId) {
-  SpeechBlocks.Blocks.getBlock(blockId, this.workspace_).unplug(true /* Heal stack! */);
-  this.moveBlock(blockId, new SpeechBlocks.Translation(50, 0));
+  var block = SpeechBlocks.Blocks.getBlock(blockId, this.workspace_)
+  block.unplug(true /* Heal stack! */);
+  this.moveBlock(blockId, new SpeechBlocks.Translation(block.width + 20, 0));
 };
 
 /**

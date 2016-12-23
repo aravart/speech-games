@@ -115,7 +115,8 @@ $(document).ready(function() {
     $("#output").addClass("disabled").text("Output not available.");
 
     try {
-      output = parser.parse($("#q").val().toLowerCase());
+      var speech = $("#q").val()
+      output = parser.parse(speech.toLowerCase());
 
       $("#parse-message")
             .attr("class", "message info")
@@ -123,9 +124,12 @@ $(document).ready(function() {
       $("#output").removeClass("disabled").text(jsDump.parse(output));
       interpretSpeech();
       var result = true;
+      $("#user-message").text("Got it!");
     } catch (e) {
       $("#parse-message").attr("class", "message error").text(buildErrorMessage(e));
-
+      if(speech != "") {
+        $("#user-message").text("Sorry, I didn't understand '" + speech + "'");
+      }
       var result = false;
     }
 
@@ -168,6 +172,7 @@ $(document).ready(function() {
 // $("#showButton").on("click", showCode);
 $("#debug").hide();
 $("#debugButton").on("click", function() { $("#debug").toggle() });
+$("#buttonRow").hide();
 
 });
 

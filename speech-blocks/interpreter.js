@@ -170,7 +170,7 @@ SpeechBlocks.Interpreter.prototype.getNewPosition_ = function(command) {
   for(var i = 0; i < blocks.length; i++) {
     maxy = Math.max(maxy, blocks[i].getRelativeToSurfaceXY().y + blocks[i].height);
   }
-  // If you use fewer than 20, Blockly shifts it rightward a bit because there is a zone under the block where it'd be connected
+  // If you use less than 20, Blockly shifts it rightward a bit because there is a zone under the block where it'd be connected
   return new SpeechBlocks.Translation(10, maxy + 20);
 }
 
