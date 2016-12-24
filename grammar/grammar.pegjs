@@ -3,15 +3,14 @@ Start = ("please" _)? command:( Move / Add / Remove / Change / Run / Undo / Redo
 Article = "an" / "a" / "the"
 Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "move" / "turn" / "pen" / "color" / "walk"
 
-Move = MoveVerb _ block:BlockToken _ where:(Where / "away") { return {
+Move = "move" _ block:BlockToken _ where:(Where / "away") { return {
     "action": "move",
     "block": block,
     "where": where
 } }
 
-MoveVerb = "move" / "attach"
 
-BlockType = Article _ type:Type (_ "block")? { return type }
+BlockType = type:Type (_ "block")? { return type }
 
 BlockToken = _ ("blocks"/"block")? _ ("number")? _ number:Number { return number }
 
@@ -30,65 +29,20 @@ Number = digits:[0-9]+ { return parseInt(digits.join(""), 10); }
 Word = value:[a-zA-Z]+ { return value.join("") }
 Words = car:Word cdr:(" " w:Word { return w })* { return [car].concat(cdr).join(" ") }
 NewTextField = car:Word cdr:(!"in block" .)* { return [car].concat(cdr.join("")).join("").replace(new RegExp(",","g"),"").trim()  }
-Add = Add4 / Add3 / Add2 / Add1
 
-Add1 = AddVerb _ type:BlockType { return {
+Add = "add" _ (Article)? _ type:BlockType { return {
     "action": "add",
     "type": type,
-    "where": "",
-    "value": ""
 } }
 
-Add2 = AddVerb _ type:BlockType _ where:Where { return {
-    "action": "add",
-    "type": type,
-    "where": where,
-    "value": ""
-} }
-
-Add3 = AddVerb _ type:BlockType _ NameVerb _  name:Word{ return {
-    "action": "add",
-    "type": type,
-    "where": "",
-    "value": name
-} }
-
-Add4 =  AddVerb _ type:BlockType _ NameVerb _  name:Word _ where:Where { return {
-    "action": "add",
-    "type": type,
-    "where": where,
-    "value": name
-} }
-
-AddVerb = "add" / "insert" / "make"
 NameVerb = "called" / "named"
 
-Remove = RemoveVerb _ block:(BlockToken / "all") { return {
+Remove = "delete" _ block:(BlockToken / "all") { return {
     "action": "delete",
     "block": block
 } }
 
-RemoveVerb = "delete" / "remove" / "erase"
-
-Change = Change1 / Change2 / Change3 / Change4
-
-Change1 = "in" _ block:BlockToken _ ("please" _)? ChangeVerb _ ("the")? _ ordinal:(Ordinal / "") _ pair:PropertyValuePair { console.log(pair); return  {
-      "action": "modify",
-      "property": pair.property,
-      "value": pair.value,
-      "block": block,
-      "ordinal": ordinal
-} }
-
-Change2 = ChangeVerb _ ("the")? _ ordinal:(Ordinal / "") _ pair:PropertyValuePair _ "in" block:BlockToken ( _ "please")? { return {
-    "action": "modify",
-    "property": pair.property,
-    "value": pair.value,
-    "block": block,
-    "ordinal": ordinal
-} }
-
-Change3 = ChangeVerb _ ("the")? _ ordinal:(Ordinal /"") _ property:Property _ "in" _ block:BlockToken _ "to" _ value:Value ( _ "please")? { return {
+Change = "change" _ ("the")? _ ordinal:(Ordinal /"") _ property:Property _ "in" _ block:BlockToken _ "to" _ value:Value ( _ "please")? { return {
     "action": "modify",
     "property": property,
     "value": value,
@@ -96,15 +50,7 @@ Change3 = ChangeVerb _ ("the")? _ ordinal:(Ordinal /"") _ property:Property _ "i
     "ordinal": ordinal
 } }
 
-Change4 = ChangeVerb _ "in" _ block:BlockToken _ ("the")? _ ordinal:(Ordinal / "") _ pair:PropertyValuePair (_ "please")? { return {
-   "action": "modify",
-   "property": pair.property,
-   "value": pair.value,
-   "block": block,
-   "ordinal": ordinal
-} }
-
-Ordinal = ord:("first" / "second" / "third" / "fourth" / "last") { return ord }
+Ordinal = ord:("first" / "second" / "third" ) { return ord }
 
 ChangeVerb = "change" / "set" / "modify"
 
@@ -194,9 +140,7 @@ Menu = actionType:MenuVerb _ "the"?  _ menuName:Word _ ("menu"/"toolbox") { retu
     "actionType": actionType,
     "menu": menuName
 } }
-MenuVerb = OpenMenuVerb / CloseMenuVerb
-OpenMenuVerb = ("open" / "show") { return "open" }
-CloseMenuVerb = "close"
+MenuVerb = "open" / "close"
 
 SeparateVerb = "separate" / "disconnect" / "break apart"
 
