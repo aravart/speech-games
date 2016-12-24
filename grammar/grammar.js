@@ -184,7 +184,7 @@
         peg$c40 = peg$literalExpectation("away", false),
         peg$c41 = function(block, where) { return {
             "action": "move",
-            "block": block,
+            "blockId": block,
             "where": where
         } },
         peg$c42 = "block",
@@ -194,7 +194,7 @@
         peg$c46 = peg$literalExpectation("blocks", false),
         peg$c47 = function(number) { return number },
         peg$c48 = function(position, block) { return {
-            "block": block,
+            "blockId": block,
             "position": position
         } },
         peg$c49 = "to the trash",
@@ -230,7 +230,7 @@
         peg$c76 = peg$literalExpectation("all", false),
         peg$c77 = function(block) { return {
             "action": "delete",
-            "block": block
+            "blockId": block
         } },
         peg$c78 = "change",
         peg$c79 = peg$literalExpectation("change", false),
@@ -243,7 +243,7 @@
             "action": "modify",
             "property": property,
             "value": value,
-            "block": block,
+            "blockId": block,
             "ordinal": ordinal
         } },
         peg$c86 = "first",
@@ -419,7 +419,7 @@
         peg$c232 = peg$literalExpectation("and", false),
         peg$c233 = function(block) { return {
             "action": "move",
-            "block": block,
+            "blockId": block,
             "where": "away"
         } },
         peg$c234 = "menu",

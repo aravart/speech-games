@@ -5,7 +5,7 @@ Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" 
 
 Move = "move" _ block:BlockToken _ where:(Where / "away") { return {
     "action": "move",
-    "block": block,
+    "blockId": block,
     "where": where
 } }
 
@@ -17,7 +17,7 @@ BlockToken = _ ("blocks"/"block")? _ ("number")? _ number:Number { return number
 Where = BlockPosition / Trash
 
 BlockPosition = position:Position _ block:BlockToken { return {
-    "block": block,
+    "blockId": block,
     "position": position
 } }
 
@@ -39,14 +39,14 @@ NameVerb = "called" / "named"
 
 Remove = "delete" _ block:(BlockToken / "all") { return {
     "action": "delete",
-    "block": block
+    "blockId": block
 } }
 
 Change = "change" _ ("the")? _ ordinal:(Ordinal /"") _ property:Property _ "in" _ block:BlockToken _ "to" _ value:Value ( _ "please")? { return {
     "action": "modify",
     "property": property,
     "value": value,
-    "block": block,
+    "blockId": block,
     "ordinal": ordinal
 } }
 
@@ -84,12 +84,13 @@ ComparisonPair = (ComparisonName / ComparisonValue) _ "to" _ comparison:Comparis
 } }
 
 ComparisonName = "comparison"
-ComparisonValue = "equals" { return "==" } /
-("not equals" / "not equal to") { return "!=" /** this doesn't work yet :( */} /
-"greater than or equal to" { return ">=" } /
-"less than or equal to" { return "<=" } /
-"greater than" { return ">" } /
-"less than" { return "<" }
+ComparisonValue = 
+    "equals" { return "==" } /
+    ("not equals" / "not equal to") { return "!=" /** this doesn't work yet :( */} /
+    "greater than or equal to" { return ">=" } /
+    "less than or equal to" { return "<=" } /
+    "greater than" { return ">" } /
+    "less than" { return "<" }
 
 NumberPair = (NumberName / Number) _ "to" _ number:Number { return {
     "property": "number",
@@ -131,7 +132,7 @@ Redo = "redo" { return {
 
 Separate = SeparateVerb _ block:BlockToken _ (("from"/"and") _ BlockToken)? { return {
     "action": "move",
-    "block": block,
+    "blockId": block,
     "where": "away"
 } }
 
