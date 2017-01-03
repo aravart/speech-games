@@ -248,6 +248,7 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
         throw 'Block ' + command.blockId + ' does not exist!';
     }
 
+    // We look for the field the user mentioned
     var fields = this.controller_.getFieldsForBlock(command.blockId).getKeys();
     var fieldIndex;
     if (command.ordinal) {
@@ -263,6 +264,7 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
                 break;
         }
     } else {
+        // Otherwise we try to match by type
         var fieldValuesMap = this.controller_.getFieldValuesForBlock(command.blockId);
         var valueType = typeof(command.value);
         if (valueType == "string") {
@@ -288,7 +290,10 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
             return;
         }
     }
-    this.controller_.setBlockField(command.blockId, fields[fieldIndex], command.value);
+
+    var block = SpeechBlocks.Blocks.getBlock(command.blockId, SpeechGames.workspace)
+    var value = $("#synonyms synonym[type='" + block.type + "'][field='" + fields[fieldIndex] + "'][alias='" + command.value + "']").attr("property") || command.value;
+    this.controller_.setBlockField(command.blockId, fields[fieldIndex], value);
 };
 
 /**

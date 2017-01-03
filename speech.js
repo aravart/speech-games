@@ -170,7 +170,9 @@ $(document).ready(function() {
 
 // $("#runButton").on("click", run);
 // $("#showButton").on("click", showCode);
-$("#debug").hide();
+if(!getParameterByName("debug")) {
+  $("#debug").hide();
+}
 $("#debugButton").on("click", function() { $("#debug").toggle() });
 $("#buttonRow").hide();
 
@@ -189,4 +191,16 @@ function showCode() {
   modalEl.style.backgroundColor = '#ff';
   modalEl.textContent = createCode()
   mui.overlay('on', modalEl);
+}
+
+function getParameterByName(name, url) {
+    if (!url) {
+      url = window.location.href;
+    }
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
