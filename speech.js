@@ -126,13 +126,16 @@ $(document).ready(function() {
       var result = true;
       $("#user-message").text("Got it!");
     } catch (e) {
+      if(e instanceof SpeechBlocks.UserError) {
+        $("#user-message").text(e.message)
+      } else {
       $("#parse-message").attr("class", "message error").text(buildErrorMessage(e));
       if(speech != "") {
         $("#user-message").text("Sorry, I didn't understand '" + speech + "'");
       }
+      }
       var result = false;
     }
-
     return result;
   }
 

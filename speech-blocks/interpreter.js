@@ -57,44 +57,40 @@ SpeechBlocks.Interpreter.prototype.createBlockTypeMap_ = function() {
  * @public
  */
 SpeechBlocks.Interpreter.prototype.interpret = function(command) {
-    console.log(command);
-    try {
-        this.controller_.closeMenu()
-        switch (command.action) {
-            case 'run':
-                this.run_();
-                break;
+    // console.log(command);
+    this.controller_.closeMenu()
+    switch (command.action) {
+        case 'run':
+            this.run_();
+            break;
 
-            case 'add':
-                this.addBlock_(command);
-                break;
+        case 'add':
+            this.addBlock_(command);
+            break;
 
-            case 'move':
-                this.moveBlock_(command);
-                break;
+        case 'move':
+            this.moveBlock_(command);
+            break;
 
-            case 'modify':
-                this.modifyBlock_(command);
-                break;
+        case 'modify':
+            this.modifyBlock_(command);
+            break;
 
-            case 'delete':
-                this.deleteBlock_(command.blockId.toString());
-                break;
+        case 'delete':
+            this.deleteBlock_(command.blockId.toString());
+            break;
 
-            case 'undo':
-                this.controller_.undo();
-                break;
+        case 'undo':
+            this.controller_.undo();
+            break;
 
-            case 'redo':
-                this.controller_.redo();
-                break;
+        case 'redo':
+            this.controller_.redo();
+            break;
 
-            case 'menu':
-                this.menuAction_(command);
-                break;
-        }
-    } catch (e) {
-        console.log(e);
+        case 'menu':
+            this.menuAction_(command);
+            break;
     }
 };
 
@@ -293,8 +289,39 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
 
     var block = SpeechBlocks.Blocks.getBlock(command.blockId, SpeechGames.workspace)
     var value = $("#synonyms synonym[type='" + block.type + "'][field='" + fields[fieldIndex] + "'][alias='" + command.value + "']").attr("property") || command.value;
+    var dropdowns = this.getDropdownValues_(block, fields[fieldIndex])
+    if(dropdowns.length > 0) {
+        var synonyms = $("#synonyms synonym[type='" + block.type + "'][field='" + fields[fieldIndex] + "']").map(function() { return $(this).attr("alias") }).toArray()
+        if(synonyms.length > 0) {
+            if(synonyms.indexOf(command.value) < 0) {
+                var msg = "Sorry, I didn't understand '" + command.value + "'. You can say " + synonyms.map(function(x) { return "'" + x + "'" }).join(" or ") + " here.";
+                throw new SpeechBlocks.UserError(msg)
+            }
+        } else {
+            if(dropdowns.indexOf(String(value)) < 0) {
+                var msg = "Sorry, I didn't understand '" + command.value + "'. You can say " + dropdowns.map(function(x) { return "'" + x + "'" }).join(" or ") + " here.";
+                throw new SpeechBlocks.UserError(msg)
+            }
+        }
+    }
     this.controller_.setBlockField(command.blockId, fields[fieldIndex], value);
 };
+
+SpeechBlocks.Interpreter.prototype.getDropdownValues_ = function(block, field) {
+  for(var i = 0; i < block.inputList.length; i++) {
+    var inputList = block.inputList[i]
+    for(var j = 0; j < inputList.fieldRow.length; j++) {
+      if(inputList.fieldRow[j].name == field) {
+        if(inputList.fieldRow[j] instanceof Blockly.FieldDropdown) {
+          return inputList.fieldRow[j].menuGenerator_.map(function(x){ return x[1] })
+        } else {
+          return []
+        }
+      }
+    }
+  }
+  return []
+}
 
 /**
  * Delete a specified block.
