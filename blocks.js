@@ -2,19 +2,19 @@ HUE = 160
 LEFT_TURN = ' \u21BA';
 RIGHT_TURN = ' \u21BB';
 
-Blockly.Blocks['turtle_walk'] = {
+Blockly.Blocks['turtle_step'] = {
   init: function() {
     this.setColour(HUE);
-    this.appendDummyInput().appendField("walk");
+    this.appendDummyInput().appendField("step");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip("Walks turtle forward.");
+    this.setTooltip("Moves turtle forward.");
   }
 };
 
-Blockly.JavaScript['turtle_walk'] = function(block) {
+Blockly.JavaScript['turtle_step'] = function(block) {
   var value = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_NONE) || '0';
-  return 'walk(\'block_id_' + block.id + '\');\n';
+  return 'step(\'block_id_' + block.id + '\');\n';
 };
 
 Blockly.Blocks['turtle_move'] = {

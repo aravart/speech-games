@@ -178,8 +178,8 @@
         peg$c34 = peg$literalExpectation("pen", false),
         peg$c35 = "color",
         peg$c36 = peg$literalExpectation("color", false),
-        peg$c37 = "walk",
-        peg$c38 = peg$literalExpectation("walk", false),
+        peg$c37 = "step",
+        peg$c38 = peg$literalExpectation("step", false),
         peg$c39 = "away",
         peg$c40 = peg$literalExpectation("away", false),
         peg$c41 = function(block, where) { return {
