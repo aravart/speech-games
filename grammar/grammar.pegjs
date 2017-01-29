@@ -1,6 +1,6 @@
 Start = ("please" _)? command:( Move / Add / Remove / Change / Run / Undo / Redo / Separate / Menu ) { return command }
 
-Article = "an" / "a" / "the"
+Article = "an" / "a"
 Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "move" / "turn" / "pen" / "color" / "step"
 
 Move = "move" _ block:BlockToken _ where:(Where / "away") { return {
@@ -10,9 +10,9 @@ Move = "move" _ block:BlockToken _ where:(Where / "away") { return {
 } }
 
 
-BlockType = type:Type (_ "block")? { return type }
+BlockType = type:Type _ "block" { return type }
 
-BlockToken = _ ("blocks"/"block")? _ ("number")? _ number:Number { return number }
+BlockToken = _ ("blocks"/"block") _ ("number")? _ number:Number { return number }
 
 Where = BlockPosition / Trash
 
@@ -30,7 +30,7 @@ Word = value:[a-zA-Z]+ { return value.join("") }
 Words = car:Word cdr:(" " w:Word { return w })* { return [car].concat(cdr).join(" ") }
 NewTextField = car:Word cdr:(!"in block" .)* { return [car].concat(cdr.join("")).join("").replace(new RegExp(",","g"),"").trim()  }
 
-Add = "add" _ (Article)? _ type:BlockType { return {
+Add = "add" _ Article _ type:BlockType { return {
     "action": "add",
     "type": type,
 } }
@@ -119,7 +119,7 @@ Away = ("away")? _ "from" { return "away" }
 Inside = ("inside" / "into") _ ("of")?  { return "inside" }
 To = "to" { return "inside" }
 
-Run = ("run the program" / "run it" / "run") { return {
+Run = ("run the program") { return {
     "action": "run"
 } }
 
