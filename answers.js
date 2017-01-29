@@ -25,6 +25,20 @@
 
 goog.provide('Turtle.Answers');
 
+Turtle.descriptions = {
+  1: "",
+  2: "",
+  3: "Create a program that draws a square.",
+  4: "",
+  5: "",
+  6: "",
+  7: "",
+  8: "",
+  9: "",
+  10: "",
+  11: "",
+  12: ""
+}
 
 /**
  * Sample solutions for each level.
