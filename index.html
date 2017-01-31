@@ -1,4 +1,5 @@
 <html>
+
 <head>
   <script src="lib/closure-library/closure/goog/base.js"></script>
 
@@ -28,7 +29,7 @@
   <script src="lib/jsDump.js"></script>
 
   <script src="lib/fabric.min.js"></script>
-  
+
   <script src="blocks.js"></script>
   <script src="grammar/grammar.js"></script>
 
@@ -43,90 +44,96 @@
 
   <link href="common.css" rel="stylesheet" type="text/css" />
   <style>
-  .block-id-style {
-    text-shadow: 2px 2px #000000;
-    font-size: smaller;
-  } 
-  </style>
+        .block-id-style {
+            text-shadow: 2px 2px #000000;
+            font-size: smaller;
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="mui-container">
+  <div class="mui-container">
 
-<table width="100%">
-  <tbody>
-    <tr>
-      <td>
-        <h1 id="levels">
-          <span>
+    <table width="100%">
+      <tbody>
+        <tr>
+          <td>
+            <h1 id="levels">
+                            <span>
             <a href=".">Speech Games</a> : Turtle</span> &nbsp;
-        </h1>
-      </td>
-    </tr>
-  </tbody>
-</table>
+                        </h1>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-<div class="row form-inline">
-  <div class="col-md-12">
-    <img id="microphone" style="width: 5.5%;" src="https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif"/>
-    <input id="q" style="width: 94%;" class="form-control" type="text" name="q" id="transcript" placeholder="Speak" />
-  </div>
+    <div class="row form-inline">
+      <div class="col-md-12">
+        <img id="microphone" style="width: 5.5%;" src="https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif" />
+<input id="q" style="width: 94%;" class="form-control" type="text" name="q" id="transcript" placeholder="Speak" />
+</div>
 </div>
 
 <div id="debug">
 
-<div class="row">
-   <div class="col-md-12">
-     <div id="parse-message" class="message disabled"></div>
-   </div>
- </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div id="parse-message" class="message disabled"></div>
+    </div>
+  </div>
 
-<div class="row form-inline">
-   <div class="col-md-12">
-     <pre id="output" class="disabled">Record some speech or type some text to display parser results.</pre>
-   </div>
+  <div class="row form-inline">
+    <div class="col-md-12">
+      <pre id="output" class="disabled">Record some speech or type some text to display parser results.</pre>
+    </div>
+  </div>
+
 </div>
 
-</div>
-
 <div class="row form-inline">
-   <div class="col-md-12">
-     <pre id="user-message">Click on the microphone and say something!</pre>
-   </div>
-   <div class="col-md-12">
-     <div id="levelDescription">foo</div>
-   </div>
+  <div class="col-md-12">
+    <pre id="user-message">Click on the microphone and say something!</pre>
+  </div>
+  <div class="col-md-12">
+    <div id="levelDescription">foo</div>
+  </div>
 </div>
 
 <div class="mui-row">
-<div class="mui-col-md-6">
-  <canvas id="display" height="500" width="500" style="border:1px solid #ccc;"></canvas>
-  <canvas id="answer"  height="500" width="500" style="border:1px solid #ccc; display: none;"></canvas>
-  <canvas id="scratch" height="500" width="500" style="border:1px solid #ccc; display: none;"></canvas>
+  <div class="mui-col-md-6">
+    <canvas id="display" height="500" width="500" style="border:1px solid #ccc;"></canvas>
+<canvas id="answer" height="500" width="500" style="border:1px solid #ccc; display: none;"></canvas>
+<canvas id="scratch" height="500" width="500" style="border:1px solid #ccc; display: none;"></canvas>
 </div>
-<div class="mui-col-md-6"><div id="blocklyDiv" style="height: 500"></div></div>
+<div class="mui-col-md-6">
+  <div id="blocklyDiv" style="height: 500"></div>
+</div>
 </div>
 <div id="blocklyDiv" style="top: 112px; left: 420px; width: 348px;"></div>
 
 <div id="buttonRow" class="row">
-<button id="runButton" type="button" class="mui-btn mui-btn--primary mui-btn--raised">Run</button>
-<button id="resetButton" type="button" class="mui-btn mui-btn--primary mui-btn--raised">Reset</button>
-<!-- <button id="showButton" type="button" class="mui-btn mui-btn--accent">Show Code</button> -->
-<button id="debugButton" type="button" class="mui-btn mui-btn--danger">Debug</button>
+  <button id="runButton" type="button" class="mui-btn mui-btn--primary mui-btn--raised">Run</button>
+  <button id="resetButton" type="button" class="mui-btn mui-btn--primary mui-btn--raised">Reset</button>
+  <!-- <button id="showButton" type="button" class="mui-btn mui-btn--accent">Show Code</button> -->
+  <button id="debugButton" type="button" class="mui-btn mui-btn--danger">Debug</button>
 </div>
 
 <xml id="toolbox" style="display: none">
-  <block type="turtle_step"></block>
-  <block type="turtle_turn_internal"><field name="VALUE">90</field></block>
-  <block type="turtle_pen"></block>
-  <block type="turtle_colour_internal"></block>
-  <block type="turtle_repeat_internal"><field name="TIMES">4</field></block>
+<block type="turtle_move"></block>
+<block type="turtle_turn_internal">
+  <field name="VALUE">90</field>
+</block>
+<block type="turtle_pen"></block>
+<block type="turtle_colour_internal"></block>
+<block type="turtle_repeat_internal">
+  <field name="TIMES">4</field>
+</block>
 </xml>
 
 <xml id="synonyms" style="display: none">
-  <synonym type="turtle_turn_internal" field="DIR" alias="left" property="turnLeft"/>
-  <synonym type="turtle_turn_internal" field="DIR" alias="right" property="turnRight"/>
+<synonym type="turtle_turn_internal" field="DIR" alias="left" property="turnLeft" />
+<synonym type="turtle_turn_internal" field="DIR" alias="right" property="turnRight" />
 </xml>
 
 <div id="dialogShadow" class="dialogAnimate"></div>
@@ -135,17 +142,17 @@
 
 <div id="dialogDone" class="dialogHiddenContent">
   <div style="font-size: large; margin: 1em;">Congratulations!</div>
-  <div id="dialogLinesText" style="font-size: large; margin: 1em;"></div>
-  <pre id="containerCode"></pre>
-  <div id="dialogDoneText" style="font-size: large; margin: 1em;"></div>
-  <div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0">
-    <!-- <button id="doneCancel"> -->
-    <!--   Stay at this level -->
-    <!-- </button> -->
-    <button id="doneOk" class="secondary">
+<div id="dialogLinesText" style="font-size: large; margin: 1em;"></div>
+<pre id="containerCode"></pre>
+<div id="dialogDoneText" style="font-size: large; margin: 1em;"></div>
+<div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0">
+<!-- <button id="doneCancel"> -->
+<!--   Stay at this level -->
+<!-- </button> -->
+<button id="doneOk" class="secondary">
       Go to the next level
     </button>
-  </div>
+</div>
 </div>
 
 <script src="lib-interface.js"></script>
@@ -155,4 +162,5 @@
 <script src="turtle.js"></script>
 <script src="ui.js"></script>
 </body>
+
 </html>
