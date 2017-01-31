@@ -6,7 +6,7 @@
 
 goog.provide('SpeechBlocks.StatementInput');
 
-goog.require('SpeechBlocks.Blocks');
+goog.require('SpeechBlocks.BlockUtils');
 
 /**
  * @param {string} parentBlockId The ID of the parent block.
@@ -28,10 +28,14 @@ SpeechBlocks.StatementInput = function(parentBlockId, inputName) {
  * @override
  */
 SpeechBlocks.StatementInput.prototype.place = function(blockId, workspace) {
+  if (SpeechBlocks.BlockUtils.areBlocksInSameChain(
+      blockId, this.parentBlockId_, workspace)) {
+    throw 'Block ' + blockId + ' and block ' + this.parentBlockId_ + ' are connected!';
+  }
   var parentInputConnection =
-      SpeechBlocks.Blocks.getInputConnection(
+      SpeechBlocks.BlockUtils.getInputConnection(
           this.parentBlockId_, this.inputName_, workspace);
   var childPreviousConnection =
-      SpeechBlocks.Blocks.getPreviousConnection(blockId, workspace);
+      SpeechBlocks.BlockUtils.getPreviousConnection(blockId, workspace);
   parentInputConnection.connect(childPreviousConnection);
 };

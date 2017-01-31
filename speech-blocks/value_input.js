@@ -7,7 +7,7 @@
 goog.provide('SpeechBlocks.ValueInput');
 
 goog.require('Blockly.constants');
-goog.require('SpeechBlocks.Blocks');
+goog.require('SpeechBlocks.BlockUtils');
 
 /**
  * @param {string} parentBlockId The ID of the parent block.
@@ -28,9 +28,15 @@ SpeechBlocks.ValueInput = function(parentBlockId, inputName) {
  * @override
  */
 SpeechBlocks.ValueInput.prototype.place = function(blockId, workspace) {
+  // If the successor block comes after the given block in the same chain,
+  // the placement is invalid.
+  if (SpeechBlocks.BlockUtils.areBlocksInSameChain(
+      blockId, this.parentBlockId_, workspace)) {
+    throw 'Block ' + blockId + ' and block ' + this.parentBlockId_ + ' are connected!';
+  }
   var parentInputConnection =
-      SpeechBlocks.Blocks.getInputConnection(this.parentBlockId_, this.inputName_, workspace);
+      SpeechBlocks.BlockUtils.getInputConnection(this.parentBlockId_, this.inputName_, workspace);
   var childOutputConnection =
-      SpeechBlocks.Blocks.getOutputConnection(blockId, workspace);
+      SpeechBlocks.BlockUtils.getOutputConnection(blockId, workspace);
   parentInputConnection.connect(childOutputConnection);
 };

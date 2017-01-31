@@ -84,40 +84,53 @@ SpeechBlocks.BlockUtils.getInputConnection = function(blockId, inputName, worksp
 /**
  * Returns true if the blocks belong to the same chain, false otherwise.
  *  
- * Here, the term "chain"" refers to all blocks after the given block.
+ * Here, the term "chain" refers to all blocks after the given block.
  * Note this includes nested structures; e.g., a repeat block's
  * statement inputs belong to the same chain as the repeat block itself.
  * 
- * @param {string} blockId1
- * @param {string} blockId2
+ * @param {string} refBlockId The block to treat as the chain start.
+ * @param {string} blockToFindId The id of the block to search for in the chain.
  * @param {!Blockly.Workspace} workspace
  * @return {boolean}
  * @public
  */
-SpeechBlocks.BlockUtils.areBlocksInSameChain = function(blockId1, blockId2, workspace) {
-  var toCheck = [SpeechBlocks.BlockUtils.getBlock(blockId1, workspace)];
-  while (toCheck) {
+SpeechBlocks.BlockUtils.areBlocksInSameChain = function(refBlockId, blockToFindId, workspace) {
+  var toCheck = [SpeechBlocks.BlockUtils.getBlock(refBlockId, workspace)];
+  
+  while (toCheck.length > 0) {
     var curr = toCheck.pop();
 
     // If we found the block, we're done.
-    if (curr.id == blockId2) {
+    if (curr.id == blockToFindId) {
       return true;
     }
 
     // Otherwise, add all connected blocks to the queue.
-    var conn = SpeechBlocks.BlockUtils.asConnection_(curr.nextConnection);
-    if (conn.isConnected()) {
-      toCheck.push(SpeechBlocks.BlockUtils.getConnectionTarget_(conn));
+    var conn; 
+    
+    if (curr.nextConnection) {
+      conn = SpeechBlocks.BlockUtils.asConnection_(curr.nextConnection);
+      if (conn.isConnected()) {
+        toCheck.push(SpeechBlocks.BlockUtils.getConnectionTarget_(conn));
+      }
     }
 
-    conn = SpeechBlocks.BlockUtils.asConnection_(curr.outputConnection);
-    if (conn.isConnected()) {
-      toCheck.push(SpeechBlocks.BlockUtils.getConnectionTarget_(conn));
+    if (curr.outputConnection) {
+      conn = SpeechBlocks.BlockUtils.asConnection_(curr.outputConnection);
+      if (conn.isConnected()) {
+        toCheck.push(SpeechBlocks.BlockUtils.getConnectionTarget_(conn));
+      }
     }
 
-    curr.inputsList.forEach(function(input) {
-      if (input.connection.isConnected()) {
-        toCheck.push(input.connection.targetConnection.getSourceBlock());
+    console.log(curr);
+    console.log(curr.inputList);
+    curr.inputList.forEach(function(input) {
+      if (!input.connection) {
+        return;
+      }
+      conn = SpeechBlocks.BlockUtils.asConnection_(input.connection);
+      if (conn.isConnected()) {
+        toCheck.push(SpeechBlocks.BlockUtils.getConnectionTarget_(conn));
       }
     });
   }
@@ -127,7 +140,7 @@ SpeechBlocks.BlockUtils.areBlocksInSameChain = function(blockId1, blockId2, work
 /**
  * Gets the input object for the given block.
  * @param {string} blockId
- * @param {stirng} inputName
+ * @param {string} inputName
  * @return {!Blockly.Input}
  * @private
  */
@@ -159,7 +172,7 @@ SpeechBlocks.BlockUtils.getLastBlockInChain_ = function(blockId, workspace) {
 SpeechBlocks.BlockUtils.getConnectionTarget_= function(connection) {
   return goog.asserts.assertInstanceof(
       goog.asserts.assertInstanceof(
-          connection.targetConnection, Blockly.Connection),
+          connection.targetConnection, Blockly.Connection).getSourceBlock(),
       Blockly.Block);
 }
 

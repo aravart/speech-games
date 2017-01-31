@@ -6,7 +6,7 @@
 
 goog.provide('SpeechBlocks.Predecessor');
 
-goog.require('SpeechBlocks.Blocks');
+goog.require('SpeechBlocks.BlockUtils');
 
 /**
  * @param {string} successorBlockId The ID of the successor block. 
@@ -23,15 +23,21 @@ SpeechBlocks.Predecessor = function(successorBlockId) {
  * @override
  */
 SpeechBlocks.Predecessor.prototype.place = function(blockId, workspace) {
+  // If the successor block comes after the given block in the same chain,
+  // the placement is invalid.
+  if (SpeechBlocks.BlockUtils.areBlocksInSameChain(
+      blockId, this.successorBlockId_, workspace)) {
+    throw 'Block ' + blockId + ' and block ' + this.successorBlockId_ + ' are connected!';
+  }
   var successorPrevConnection =
-      SpeechBlocks.Blocks.getPreviousConnection(this.successorBlockId_, workspace);
+      SpeechBlocks.BlockUtils.getPreviousConnection(this.successorBlockId_, workspace);
   if (successorPrevConnection.isConnected()) {
     var chainPrevConnection =
-        SpeechBlocks.Blocks.getPreviousConnection(blockId, workspace);
+        SpeechBlocks.BlockUtils.getPreviousConnection(blockId, workspace);
     successorPrevConnection.targetConnection.connect(chainPrevConnection);
   }
   var chainNextConnection =
-      SpeechBlocks.Blocks.getChainNextConnection(blockId, workspace);
+      SpeechBlocks.BlockUtils.getChainNextConnection(blockId, workspace);
   successorPrevConnection.connect(chainNextConnection); 
 };
 
