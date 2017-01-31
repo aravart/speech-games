@@ -29,5 +29,5 @@ SpeechBlocks.Translation = function(dx, dy) {
  * @override 
  */
 SpeechBlocks.Translation.prototype.place = function(blockId, workspace) {
-  SpeechBlocks.Blocks.getBlock(blockId, workspace).moveBy(this.dx_, this.dy_);
+  SpeechBlocks.BlockUtils.getBlock(blockId, workspace).moveBy(this.dx_, this.dy_);
 };
