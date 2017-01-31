@@ -48,6 +48,7 @@ SpeechBlocks.Blocks.getNextConnection = function(blockId, workspace) {
 /**
  * @param {string} blockId
  * @param {!Blockly.Workspace} workspace
+ * @return {!Blockly.Connection}
  * @public
  */
 SpeechBlocks.Blocks.getChainNextConnection = function(blockId, workspace) {
@@ -77,7 +78,54 @@ SpeechBlocks.Blocks.getOutputConnection = function(blockId, workspace) {
  */
 SpeechBlocks.Blocks.getInputConnection = function(blockId, inputName, workspace) {
   return SpeechBlocks.Blocks.asConnection_(
-    SpeechBlocks.Blocks.getInput_(blockId, inputName, workspace).connection);
+      SpeechBlocks.Blocks.getInput_(blockId, inputName, workspace).connection);
+};
+
+/**
+ * Returns true if the blocks belong to the same chain, false otherwise.
+ *  
+ * Here, the term "chain" includes nested structures; e.g., a repeat block's
+ * statement inputs belong to the same chain as the repeat block itself.
+ * 
+ * @param {string} blockId1
+ * @param {string} blockId2
+ * @param {!Blockly.Workspace} workspace
+ * @return {boolean}
+ * @public
+ */
+SpeechBlocks.Blocks.areBlocksInSameChain = function(blockId1, blockId2, workspace) {
+  var toCheck = [SpeechBlocks.Blocks.getBlock(blockId1, workspace)];
+  while (toCheck) {
+    var curr = toCheck.pop();
+
+    // If we found the block, we're done.
+    if (curr.id == blockId2) {
+      return true;
+    }
+
+    // Otherwise, add all connected blocks to the queue.
+    var conn = SpeechBlocks.Blocks.asConnection_(curr.nextConnection);
+    if (conn.isConnected()) {
+      toCheck.push(SpeechBlocks.Blocks.getConnectionTarget_(conn));
+    }
+
+    conn = SpeechBlocks.Blocks.asConnection_(curr.previousConnection);
+    if (conn.isConnected()) {
+      toCheck.push(SpeechBlocks.Blocks.getConnectionTarget_(conn));
+    }
+
+    conn = SpeechBlocks.Blocks.asConnection_(curr.outputConnection);
+    if (conn.isConnected()) {
+      toCheck.push(SpeechBlocks.Blocks.getConnectionTarget_(conn));
+    }
+
+    curr.inputsList.forEach(function(input) {
+      if (input.connection.isConnected()) {
+        toCheck.push(input.connection.targetConnection.getSourceBlock());
+      }
+    });
+  }
+  return false;
 };
 
 /**
@@ -102,10 +150,22 @@ SpeechBlocks.Blocks.getInput_ = function(blockId, inputName, workspace) {
 SpeechBlocks.Blocks.getLastBlockInChain_ = function(blockId, workspace) {
   var curr = SpeechBlocks.Blocks.getBlock(blockId, workspace);
   while (curr.nextConnection && curr.nextConnection.isConnected()) {
-    curr = curr.nextConnection.targetConnection.getSource();
+    curr = curr.nextConnection.targetConnection.getSourceBlock();
   }
   return curr;
 };
+
+/**
+ * @param {!Blockly.Connection} connection
+ * @return {!Blockly.Block} The connection target.
+ * @private
+ */
+SpeechBlocks.Blocks.getConnectionTarget_= function(connection) {
+  return goog.asserts.assertInstanceof(
+      goog.asserts.assertInstanceof(
+          connection.targetConnection, Blockly.Connection),
+      Blockly.Block);
+}
 
 /**
  * Asserts that the connection is not null.

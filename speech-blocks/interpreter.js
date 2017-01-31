@@ -57,7 +57,6 @@ SpeechBlocks.Interpreter.prototype.createBlockTypeMap_ = function() {
  * @public
  */
 SpeechBlocks.Interpreter.prototype.interpret = function(command) {
-    // console.log(command);
     this.controller_.closeMenu()
     switch (command.action) {
         case 'run':
@@ -141,7 +140,6 @@ SpeechBlocks.Interpreter.prototype.getNewPosition_ = function(command) {
  */
 SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
     command.blockId = command.blockId.toString();
-    // console.log(command)
     if (!this.isBlockIdValid_(command.blockId)) {
         throw 'Block ' + command.blockId.toString() + ' does not exist!';
     }
@@ -287,20 +285,20 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
         }
     }
 
-    var block = SpeechBlocks.Blocks.getBlock(command.blockId, SpeechGames.workspace)
+    var block = SpeechBlocks.Blocks.getBlock(command.blockId, SpeechGames.workspace);
     var value = $("#synonyms synonym[type='" + block.type + "'][field='" + fields[fieldIndex] + "'][alias='" + command.value + "']").attr("property") || command.value;
-    var dropdowns = this.getDropdownValues_(block, fields[fieldIndex])
+    var dropdowns = this.getDropdownValues_(block, fields[fieldIndex]);
     if(dropdowns.length > 0) {
         var synonyms = $("#synonyms synonym[type='" + block.type + "'][field='" + fields[fieldIndex] + "']").map(function() { return $(this).attr("alias") }).toArray()
         if(synonyms.length > 0) {
             if(synonyms.indexOf(command.value) < 0) {
                 var msg = "Sorry, I didn't understand '" + command.value + "'. You can say " + synonyms.map(function(x) { return "'" + x + "'" }).join(" or ") + " here.";
-                throw new SpeechBlocks.UserError(msg)
+                throw new SpeechBlocks.UserError(msg);
             }
         } else {
             if(dropdowns.indexOf(String(value)) < 0) {
                 var msg = "Sorry, I didn't understand '" + command.value + "'. You can say " + dropdowns.map(function(x) { return "'" + x + "'" }).join(" or ") + " here.";
-                throw new SpeechBlocks.UserError(msg)
+                throw new SpeechBlocks.UserError(msg);
             }
         }
     }
@@ -308,24 +306,24 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
 };
 
 SpeechBlocks.Interpreter.prototype.getDropdownValues_ = function(block, field) {
-  for(var i = 0; i < block.inputList.length; i++) {
-    var inputList = block.inputList[i]
-    for(var j = 0; j < inputList.fieldRow.length; j++) {
-      if(inputList.fieldRow[j].name == field) {
-        if(inputList.fieldRow[j] instanceof Blockly.FieldDropdown) {
-          return inputList.fieldRow[j].menuGenerator_.map(function(x){ return x[1] })
+  for (var i = 0; i < block.inputList.length; i++) {
+    var inputList = block.inputList[i];
+    for (var j = 0; j < inputList.fieldRow.length; j++) {
+      if (inputList.fieldRow[j].name == field) {
+        if (inputList.fieldRow[j] instanceof Blockly.FieldDropdown) {
+          return inputList.fieldRow[j].menuGenerator_.map(function(x){ return x[1] });
         } else {
-          return []
+          return [];
         }
       }
     }
   }
-  return []
-}
+  return [];
+};
 
 /**
  * Delete a specified block.
- * @param {string} command Command object from parser.
+ * @param {string} blockId The ID of the block to delete.
  * @private
  */
 SpeechBlocks.Interpreter.prototype.deleteBlock_ = function(blockId) {
@@ -343,7 +341,7 @@ SpeechBlocks.Interpreter.prototype.deleteBlock_ = function(blockId) {
  */
 SpeechBlocks.Interpreter.prototype.isBlockIdValid_ = function(blockId) {
     return this.controller_.getAllBlockIds().contains(blockId);
-}
+};
 
 /**
  * Opens or closes a specified menu.
@@ -356,4 +354,4 @@ SpeechBlocks.Interpreter.prototype.menuAction_ = function(command) {
     } else if (command.actionType == 'close') {
         this.controller_.closeMenu();
     }
-}
+};

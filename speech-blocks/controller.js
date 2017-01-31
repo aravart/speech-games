@@ -57,7 +57,7 @@ SpeechBlocks.Controller = function(workspace) {
       var newBlock =
           SpeechBlocks.Blocks.getBlock(event.blockId, this.workspace_);
       newBlock.appendDummyInput().appendField(
-          new Blockly.FieldLabel("Block " + newBlock.id, 'block-id-style'));
+          new Blockly.FieldLabel('Block ' + newBlock.id, 'block-id-style'));
     }
   }.bind(this));
 
@@ -72,7 +72,7 @@ SpeechBlocks.Controller = function(workspace) {
   } else {
     var arr = this.workspace_.options.languageTree.children;
     for(var i = 0, len = arr.length; i < len; i++) {
-        this.blockXmlMap_.set(arr[i].getAttribute('type'), arr[i]);
+      this.blockXmlMap_.set(arr[i].getAttribute('type'), arr[i]);
     }
   }
 };
@@ -140,7 +140,7 @@ SpeechBlocks.Controller.prototype.moveBlock = function(blockId, where) {
  * @public
  */
 SpeechBlocks.Controller.prototype.disconnectBlock = function(blockId) {
-  var block = SpeechBlocks.Blocks.getBlock(blockId, this.workspace_)
+  var block = SpeechBlocks.Blocks.getBlock(blockId, this.workspace_);
   block.unplug(true /* Heal stack! */);
   this.moveBlock(blockId, new SpeechBlocks.Translation(block.width + 20, 0));
 };
@@ -284,8 +284,6 @@ SpeechBlocks.Controller.prototype.getFieldsForBlock = function(blockId) {
   SpeechBlocks.Blocks.getBlock(blockId, this.workspace_).inputList.forEach(function(input) {
     input.fieldRow.forEach(function(field) {
       var type = SpeechBlocks.Controller.getFieldType_(field);
-
-      // TODO(evanfredhernandez): How to handle nameless fields?
       if (field.name && type != SpeechBlocks.FieldTypes.IRRELEVANT) {
         blockFields.set(field.name, type);
       }
@@ -306,8 +304,6 @@ SpeechBlocks.Controller.prototype.getFieldValuesForBlock = function(blockId) {
   SpeechBlocks.Blocks.getBlock(blockId, this.workspace_).inputList.forEach(function(input) {
     input.fieldRow.forEach(function(field) {
       var type = SpeechBlocks.Controller.getFieldType_(field)
-
-      // TODO(evanfredhernandez): How to handle nameless fields?
       if (field.name && type != SpeechBlocks.IRRELEVANT) {
         blockFieldValues.set(field.name, field.getValue());
       }
@@ -390,7 +386,7 @@ SpeechBlocks.Controller.prototype.getField_ = function(blockId, fieldName) {
 };
 
 /**
- * Open the specified toolbox menus
+ * Open the specified toolbox menu.
  * @param {string} menuName Name of the menu to open.
  * @public
  */
