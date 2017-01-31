@@ -113,25 +113,8 @@ SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
 
     command.blockId = this.controller_.addBlock(
         this.blockTypeMap_.get(command.type),
-        this.getNewPosition_());
+        this.controller_.layout.getNewPosition_());
 };
-
-/**
- * Returns coordinates of some empty space in the workspace
- * @private
- */
-SpeechBlocks.Interpreter.prototype.getNewPosition_ = function(command) {
-    var blocks = SpeechGames.workspace.getAllBlocks();
-    if (blocks.length == 0) {
-        return new SpeechBlocks.Translation(10, 10);
-    }
-    var maxy = 0;
-    for (var i = 0; i < blocks.length; i++) {
-        maxy = Math.max(maxy, blocks[i].getRelativeToSurfaceXY().y + blocks[i].height);
-    }
-    // If you use less than 20, Blockly shifts it rightward a bit because there is a zone under the block where it'd be connected
-    return new SpeechBlocks.Translation(10, maxy + 20);
-}
 
 /**
  * Moves a specified block.

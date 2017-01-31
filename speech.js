@@ -1,5 +1,7 @@
 goog.provide('SpeechGames');
 
+goog.require('Turtle.Answers');
+
 SpeechGames.workspace = null;
 
 /**
@@ -178,6 +180,8 @@ if(!getParameterByName("debug")) {
 }
 $("#debugButton").on("click", function() { $("#debug").toggle() });
 $("#buttonRow").hide();
+
+$("#levelDescription").text(Turtle.descriptions[SpeechGames.LEVEL])
 
 });
 
