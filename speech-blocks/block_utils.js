@@ -84,7 +84,8 @@ SpeechBlocks.BlockUtils.getInputConnection = function(blockId, inputName, worksp
 /**
  * Returns true if the blocks belong to the same chain, false otherwise.
  *  
- * Here, the term "chain" includes nested structures; e.g., a repeat block's
+ * Here, the term "chain"" refers to all blocks after the given block.
+ * Note this includes nested structures; e.g., a repeat block's
  * statement inputs belong to the same chain as the repeat block itself.
  * 
  * @param {string} blockId1
@@ -105,11 +106,6 @@ SpeechBlocks.BlockUtils.areBlocksInSameChain = function(blockId1, blockId2, work
 
     // Otherwise, add all connected blocks to the queue.
     var conn = SpeechBlocks.BlockUtils.asConnection_(curr.nextConnection);
-    if (conn.isConnected()) {
-      toCheck.push(SpeechBlocks.BlockUtils.getConnectionTarget_(conn));
-    }
-
-    conn = SpeechBlocks.BlockUtils.asConnection_(curr.previousConnection);
     if (conn.isConnected()) {
       toCheck.push(SpeechBlocks.BlockUtils.getConnectionTarget_(conn));
     }
