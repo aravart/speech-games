@@ -44,7 +44,7 @@ SpeechBlocks.Interpreter.prototype.createBlockTypeMap_ = function() {
     this.blockTypeMap_.set('set', 'variables_set');
     this.blockTypeMap_.set('variable', 'variables_get');
     this.blockTypeMap_.set('turn', 'turtle_turn_internal');
-    this.blockTypeMap_.set('move', 'turtle_move_internal');
+    this.blockTypeMap_.set('move', 'turtle_move');
     this.blockTypeMap_.set('pen', 'turtle_pen');
     this.blockTypeMap_.set('repeat', 'turtle_repeat_internal');
     this.blockTypeMap_.set('color', 'turtle_colour_internal');
@@ -271,15 +271,15 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
     var block = SpeechBlocks.BlockUtils.getBlock(command.blockId, SpeechGames.workspace);
     var value = $("#synonyms synonym[type='" + block.type + "'][field='" + fields[fieldIndex] + "'][alias='" + command.value + "']").attr("property") || command.value;
     var dropdowns = this.getDropdownValues_(block, fields[fieldIndex]);
-    if(dropdowns.length > 0) {
+    if (dropdowns.length > 0) {
         var synonyms = $("#synonyms synonym[type='" + block.type + "'][field='" + fields[fieldIndex] + "']").map(function() { return $(this).attr("alias") }).toArray()
-        if(synonyms.length > 0) {
-            if(synonyms.indexOf(command.value) < 0) {
+        if (synonyms.length > 0) {
+            if (synonyms.indexOf(command.value) < 0) {
                 var msg = "Sorry, I didn't understand '" + command.value + "'. You can say " + synonyms.map(function(x) { return "'" + x + "'" }).join(" or ") + " here.";
                 throw new SpeechBlocks.UserError(msg);
             }
         } else {
-            if(dropdowns.indexOf(String(value)) < 0) {
+            if (dropdowns.indexOf(String(value)) < 0) {
                 var msg = "Sorry, I didn't understand '" + command.value + "'. You can say " + dropdowns.map(function(x) { return "'" + x + "'" }).join(" or ") + " here.";
                 throw new SpeechBlocks.UserError(msg);
             }
@@ -289,19 +289,19 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
 };
 
 SpeechBlocks.Interpreter.prototype.getDropdownValues_ = function(block, field) {
-  for (var i = 0; i < block.inputList.length; i++) {
-    var inputList = block.inputList[i];
-    for (var j = 0; j < inputList.fieldRow.length; j++) {
-      if (inputList.fieldRow[j].name == field) {
-        if (inputList.fieldRow[j] instanceof Blockly.FieldDropdown) {
-          return inputList.fieldRow[j].menuGenerator_.map(function(x){ return x[1] });
-        } else {
-          return [];
+    for (var i = 0; i < block.inputList.length; i++) {
+        var inputList = block.inputList[i];
+        for (var j = 0; j < inputList.fieldRow.length; j++) {
+            if (inputList.fieldRow[j].name == field) {
+                if (inputList.fieldRow[j] instanceof Blockly.FieldDropdown) {
+                    return inputList.fieldRow[j].menuGenerator_.map(function(x) { return x[1] });
+                } else {
+                    return [];
+                }
+            }
         }
-      }
     }
-  }
-  return [];
+    return [];
 };
 
 /**
