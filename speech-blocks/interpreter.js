@@ -57,6 +57,7 @@ SpeechBlocks.Interpreter.prototype.createBlockTypeMap_ = function() {
  * @public
  */
 SpeechBlocks.Interpreter.prototype.interpret = function(command) {
+  console.log(command);
   this.controller_.closeMenu()
   switch (command.action) {
     case 'run':
@@ -67,7 +68,7 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
       this.addBlock_(command);
       break;
 
-    case 'move':
+    case 'put':
       this.moveBlock_(command);
       break;
 
@@ -76,8 +77,11 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
       break;
 
     case 'delete':
-      this.deleteBlock_(command.blockId.toString());
+      this.deleteBlock_(command);
       break;
+
+    case 'separate':
+      this.separate_(command);
 
     case 'undo':
       this.controller_.undo();
@@ -98,6 +102,7 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
  * @private
  */
 SpeechBlocks.Interpreter.prototype.run_ = function() {
+
   document.getElementById('runButton').click();
 };
 
@@ -108,7 +113,8 @@ SpeechBlocks.Interpreter.prototype.run_ = function() {
  */
 SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
   if (!this.blockTypes_.includes(this.blockTypeMap_.get(command.type))) {
-    throw 'Block type ' + this.blockTypes_.toString() + 'not available';
+    var msg = 'Block type ' + this.blockTypes_.toString() + 'not available';
+    throw new SpeechBlocks.UserError(msg);
   }
 
   command.blockId = this.controller_.addBlock(
@@ -124,23 +130,22 @@ SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
 SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
   command.blockId = command.blockId.toString();
   if (!this.isBlockIdValid_(command.blockId)) {
-    throw 'Block ' + command.blockId.toString() + ' does not exist!';
-  }
-
-  // Handle cases where target is not a block.
-  if (command.where == 'trash') {
-    this.deleteBlock_(command.blockId);
-    return;
-  } else if (command.where == 'away') {
-    this.controller_.disconnectBlock(command.blockId);
-    return;
+    var msg = 'Block ' + command.blockId.toString() + ' does not exist!';
+    throw new SpeechBlocks.UserError(msg);
   }
 
   // Handle cases where target is a block.
   command.where.blockId = command.where.blockId.toString();
   if (command.where.blockId == null ||
     !this.isBlockIdValid_(command.where.blockId)) {
-    throw 'Block ' + command.where.blockId + ' does not exist!';
+    var msg = 'Block ' + command.where.blockId + ' does not exist!';
+    throw new SpeechBlocks.UserError(msg);
+  }
+  else if (command.blockId == command.where.blockId)
+  {
+    var msg = 'Sorry, cannot move block ' + command.where.blockId + ' ' + command.where.position 
+        + ' itself!';
+    throw new SpeechBlocks.UserError(msg);
   }
   var wheres = []
   try {
@@ -149,6 +154,13 @@ SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
     console.log(e);
     return;
   }
+
+  if (wheres.length == 0)
+  {
+    var msg = 'Sorry, invalid location.'
+    throw new SpeechBlocks.UserError(msg);
+  }
+  
   for (var i = 0; i < wheres.length; i++) {
     try {
       this.controller_.moveBlock(command.blockId, wheres[i]);
@@ -167,34 +179,36 @@ SpeechBlocks.Interpreter.prototype.getWheres_ = function(command) {
   command.where.blockId = command.where.blockId.toString();
   if (command.where.blockId == null ||
     !this.isBlockIdValid_(command.where.blockId)) {
-    throw 'Block ' + command.where.blockId + ' does not exist or not given!';
+    var msg = 'Block ' + command.where.blockId + ' does not exist or not given!';
+    throw new SpeechBlocks.UserError(msg);
   }
 
   var wheres = [];
   switch (command.where.position) {
-    case 'below':
+    case 'after':
       wheres.push(new SpeechBlocks.Successor(command.where.blockId));
       break;
 
-    case 'above':
+    case 'before':
       wheres.push(new SpeechBlocks.Predecessor(command.where.blockId));
       break;
 
-    case 'lhs':
-    case 'rhs':
-    case 'top':
-    case 'to the right of':
-      var inputList = this.controller_.getBlockValueInputs(command.where.blockId);
-      if (inputList.length == 0) {
-        throw 'Block ' + command.where.blockId + ' has no value inputs!';
-      } else if (command.where.position == 'rhs' ||
-        command.where.position == 'to the right of') {
-        wheres.push(new SpeechBlocks.ValueInput(command.where.blockId, inputList[inputList.length - 1]));
-      } else if (command.where.position == 'lhs' ||
-        command.where.position == 'top') {
-        wheres.push(new SpeechBlocks.ValueInput(command.where.blockId, inputList[0]));
-      }
-      break;
+    // TODO: Handle this once our levels require "if" blocks.
+    // case 'lhs':
+    // case 'rhs':
+    // case 'top':
+    // case 'to the right of':
+    //   var inputList = this.controller_.getBlockValueInputs(command.where.blockId);
+    //   if (inputList.length == 0) {
+    //     throw 'Block ' + command.where.blockId + ' has no value inputs!';
+    //   } else if (command.where.position == 'rhs' ||
+    //     command.where.position == 'to the right of') {
+    //     wheres.push(new SpeechBlocks.ValueInput(command.where.blockId, inputList[inputList.length - 1]));
+    //   } else if (command.where.position == 'lhs' ||
+    //     command.where.position == 'top') {
+    //     wheres.push(new SpeechBlocks.ValueInput(command.where.blockId, inputList[0]));
+    //   }
+    //   break;
 
     case 'inside':
       // TODO: We should be handling case-by-case scenarios, where we check if the
@@ -206,7 +220,8 @@ SpeechBlocks.Interpreter.prototype.getWheres_ = function(command) {
         wheres.push(new SpeechBlocks.ValueInput(command.where.blockId, inputList[i]));
       }
       for (var i = 0; i < statementList.length; i++) {
-        wheres.push(new SpeechBlocks.StatementInput(command.where.blockId, statementList[statementList.length - 1]));
+        wheres.push(new SpeechBlocks.StatementInput(command.where.blockId, 
+            statementList[statementList.length - 1]));
       }
       break;
   }
@@ -222,7 +237,8 @@ SpeechBlocks.Interpreter.prototype.getWheres_ = function(command) {
 SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
   command.blockId = command.blockId.toString();
   if (!this.isBlockIdValid_(command.blockId)) {
-    throw 'Block ' + command.blockId + ' does not exist!';
+    var msg = 'Block ' + command.blockId + ' does not exist!';
+    throw new SpeechBlocks.UserError(msg);
   }
 
   // We look for the field the user mentioned
@@ -246,7 +262,8 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
     var valueType = typeof (command.value);
     if (valueType == "string") {
       for (var i = 0; i < fieldValuesMap.keys_.length; i++) {
-        if (this.controller_.isFieldValueValid(command.blockId, fieldValuesMap.keys_[i], command.value) && valueType == typeof (fieldValuesMap.get(fieldValuesMap.keys_[i]))) {
+        if (this.controller_.isFieldValueValid(command.blockId, fieldValuesMap.keys_[i], 
+            command.value) && valueType == typeof (fieldValuesMap.get(fieldValuesMap.keys_[i]))) {
           fieldIndex = i;
           break;
         }
@@ -254,7 +271,8 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
     } else if (valueType == "number") {
       command.value += "";
       for (var i = 0; i < fieldValuesMap.keys_.length; i++) {
-        if (!this.controller_.isFieldValueValid(command.blockId, fieldValuesMap.keys_[i], command.value) || isNaN(parseInt(fieldValuesMap.get(fieldValuesMap.keys_[i])))) {
+        if (!this.controller_.isFieldValueValid(command.blockId, fieldValuesMap.keys_[i], 
+            command.value) || isNaN(parseInt(fieldValuesMap.get(fieldValuesMap.keys_[i])))) {
           continue;
         } else {
           fieldIndex = i;
@@ -269,18 +287,22 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
   }
 
   var block = SpeechBlocks.BlockUtils.getBlock(command.blockId, SpeechGames.workspace);
-  var value = $("#synonyms synonym[type='" + block.type + "'][field='" + fields[fieldIndex] + "'][alias='" + command.value + "']").attr("property") || command.value;
+  var value = $("#synonyms synonym[type='" + block.type + "'][field='" + fields[fieldIndex] 
+      + "'][alias='" + command.value + "']").attr("property") || command.value;
   var dropdowns = this.getDropdownValues_(block, fields[fieldIndex]);
   if (dropdowns.length > 0) {
-    var synonyms = $("#synonyms synonym[type='" + block.type + "'][field='" + fields[fieldIndex] + "']").map(function () { return $(this).attr("alias") }).toArray()
+    var synonyms = $("#synonyms synonym[type='" + block.type + "'][field='" + fields[fieldIndex] 
+        + "']").map(function () { return $(this).attr("alias") }).toArray()
     if (synonyms.length > 0) {
       if (synonyms.indexOf(command.value) < 0) {
-        var msg = "Sorry, I didn't understand '" + command.value + "'. You can say " + synonyms.map(function (x) { return "'" + x + "'" }).join(" or ") + " here.";
+        var msg = "Sorry, I didn't understand '" + command.value + "'. You can say " + 
+            synonyms.map(function (x) { return "'" + x + "'" }).join(" or ") + " here.";
         throw new SpeechBlocks.UserError(msg);
       }
     } else {
       if (dropdowns.indexOf(String(value)) < 0) {
-        var msg = "Sorry, I didn't understand '" + command.value + "'. You can say " + dropdowns.map(function (x) { return "'" + x + "'" }).join(" or ") + " here.";
+        var msg = "Sorry, I didn't understand '" + command.value + "'. You can say " 
+            + dropdowns.map(function (x) { return "'" + x + "'" }).join(" or ") + " here.";
         throw new SpeechBlocks.UserError(msg);
       }
     }
@@ -309,11 +331,12 @@ SpeechBlocks.Interpreter.prototype.getDropdownValues_ = function(block, field) {
  * @param {string} blockId The ID of the block to delete.
  * @private
  */
-SpeechBlocks.Interpreter.prototype.deleteBlock_ = function(blockId) {
-  if (blockId == 'all') {
+SpeechBlocks.Interpreter.prototype.deleteBlock_ = function(command) {
+  command.blockId = command.blockId.toString();
+  if (command.blockId == 'all') {
     this.controller_.removeAllBlocks();
-  } else if (this.isBlockIdValid_(blockId)) {
-    this.controller_.removeBlock(blockId);
+  } else if (this.isBlockIdValid_(command.blockId)) {
+    this.controller_.removeBlock(command.blockId);
   }
 };
 
@@ -325,6 +348,10 @@ SpeechBlocks.Interpreter.prototype.deleteBlock_ = function(blockId) {
 SpeechBlocks.Interpreter.prototype.isBlockIdValid_ = function(blockId) {
   return this.controller_.getAllBlockIds().contains(blockId);
 };
+
+SpeechBlocks.Interpreter.prototype.separate_ = function(command) {
+  this.controller_.disconnectBlock(command.blockId);
+}
 
 /**
  * Opens or closes a specified menu.

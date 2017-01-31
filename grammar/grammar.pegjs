@@ -1,4 +1,4 @@
-Start = ("please" _)? command:( Put / Add / Remove / Change / Run / Undo / Redo / Separate / Menu ) { return command }
+Start = ("please")? _ command:( Put / Add / Delete / Change / Run / Undo / Redo / Separate / Menu ) { return command }
 
 Article = "an" / "a"
 Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "put" / "turn" / "pen" / "color" / "move"
@@ -9,21 +9,24 @@ Put = "put" _ block:BlockToken _ where:Where { return {
   "where": where
 } }
 
-
 BlockType = type:Type _ "block" { return type }
 
-BlockToken = _ ("blocks"/"block") _ ("number")? _ number:Number { return number }
+BlockToken = "block" _ number:Number { return number }
 
-Where = BlockPosition / Trash
+Where = BlockPosition
 
 BlockPosition = position:Position _ block:BlockToken { return {
   "blockId": block,
   "position": position
 } }
 
-Trash = "to the trash" { return "trash" }
+Position = Before / After / Left / Right / Top / "inside"
 
-Position = Above / Below / Left / Right / Top / Inside / To
+Before = ("above" / "before") { return "before" }
+After = ("below" / "after") { return "after" }
+Left = ("to" / "into") _ "the" _ ("first blank" / "first field" / "lefthand side" / "left") _ "of" { return "lhs" }
+Right = ("to" / "into") _ "the" _ ("second blank" / "second field" /"last field" / "last blank"/ "righthand side" / "right") _ "of" { return "rhs" }
+Top = ("at" / "to" / "into") _ "the" _ "top" _ "of" { return "top" }
 
 Number = digits:[0-9]+ { return parseInt(digits.join(""), 10); }
 Word = value:[a-zA-Z]+ { return value.join("") }
@@ -37,12 +40,12 @@ Add = "add" _ Article _ type:BlockType { return {
 
 NameVerb = "called" / "named"
 
-Remove = "delete" _ block:(BlockToken / "all") { return {
+Delete = "delete" _ block:(BlockToken / "all") { return {
   "action": "delete",
   "blockId": block
 } }
 
-Change = "change" _ ("the")? _ ordinal:(Ordinal /"") _ property:Property _ "in" _ block:BlockToken _ "to" _ value:Value ( _ "please")? { return {
+Change = "change" _ ("the")? _ ordinal:(Ordinal/"") _ property:Property _ "in" _ block:BlockToken _ "to" _ value:Value { return {
   "action": "modify",
   "property": property,
   "value": value,
@@ -109,14 +112,6 @@ FieldPair = FieldName _ "to" _ text:(Number/Words) { return {
 } }
 
 FieldName = ("field" / "middle" / "blank" / "value" / "property")
-
-Above = ("above" / "before") { return "above" }
-Below = ("below" / "after") { return "below" }
-Left = ("to" / "into") _ "the" _ ("first blank" / "first field" / "lefthand side" / "left") _ "of" { return "lhs" }
-Right = ("to" / "into") _ "the" _ ("second blank" / "second field" /"last field" / "last blank"/ "righthand side" / "right") _ "of" { return "rhs" }
-Top = ("at" / "to" / "into") _ "the" _ "top" _ "of" { return "top" }
-Inside = ("inside" / "into") _ ("of")?  { return "inside" }
-To = "to" { return "inside" }
 
 Run = ("run the program") { return {
   "action": "run"
