@@ -1,6 +1,6 @@
 goog.provide('SpeechGames');
 
-SpeechGames.workspace = null
+SpeechGames.workspace = null;
 
 /**
  * Extracts a parameter from the URL.
@@ -63,7 +63,7 @@ $(document).ready(function() {
        trashcan: false,
        scrollbars: false,
        toolbox: document.getElementById('toolbox')}); 
-  SpeechGames.workspace = controller.workspace_
+  SpeechGames.workspace = controller.workspace_;
   var interpreter = new SpeechBlocks.Interpreter(controller);
 
   function speechCorrections(speech) {
@@ -91,7 +91,7 @@ $(document).ready(function() {
       recognition.start();
       recognition.onresult = function(e) {
         unfiltered = e.results[0][0].transcript;
-        corrections = speechCorrections(unfiltered)
+        corrections = speechCorrections(unfiltered);
         document.getElementById('q').value = corrections;
         recognition.stop();
         document.getElementById('microphone').src = mic;
