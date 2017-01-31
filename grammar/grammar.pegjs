@@ -1,10 +1,10 @@
-Start = ("please" _)? command:( Move / Add / Remove / Change / Run / Undo / Redo / Separate / Menu ) { return command }
+Start = ("please" _)? command:( Put / Add / Remove / Change / Run / Undo / Redo / Separate / Menu ) { return command }
 
 Article = "an" / "a"
-Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "move" / "turn" / "pen" / "color" / "step"
+Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "put" / "turn" / "pen" / "color" / "move"
 
-Move = "move" _ block:BlockToken _ where:(Where / "away") { return {
-    "action": "move",
+Put = "put" _ block:BlockToken _ where:Where { return {
+    "action": "put",
     "blockId": block,
     "where": where
 } }
@@ -23,7 +23,7 @@ BlockPosition = position:Position _ block:BlockToken { return {
 
 Trash = "to the trash" { return "trash" }
 
-Position = Above / Below / Left / Right / Top / Away / Inside / To
+Position = Above / Below / Left / Right / Top / Inside / To
 
 Number = digits:[0-9]+ { return parseInt(digits.join(""), 10); }
 Word = value:[a-zA-Z]+ { return value.join("") }
@@ -115,7 +115,6 @@ Below = ("below" / "after") { return "below" }
 Left = ("to" / "into") _ "the" _ ("first blank" / "first field" / "lefthand side" / "left") _ "of" { return "lhs" }
 Right = ("to" / "into") _ "the" _ ("second blank" / "second field" /"last field" / "last blank"/ "righthand side" / "right") _ "of" { return "rhs" }
 Top = ("at" / "to" / "into") _ "the" _ "top" _ "of" { return "top" }
-Away = ("away")? _ "from" { return "away" }
 Inside = ("inside" / "into") _ ("of")?  { return "inside" }
 To = "to" { return "inside" }
 
@@ -131,9 +130,8 @@ Redo = "redo" { return {
 } }
 
 Separate = SeparateVerb _ block:BlockToken _ (("from"/"and") _ BlockToken)? { return {
-    "action": "move",
-    "blockId": block,
-    "where": "away"
+    "action": "separate",
+    "blockId": block
 } }
 
 Menu = actionType:MenuVerb _ "the"?  _ menuName:Word _ ("menu"/"toolbox") { return {
@@ -143,6 +141,6 @@ Menu = actionType:MenuVerb _ "the"?  _ menuName:Word _ ("menu"/"toolbox") { retu
 } }
 MenuVerb = "open" / "close"
 
-SeparateVerb = "separate" / "disconnect" / "break apart"
+SeparateVerb = "separate"
 
 _   = ' '*
