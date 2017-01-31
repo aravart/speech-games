@@ -21,7 +21,7 @@ goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
 goog.require('Blockly.constants');
 goog.require('Blockly.inject');
-goog.require('SpeechBlocks.Blocks');
+goog.require('SpeechBlocks.BlockUtils');
 goog.require('SpeechBlocks.FieldTypes');
 goog.require('SpeechBlocks.Translation');
 goog.require('SpeechBlocks.Where');
@@ -58,7 +58,7 @@ SpeechBlocks.Controller = function(workspace) {
   this.workspace_.addChangeListener(function(event) {
     if (event.type == Blockly.Events.CREATE) {
       var newBlock =
-          SpeechBlocks.Blocks.getBlock(event.blockId, this.workspace_);
+          SpeechBlocks.BlockUtils.getBlock(event.blockId, this.workspace_);
       newBlock.appendDummyInput().appendField(
           new Blockly.FieldLabel('Block ' + newBlock.id, 'block-id-style'));
     }
@@ -144,7 +144,7 @@ SpeechBlocks.Controller.prototype.moveBlock = function(blockId, where) {
  * @public
  */
 SpeechBlocks.Controller.prototype.disconnectBlock = function(blockId) {
-  var block = SpeechBlocks.Blocks.getBlock(blockId, this.workspace_);
+  var block = SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_);
   block.unplug(true /* Heal stack! */);
   this.moveBlock(blockId, new SpeechBlocks.Translation(block.width + 20, 0));
   this.layout.validateDisconnect(block);
@@ -156,7 +156,7 @@ SpeechBlocks.Controller.prototype.disconnectBlock = function(blockId) {
  * @public
  */
 SpeechBlocks.Controller.prototype.removeBlock = function(blockId) {
-  var block = SpeechBlocks.Blocks.getBlock(blockId, this.workspace_);
+  var block = SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_);
   block.unplug(true /* Heal the stack! */);
   this.layout.validateRemove(block)
   block.dispose();
@@ -214,7 +214,7 @@ SpeechBlocks.Controller.prototype.getAllBlockIds = function() {
  */
 SpeechBlocks.Controller.prototype.hasNextConnection = function(blockId) {
   return !goog.isNull(
-      SpeechBlocks.Blocks.getBlock(blockId, this.workspace_).nextConnection);
+      SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_).nextConnection);
 };
 
 /**
@@ -225,7 +225,7 @@ SpeechBlocks.Controller.prototype.hasNextConnection = function(blockId) {
  */
 SpeechBlocks.Controller.prototype.hasPreviousConnection = function(blockId) {
   return !goog.isNull(
-      SpeechBlocks.Blocks.getBlock(blockId, this.workspace_).previousConnection);
+      SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_).previousConnection);
 };
 
 /**
@@ -236,7 +236,7 @@ SpeechBlocks.Controller.prototype.hasPreviousConnection = function(blockId) {
  */
 SpeechBlocks.Controller.prototype.hasOutputConnection = function(blockId) {
   return !goog.isNull(
-      SpeechBlocks.Blocks.getBlock(blockId, this.workspace_).outputConnection);
+      SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_).outputConnection);
 };
 
 /**
@@ -271,7 +271,7 @@ SpeechBlocks.Controller.prototype.getBlockStatementInputs = function(blockId) {
  */
 SpeechBlocks.Controller.prototype.getBlockXInputs_ = function (blockId, type) {
   var inputLabels = [];
-  SpeechBlocks.Blocks.getBlock(blockId, this.workspace_).inputList.forEach(function(input) {
+  SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_).inputList.forEach(function(input) {
     if (input.type == type) { inputLabels.push(input.name); }
   });
   return inputLabels;
@@ -287,7 +287,7 @@ SpeechBlocks.Controller.prototype.getBlockXInputs_ = function (blockId, type) {
 SpeechBlocks.Controller.prototype.getFieldsForBlock = function(blockId) {
   /** @type {!goog.structs.Map<string, number>} */
   var blockFields = new goog.structs.Map();
-  SpeechBlocks.Blocks.getBlock(blockId, this.workspace_).inputList.forEach(function(input) {
+  SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_).inputList.forEach(function(input) {
     input.fieldRow.forEach(function(field) {
       var type = SpeechBlocks.Controller.getFieldType_(field);
       if (field.name && type != SpeechBlocks.FieldTypes.IRRELEVANT) {
@@ -307,7 +307,7 @@ SpeechBlocks.Controller.prototype.getFieldsForBlock = function(blockId) {
 SpeechBlocks.Controller.prototype.getFieldValuesForBlock = function(blockId) {
   /** @type {!goog.structs.Map<string, string>} */
   var blockFieldValues = new goog.structs.Map();
-  SpeechBlocks.Blocks.getBlock(blockId, this.workspace_).inputList.forEach(function(input) {
+  SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_).inputList.forEach(function(input) {
     input.fieldRow.forEach(function(field) {
       var type = SpeechBlocks.Controller.getFieldType_(field)
       if (field.name && type != SpeechBlocks.IRRELEVANT) {
@@ -364,7 +364,7 @@ SpeechBlocks.Controller.getFieldType_ = function(field) {
  * @public
  */
 SpeechBlocks.Controller.prototype.setBlockField = function(blockId, fieldName, fieldValue) {
-  SpeechBlocks.Blocks.getBlock(blockId, this.workspace_).setFieldValue(fieldValue, fieldName);
+  SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_).setFieldValue(fieldValue, fieldName);
 };
 
 /**
@@ -388,7 +388,7 @@ SpeechBlocks.Controller.prototype.isFieldValueValid = function(blockId, fieldNam
  */
 SpeechBlocks.Controller.prototype.getField_ = function(blockId, fieldName) {
   return goog.asserts.assertInstanceof(
-      SpeechBlocks.Blocks.getBlock(blockId, this.workspace_)).getField(fieldName);
+      SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_)).getField(fieldName);
 };
 
 /**

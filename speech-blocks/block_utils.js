@@ -4,7 +4,7 @@
  */
 'use strict';
 
-goog.provide('SpeechBlocks.Blocks');
+goog.provide('SpeechBlocks.BlockUtils');
 
 goog.require('Blockly.Connection');
 goog.require('goog.asserts');
@@ -16,7 +16,7 @@ goog.require('goog.asserts');
  * @return {!Blockly.Block}
  * @public
  */
-SpeechBlocks.Blocks.getBlock = function(blockId, workspace) {
+SpeechBlocks.BlockUtils.getBlock = function(blockId, workspace) {
   return goog.asserts.assertInstanceof(
       workspace.getBlockById(blockId), Blockly.Block);
 };
@@ -28,9 +28,9 @@ SpeechBlocks.Blocks.getBlock = function(blockId, workspace) {
  * @return {!Blockly.Connection}
  * @public
  */
-SpeechBlocks.Blocks.getPreviousConnection = function(blockId, workspace) {
-  return SpeechBlocks.Blocks.asConnection_(
-      SpeechBlocks.Blocks.getBlock(blockId, workspace).previousConnection);
+SpeechBlocks.BlockUtils.getPreviousConnection = function(blockId, workspace) {
+  return SpeechBlocks.BlockUtils.asConnection_(
+      SpeechBlocks.BlockUtils.getBlock(blockId, workspace).previousConnection);
 };
 
 /**
@@ -40,9 +40,9 @@ SpeechBlocks.Blocks.getPreviousConnection = function(blockId, workspace) {
  * @return {!Blockly.Connection}
  * @public
  */
-SpeechBlocks.Blocks.getNextConnection = function(blockId, workspace) {
-  return SpeechBlocks.Blocks.asConnection_(
-      SpeechBlocks.Blocks.getBlock(blockId, workspace).nextConnection);
+SpeechBlocks.BlockUtils.getNextConnection = function(blockId, workspace) {
+  return SpeechBlocks.BlockUtils.asConnection_(
+      SpeechBlocks.BlockUtils.getBlock(blockId, workspace).nextConnection);
 };
 
 /**
@@ -51,9 +51,9 @@ SpeechBlocks.Blocks.getNextConnection = function(blockId, workspace) {
  * @return {!Blockly.Connection}
  * @public
  */
-SpeechBlocks.Blocks.getChainNextConnection = function(blockId, workspace) {
-  return SpeechBlocks.Blocks.asConnection_(
-      SpeechBlocks.Blocks.getLastBlockInChain_(blockId, workspace).nextConnection);
+SpeechBlocks.BlockUtils.getChainNextConnection = function(blockId, workspace) {
+  return SpeechBlocks.BlockUtils.asConnection_(
+      SpeechBlocks.BlockUtils.getLastBlockInChain_(blockId, workspace).nextConnection);
 };
 
 /**
@@ -63,9 +63,9 @@ SpeechBlocks.Blocks.getChainNextConnection = function(blockId, workspace) {
  * @return {!Blockly.Connection}
  * @public
  */
-SpeechBlocks.Blocks.getOutputConnection = function(blockId, workspace) {
-  return SpeechBlocks.Blocks.asConnection_(
-      SpeechBlocks.Blocks.getBlock(blockId, workspace).outputConnection);
+SpeechBlocks.BlockUtils.getOutputConnection = function(blockId, workspace) {
+  return SpeechBlocks.BlockUtils.asConnection_(
+      SpeechBlocks.BlockUtils.getBlock(blockId, workspace).outputConnection);
 };
 
 /**
@@ -76,9 +76,9 @@ SpeechBlocks.Blocks.getOutputConnection = function(blockId, workspace) {
  * @return {!Blockly.Connection}
  * @public
  */
-SpeechBlocks.Blocks.getInputConnection = function(blockId, inputName, workspace) {
-  return SpeechBlocks.Blocks.asConnection_(
-      SpeechBlocks.Blocks.getInput_(blockId, inputName, workspace).connection);
+SpeechBlocks.BlockUtils.getInputConnection = function(blockId, inputName, workspace) {
+  return SpeechBlocks.BlockUtils.asConnection_(
+      SpeechBlocks.BlockUtils.getInput_(blockId, inputName, workspace).connection);
 };
 
 /**
@@ -93,8 +93,8 @@ SpeechBlocks.Blocks.getInputConnection = function(blockId, inputName, workspace)
  * @return {boolean}
  * @public
  */
-SpeechBlocks.Blocks.areBlocksInSameChain = function(blockId1, blockId2, workspace) {
-  var toCheck = [SpeechBlocks.Blocks.getBlock(blockId1, workspace)];
+SpeechBlocks.BlockUtils.areBlocksInSameChain = function(blockId1, blockId2, workspace) {
+  var toCheck = [SpeechBlocks.BlockUtils.getBlock(blockId1, workspace)];
   while (toCheck) {
     var curr = toCheck.pop();
 
@@ -104,19 +104,19 @@ SpeechBlocks.Blocks.areBlocksInSameChain = function(blockId1, blockId2, workspac
     }
 
     // Otherwise, add all connected blocks to the queue.
-    var conn = SpeechBlocks.Blocks.asConnection_(curr.nextConnection);
+    var conn = SpeechBlocks.BlockUtils.asConnection_(curr.nextConnection);
     if (conn.isConnected()) {
-      toCheck.push(SpeechBlocks.Blocks.getConnectionTarget_(conn));
+      toCheck.push(SpeechBlocks.BlockUtils.getConnectionTarget_(conn));
     }
 
-    conn = SpeechBlocks.Blocks.asConnection_(curr.previousConnection);
+    conn = SpeechBlocks.BlockUtils.asConnection_(curr.previousConnection);
     if (conn.isConnected()) {
-      toCheck.push(SpeechBlocks.Blocks.getConnectionTarget_(conn));
+      toCheck.push(SpeechBlocks.BlockUtils.getConnectionTarget_(conn));
     }
 
-    conn = SpeechBlocks.Blocks.asConnection_(curr.outputConnection);
+    conn = SpeechBlocks.BlockUtils.asConnection_(curr.outputConnection);
     if (conn.isConnected()) {
-      toCheck.push(SpeechBlocks.Blocks.getConnectionTarget_(conn));
+      toCheck.push(SpeechBlocks.BlockUtils.getConnectionTarget_(conn));
     }
 
     curr.inputsList.forEach(function(input) {
@@ -135,9 +135,9 @@ SpeechBlocks.Blocks.areBlocksInSameChain = function(blockId1, blockId2, workspac
  * @return {!Blockly.Input}
  * @private
  */
-SpeechBlocks.Blocks.getInput_ = function(blockId, inputName, workspace) {
+SpeechBlocks.BlockUtils.getInput_ = function(blockId, inputName, workspace) {
   return goog.asserts.assertInstanceof(
-      SpeechBlocks.Blocks.getBlock(blockId, workspace).getInput(inputName),
+      SpeechBlocks.BlockUtils.getBlock(blockId, workspace).getInput(inputName),
       Blockly.Input);
 };
 
@@ -147,8 +147,8 @@ SpeechBlocks.Blocks.getInput_ = function(blockId, inputName, workspace) {
  * @return {!Blockly.Block} ID of the last block in the chain.
  * @private
  */
-SpeechBlocks.Blocks.getLastBlockInChain_ = function(blockId, workspace) {
-  var curr = SpeechBlocks.Blocks.getBlock(blockId, workspace);
+SpeechBlocks.BlockUtils.getLastBlockInChain_ = function(blockId, workspace) {
+  var curr = SpeechBlocks.BlockUtils.getBlock(blockId, workspace);
   while (curr.nextConnection && curr.nextConnection.isConnected()) {
     curr = curr.nextConnection.targetConnection.getSourceBlock();
   }
@@ -160,7 +160,7 @@ SpeechBlocks.Blocks.getLastBlockInChain_ = function(blockId, workspace) {
  * @return {!Blockly.Block} The connection target.
  * @private
  */
-SpeechBlocks.Blocks.getConnectionTarget_= function(connection) {
+SpeechBlocks.BlockUtils.getConnectionTarget_= function(connection) {
   return goog.asserts.assertInstanceof(
       goog.asserts.assertInstanceof(
           connection.targetConnection, Blockly.Connection),
@@ -173,6 +173,6 @@ SpeechBlocks.Blocks.getConnectionTarget_= function(connection) {
  * @return {!Blockly.Connection}
  * @private
  */
-SpeechBlocks.Blocks.asConnection_ = function(connection) {
+SpeechBlocks.BlockUtils.asConnection_ = function(connection) {
   return goog.asserts.assertInstanceof(connection, Blockly.Connection);
 };
