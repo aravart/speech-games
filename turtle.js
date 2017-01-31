@@ -73,113 +73,113 @@ Turtle.visible = true;
  * Initialize Blockly and the turtle.  Called on page load.
  */
 Turtle.init = function() {
-  // Render the Soy template.
-  // document.body.innerHTML = Turtle.soy.start({}, null,
-  //     {lang: BlocklyGames.LANG,
-  //      level: BlocklyGames.LEVEL,
-  //      maxLevel: BlocklyGames.MAX_LEVEL,
-  //      html: BlocklyGames.IS_HTML});
+    // Render the Soy template.
+    // document.body.innerHTML = Turtle.soy.start({}, null,
+    //     {lang: BlocklyGames.LANG,
+    //      level: BlocklyGames.LEVEL,
+    //      maxLevel: BlocklyGames.MAX_LEVEL,
+    //      html: BlocklyGames.IS_HTML});
 
-  // BlocklyInterface.init();
+    // BlocklyInterface.init();
 
-  // var rtl = BlocklyGames.isRtl();
-  // var blocklyDiv = document.getElementById('blockly');
-  var blocklyDiv = document.getElementById('blocklyDiv');
-  // var visualization = document.getElementById('visualization');
-  // var onresize = function(e) {
-  //   var top = visualization.offsetTop;
-  //   blocklyDiv.style.top = Math.max(10, top - window.pageYOffset) + 'px';
-  //   blocklyDiv.style.left = rtl ? '10px' : '420px';
-  //   blocklyDiv.style.width = (window.innerWidth - 440) + 'px';
-  // };
-  // window.addEventListener('scroll', function() {
-  //   onresize();
-  //   Blockly.svgResize(BlocklyGames.workspace);
-  // });
-  // window.addEventListener('resize', onresize);
-  // onresize();
+    // var rtl = BlocklyGames.isRtl();
+    // var blocklyDiv = document.getElementById('blockly');
+    var blocklyDiv = document.getElementById('blocklyDiv');
+    // var visualization = document.getElementById('visualization');
+    // var onresize = function(e) {
+    //   var top = visualization.offsetTop;
+    //   blocklyDiv.style.top = Math.max(10, top - window.pageYOffset) + 'px';
+    //   blocklyDiv.style.left = rtl ? '10px' : '420px';
+    //   blocklyDiv.style.width = (window.innerWidth - 440) + 'px';
+    // };
+    // window.addEventListener('scroll', function() {
+    //   onresize();
+    //   Blockly.svgResize(BlocklyGames.workspace);
+    // });
+    // window.addEventListener('resize', onresize);
+    // onresize();
 
-  // if (BlocklyGames.LEVEL < BlocklyGames.MAX_LEVEL) {
-  //   Blockly.FieldColour.COLUMNS = 3;
-  //   Blockly.FieldColour.COLOURS =
-  //       ['#ff0000', '#ffcc33', '#ffff00',
-  //        '#009900', '#3333ff', '#cc33cc',
-  //        '#ffffff', '#999999', '#000000'];
-  // }
+    // if (BlocklyGames.LEVEL < BlocklyGames.MAX_LEVEL) {
+    //   Blockly.FieldColour.COLUMNS = 3;
+    //   Blockly.FieldColour.COLOURS =
+    //       ['#ff0000', '#ffcc33', '#ffff00',
+    //        '#009900', '#3333ff', '#cc33cc',
+    //        '#ffffff', '#999999', '#000000'];
+    // }
 
-  // var toolbox = document.getElementById('toolbox');
-  // BlocklyGames.workspace = Blockly.inject('blockly',
-  //     {'media': 'third-party/blockly/media/',
-  //      'rtl': rtl,
-  //      'toolbox': toolbox,
-  //      'trashcan': true,
-  //      'zoom': BlocklyGames.LEVEL == BlocklyGames.MAX_LEVEL ?
-  //          {'controls': true, 'wheel': true} : null});
-  // // Prevent collisions with user-defined functions or variables.
-  Blockly.JavaScript.addReservedWords('moveForward,moveBackward,' +
-      'turnRight,turnLeft,penUp,penDown,penWidth,penColor,' +
-      'hideTurtle,showTurtle,print,font,step');
+    // var toolbox = document.getElementById('toolbox');
+    // BlocklyGames.workspace = Blockly.inject('blockly',
+    //     {'media': 'third-party/blockly/media/',
+    //      'rtl': rtl,
+    //      'toolbox': toolbox,
+    //      'trashcan': true,
+    //      'zoom': BlocklyGames.LEVEL == BlocklyGames.MAX_LEVEL ?
+    //          {'controls': true, 'wheel': true} : null});
+    // // Prevent collisions with user-defined functions or variables.
+    Blockly.JavaScript.addReservedWords('moveForward,moveBackward,' +
+        'turnRight,turnLeft,penUp,penDown,penWidth,penColor,' +
+        'hideTurtle,showTurtle,print,font,move');
 
-  // if (document.getElementById('submitButton')) {
-  //   BlocklyGames.bindClick('submitButton', Turtle.submitToReddit);
-  // }
+    // if (document.getElementById('submitButton')) {
+    //   BlocklyGames.bindClick('submitButton', Turtle.submitToReddit);
+    // }
 
-  // // Initialize the slider.
-  // var sliderSvg = document.getElementById('slider');
-  // Turtle.speedSlider = new Slider(10, 35, 130, sliderSvg);
+    // // Initialize the slider.
+    // var sliderSvg = document.getElementById('slider');
+    // Turtle.speedSlider = new Slider(10, 35, 130, sliderSvg);
 
-  // if (BlocklyGames.LEVEL == BlocklyGames.MAX_LEVEL) {
-  //   var defaultXml =
-  //       '<xml>' +
-  //       '  <block type="turtle_move" x="70" y="70">' +
-  //       '    <value name="VALUE">' +
-  //       '      <shadow type="math_number">' +
-  //       '        <field name="NUM">10</field>' +
-  //       '      </shadow>' +
-  //       '    </value>' +
-  //       '  </block>' +
-  //       '</xml>';
-  // } else {
-  //   var defaultXml =
-  //       '<xml>' +
-  //       '  <block type="turtle_move_internal" x="70" y="70">' +
-  //       '    <field name="VALUE">100</field>' +
-  //       '  </block>' +
-  //       '</xml>';
-  // }
-  // BlocklyInterface.loadBlocks(defaultXml, true);
+    // if (BlocklyGames.LEVEL == BlocklyGames.MAX_LEVEL) {
+    //   var defaultXml =
+    //       '<xml>' +
+    //       '  <block type="turtle_move" x="70" y="70">' +
+    //       '    <value name="VALUE">' +
+    //       '      <shadow type="math_number">' +
+    //       '        <field name="NUM">10</field>' +
+    //       '      </shadow>' +
+    //       '    </value>' +
+    //       '  </block>' +
+    //       '</xml>';
+    // } else {
+    //   var defaultXml =
+    //       '<xml>' +
+    //       '  <block type="turtle_move_internal" x="70" y="70">' +
+    //       '    <field name="VALUE">100</field>' +
+    //       '  </block>' +
+    //       '</xml>';
+    // }
+    // BlocklyInterface.loadBlocks(defaultXml, true);
 
-  Turtle.ctxDisplay = document.getElementById('display').getContext('2d');
-  Turtle.ctxAnswer = document.getElementById('answer').getContext('2d');
-  Turtle.ctxScratch = document.getElementById('scratch').getContext('2d');
-  Turtle.drawAnswer();
-  Turtle.reset();
+    Turtle.ctxDisplay = document.getElementById('display').getContext('2d');
+    Turtle.ctxAnswer = document.getElementById('answer').getContext('2d');
+    Turtle.ctxScratch = document.getElementById('scratch').getContext('2d');
+    Turtle.drawAnswer();
+    Turtle.reset();
 
-  SpeechGames.bindClick('runButton', Turtle.runButtonClick);
-  SpeechGames.bindClick('resetButton', Turtle.resetButtonClick);
+    SpeechGames.bindClick('runButton', Turtle.runButtonClick);
+    SpeechGames.bindClick('resetButton', Turtle.resetButtonClick);
 
-  // // Preload the win sound.
-  // BlocklyGames.workspace.loadAudio_(['turtle/win.mp3', 'turtle/win.ogg'],
-  //     'win');
-  // // Lazy-load the JavaScript interpreter.
-  // setTimeout(BlocklyInterface.importInterpreter, 1);
-  // // Lazy-load the syntax-highlighting.
-  // setTimeout(BlocklyInterface.importPrettify, 1);
+    // // Preload the win sound.
+    // BlocklyGames.workspace.loadAudio_(['turtle/win.mp3', 'turtle/win.ogg'],
+    //     'win');
+    // // Lazy-load the JavaScript interpreter.
+    // setTimeout(BlocklyInterface.importInterpreter, 1);
+    // // Lazy-load the syntax-highlighting.
+    // setTimeout(BlocklyInterface.importPrettify, 1);
 
-  // BlocklyGames.bindClick('helpButton', Turtle.showHelp);
-  // if (location.hash.length < 2 &&
-  //     !BlocklyGames.loadFromLocalStorage(BlocklyGames.NAME,
-  //                                        BlocklyGames.LEVEL)) {
-  //   setTimeout(Turtle.showHelp, 1000);
-  //   if (BlocklyGames.LEVEL == 9) {
-  //     setTimeout(BlocklyDialogs.abortOffer, 5 * 60 * 1000);
-  //   }
-  // }
-  // if (BlocklyGames.LEVEL == 1) {
-  //   // Previous apps did not have categories.
-  //   // If the user doesn't find them, point them out.
-  //   BlocklyGames.workspace.addChangeListener(Turtle.watchCategories_);
-  // }
+    // BlocklyGames.bindClick('helpButton', Turtle.showHelp);
+    // if (location.hash.length < 2 &&
+    //     !BlocklyGames.loadFromLocalStorage(BlocklyGames.NAME,
+    //                                        BlocklyGames.LEVEL)) {
+    //   setTimeout(Turtle.showHelp, 1000);
+    //   if (BlocklyGames.LEVEL == 9) {
+    //     setTimeout(BlocklyDialogs.abortOffer, 5 * 60 * 1000);
+    //   }
+    // }
+    // if (BlocklyGames.LEVEL == 1) {
+    //   // Previous apps did not have categories.
+    //   // If the user doesn't find them, point them out.
+    //   BlocklyGames.workspace.addChangeListener(Turtle.watchCategories_);
+    // }
 };
 
 window.addEventListener('load', Turtle.init);
@@ -263,11 +263,11 @@ window.addEventListener('load', Turtle.init);
  * On startup draw the expected answer and save it to the answer canvas.
  */
 Turtle.drawAnswer = function() {
-  Turtle.reset();
-  Turtle.answer();
-  Turtle.ctxAnswer.globalCompositeOperation = 'copy';
-  Turtle.ctxAnswer.drawImage(Turtle.ctxScratch.canvas, 0, 0);
-  Turtle.ctxAnswer.globalCompositeOperation = 'source-over';
+    Turtle.reset();
+    Turtle.answer();
+    Turtle.ctxAnswer.globalCompositeOperation = 'copy';
+    Turtle.ctxAnswer.drawImage(Turtle.ctxScratch.canvas, 0, 0);
+    Turtle.ctxAnswer.globalCompositeOperation = 'source-over';
 };
 
 /**
@@ -275,92 +275,92 @@ Turtle.drawAnswer = function() {
  * pending tasks.
  */
 Turtle.reset = function() {
-  // Starting location and heading of the turtle.
-  Turtle.x = Turtle.HEIGHT / 2;
-  Turtle.y = Turtle.WIDTH / 2;
-  Turtle.heading = 0;
-  Turtle.penDownValue = true;
-  Turtle.visible = true;
+    // Starting location and heading of the turtle.
+    Turtle.x = Turtle.HEIGHT / 2;
+    Turtle.y = Turtle.WIDTH / 2;
+    Turtle.heading = 0;
+    Turtle.penDownValue = true;
+    Turtle.visible = true;
 
-  // Clear the canvas.
-  Turtle.ctxScratch.canvas.width = Turtle.ctxScratch.canvas.width;
-  Turtle.ctxScratch.strokeStyle = '#ffffff';
-  Turtle.ctxScratch.fillStyle = '#ffffff';
-  Turtle.ctxScratch.lineWidth = 5;
-  Turtle.ctxScratch.lineCap = 'round';
-  Turtle.ctxScratch.font = 'normal 18pt Arial';
-  Turtle.display();
+    // Clear the canvas.
+    Turtle.ctxScratch.canvas.width = Turtle.ctxScratch.canvas.width;
+    Turtle.ctxScratch.strokeStyle = '#ffffff';
+    Turtle.ctxScratch.fillStyle = '#ffffff';
+    Turtle.ctxScratch.lineWidth = 5;
+    Turtle.ctxScratch.lineCap = 'round';
+    Turtle.ctxScratch.font = 'normal 18pt Arial';
+    Turtle.display();
 
-  // Kill all tasks.
-  for (var x = 0; x < Turtle.pidList.length; x++) {
-    window.clearTimeout(Turtle.pidList[x]);
-  }
-  Turtle.pidList.length = 0;
-  Turtle.interpreter = null;
+    // Kill all tasks.
+    for (var x = 0; x < Turtle.pidList.length; x++) {
+        window.clearTimeout(Turtle.pidList[x]);
+    }
+    Turtle.pidList.length = 0;
+    Turtle.interpreter = null;
 };
 
 /**
  * Copy the scratch canvas to the display canvas. Add a turtle marker.
  */
 Turtle.display = function() {
-  // Clear the display with black.
-  Turtle.ctxDisplay.beginPath();
-  Turtle.ctxDisplay.rect(0, 0,
-      Turtle.ctxDisplay.canvas.width, Turtle.ctxDisplay.canvas.height);
-  Turtle.ctxDisplay.fillStyle = '#000000';
-  Turtle.ctxDisplay.fill();
-
-  // Draw the answer layer.
-  Turtle.ctxDisplay.globalCompositeOperation = 'source-over';
-  Turtle.ctxDisplay.globalAlpha = 0.2;
-  Turtle.ctxDisplay.drawImage(Turtle.ctxAnswer.canvas, 0, 0);
-  Turtle.ctxDisplay.globalAlpha = 1;
-
-  // Draw the user layer.
-  Turtle.ctxDisplay.globalCompositeOperation = 'source-over';
-  Turtle.ctxDisplay.drawImage(Turtle.ctxScratch.canvas, 0, 0);
-
-  // Draw the turtle.
-  if (Turtle.visible) {
-    // Make the turtle the colour of the pen.
-    Turtle.ctxDisplay.strokeStyle = Turtle.ctxScratch.strokeStyle;
-    Turtle.ctxDisplay.fillStyle = Turtle.ctxScratch.fillStyle;
-
-    // Draw the turtle body.
-    var radius = Turtle.ctxScratch.lineWidth / 2 + 10;
+    // Clear the display with black.
     Turtle.ctxDisplay.beginPath();
-    Turtle.ctxDisplay.arc(Turtle.x, Turtle.y, radius, 0, 2 * Math.PI, false);
-    Turtle.ctxDisplay.lineWidth = 3;
-    Turtle.ctxDisplay.stroke();
-
-    // Draw the turtle head.
-    var WIDTH = 0.3;
-    var HEAD_TIP = 10;
-    var ARROW_TIP = 4;
-    var BEND = 6;
-    var radians = 2 * Math.PI * Turtle.heading / 360;
-    var tipX = Turtle.x + (radius + HEAD_TIP) * Math.sin(radians);
-    var tipY = Turtle.y - (radius + HEAD_TIP) * Math.cos(radians);
-    radians -= WIDTH;
-    var leftX = Turtle.x + (radius + ARROW_TIP) * Math.sin(radians);
-    var leftY = Turtle.y - (radius + ARROW_TIP) * Math.cos(radians);
-    radians += WIDTH / 2;
-    var leftControlX = Turtle.x + (radius + BEND) * Math.sin(radians);
-    var leftControlY = Turtle.y - (radius + BEND) * Math.cos(radians);
-    radians += WIDTH;
-    var rightControlX = Turtle.x + (radius + BEND) * Math.sin(radians);
-    var rightControlY = Turtle.y - (radius + BEND) * Math.cos(radians);
-    radians += WIDTH / 2;
-    var rightX = Turtle.x + (radius + ARROW_TIP) * Math.sin(radians);
-    var rightY = Turtle.y - (radius + ARROW_TIP) * Math.cos(radians);
-    Turtle.ctxDisplay.beginPath();
-    Turtle.ctxDisplay.moveTo(tipX, tipY);
-    Turtle.ctxDisplay.lineTo(leftX, leftY);
-    Turtle.ctxDisplay.bezierCurveTo(leftControlX, leftControlY,
-        rightControlX, rightControlY, rightX, rightY);
-    Turtle.ctxDisplay.closePath();
+    Turtle.ctxDisplay.rect(0, 0,
+        Turtle.ctxDisplay.canvas.width, Turtle.ctxDisplay.canvas.height);
+    Turtle.ctxDisplay.fillStyle = '#000000';
     Turtle.ctxDisplay.fill();
-  }
+
+    // Draw the answer layer.
+    Turtle.ctxDisplay.globalCompositeOperation = 'source-over';
+    Turtle.ctxDisplay.globalAlpha = 0.2;
+    Turtle.ctxDisplay.drawImage(Turtle.ctxAnswer.canvas, 0, 0);
+    Turtle.ctxDisplay.globalAlpha = 1;
+
+    // Draw the user layer.
+    Turtle.ctxDisplay.globalCompositeOperation = 'source-over';
+    Turtle.ctxDisplay.drawImage(Turtle.ctxScratch.canvas, 0, 0);
+
+    // Draw the turtle.
+    if (Turtle.visible) {
+        // Make the turtle the colour of the pen.
+        Turtle.ctxDisplay.strokeStyle = Turtle.ctxScratch.strokeStyle;
+        Turtle.ctxDisplay.fillStyle = Turtle.ctxScratch.fillStyle;
+
+        // Draw the turtle body.
+        var radius = Turtle.ctxScratch.lineWidth / 2 + 10;
+        Turtle.ctxDisplay.beginPath();
+        Turtle.ctxDisplay.arc(Turtle.x, Turtle.y, radius, 0, 2 * Math.PI, false);
+        Turtle.ctxDisplay.lineWidth = 3;
+        Turtle.ctxDisplay.stroke();
+
+        // Draw the turtle head.
+        var WIDTH = 0.3;
+        var HEAD_TIP = 10;
+        var ARROW_TIP = 4;
+        var BEND = 6;
+        var radians = 2 * Math.PI * Turtle.heading / 360;
+        var tipX = Turtle.x + (radius + HEAD_TIP) * Math.sin(radians);
+        var tipY = Turtle.y - (radius + HEAD_TIP) * Math.cos(radians);
+        radians -= WIDTH;
+        var leftX = Turtle.x + (radius + ARROW_TIP) * Math.sin(radians);
+        var leftY = Turtle.y - (radius + ARROW_TIP) * Math.cos(radians);
+        radians += WIDTH / 2;
+        var leftControlX = Turtle.x + (radius + BEND) * Math.sin(radians);
+        var leftControlY = Turtle.y - (radius + BEND) * Math.cos(radians);
+        radians += WIDTH;
+        var rightControlX = Turtle.x + (radius + BEND) * Math.sin(radians);
+        var rightControlY = Turtle.y - (radius + BEND) * Math.cos(radians);
+        radians += WIDTH / 2;
+        var rightX = Turtle.x + (radius + ARROW_TIP) * Math.sin(radians);
+        var rightY = Turtle.y - (radius + ARROW_TIP) * Math.cos(radians);
+        Turtle.ctxDisplay.beginPath();
+        Turtle.ctxDisplay.moveTo(tipX, tipY);
+        Turtle.ctxDisplay.lineTo(leftX, leftY);
+        Turtle.ctxDisplay.bezierCurveTo(leftControlX, leftControlY,
+            rightControlX, rightControlY, rightX, rightY);
+        Turtle.ctxDisplay.closePath();
+        Turtle.ctxDisplay.fill();
+    }
 };
 
 /**
@@ -368,21 +368,21 @@ Turtle.display = function() {
  * @param {!Event} e Mouse or touch event.
  */
 Turtle.runButtonClick = function(e) {
-  // Prevent double-clicks or double-taps.
-  if (BlocklyInterface.eventSpam(e)) {
-    return;
-  }
-  var runButton = document.getElementById('runButton');
-  var resetButton = document.getElementById('resetButton');
-  // Ensure that Reset button is at least as wide as Run button.
-  if (!resetButton.style.minWidth) {
-    resetButton.style.minWidth = runButton.offsetWidth + 'px';
-  }
-  runButton.style.display = 'none';
-  resetButton.style.display = 'inline';
-  // document.getElementById('spinner').style.visibility = 'visible';
-  // BlocklyGames.workspace.traceOn(true);
-  Turtle.execute();
+    // Prevent double-clicks or double-taps.
+    if (BlocklyInterface.eventSpam(e)) {
+        return;
+    }
+    var runButton = document.getElementById('runButton');
+    var resetButton = document.getElementById('resetButton');
+    // Ensure that Reset button is at least as wide as Run button.
+    if (!resetButton.style.minWidth) {
+        resetButton.style.minWidth = runButton.offsetWidth + 'px';
+    }
+    runButton.style.display = 'none';
+    resetButton.style.display = 'inline';
+    // document.getElementById('spinner').style.visibility = 'visible';
+    // BlocklyGames.workspace.traceOn(true);
+    Turtle.execute();
 };
 
 /**
@@ -390,19 +390,19 @@ Turtle.runButtonClick = function(e) {
  * @param {!Event} e Mouse or touch event.
  */
 Turtle.resetButtonClick = function(e) {
-  // Prevent double-clicks or double-taps.
-  if (BlocklyInterface.eventSpam(e)) {
-    return;
-  }
-  var runButton = document.getElementById('runButton');
-  runButton.style.display = 'inline';
-  document.getElementById('resetButton').style.display = 'none';
-  // document.getElementById('spinner').style.visibility = 'hidden';
-  // BlocklyGames.workspace.traceOn(false);
-  Turtle.reset();
+    // Prevent double-clicks or double-taps.
+    if (BlocklyInterface.eventSpam(e)) {
+        return;
+    }
+    var runButton = document.getElementById('runButton');
+    runButton.style.display = 'inline';
+    document.getElementById('resetButton').style.display = 'none';
+    // document.getElementById('spinner').style.visibility = 'hidden';
+    // BlocklyGames.workspace.traceOn(false);
+    Turtle.reset();
 
-  // // Image cleared; prevent user from submitting to Reddit.
-  // Turtle.canSubmit = false;
+    // // Image cleared; prevent user from submitting to Reddit.
+    // Turtle.canSubmit = false;
 };
 
 /**
@@ -411,88 +411,99 @@ Turtle.resetButtonClick = function(e) {
  * @param {!Interpreter} interpreter The JS interpreter.
  */
 Turtle.initInterpreter = function(interpreter, scope) {
-  // API
-  var wrapper;
+    // API
+    var wrapper;
 
-  wrapper = function(id) {
-    Turtle.step(id.toString());
-  };
-  interpreter.setProperty(scope, 'step',
-      interpreter.createNativeFunction(wrapper));
+    wrapper = function(id)
+    {
+        Turtle.step(id.toString());
+    };
+    interpreter.setProperty(scope, 'step',
+        interpreter.createNativeFunction(wrapper));
 
-  wrapper = function(angle, id) {
-    Turtle.turn(angle.valueOf(), id.toString());
-  };
-  interpreter.setProperty(scope, 'turnRight',
-      interpreter.createNativeFunction(wrapper));
-  wrapper = function(angle, id) {
-    Turtle.turn(-angle.valueOf(), id.toString());
-  };
-  interpreter.setProperty(scope, 'turnLeft',
-      interpreter.createNativeFunction(wrapper));
+    wrapper = function(angle, id)
+    {
+        Turtle.turn(angle.valueOf(), id.toString());
+    };
+    interpreter.setProperty(scope, 'turnRight',
+        interpreter.createNativeFunction(wrapper));
+    wrapper = function(angle, id)
+    {
+        Turtle.turn(-angle.valueOf(), id.toString());
+    };
+    interpreter.setProperty(scope, 'turnLeft',
+        interpreter.createNativeFunction(wrapper));
 
-  wrapper = function(id) {
-    Turtle.penDown(false, id.toString());
-  };
-  interpreter.setProperty(scope, 'penUp',
-      interpreter.createNativeFunction(wrapper));
-  wrapper = function(id) {
-    Turtle.penDown(true, id.toString());
-  };
-  interpreter.setProperty(scope, 'penDown',
-      interpreter.createNativeFunction(wrapper));
+    wrapper = function(id)
+    {
+        Turtle.penDown(false, id.toString());
+    };
+    interpreter.setProperty(scope, 'penUp',
+        interpreter.createNativeFunction(wrapper));
+    wrapper = function(id)
+    {
+        Turtle.penDown(true, id.toString());
+    };
+    interpreter.setProperty(scope, 'penDown',
+        interpreter.createNativeFunction(wrapper));
 
-  wrapper = function(width, id) {
-    Turtle.penWidth(width.valueOf(), id.toString());
-  };
-  interpreter.setProperty(scope, 'penWidth',
-      interpreter.createNativeFunction(wrapper));
+    wrapper = function(width, id)
+    {
+        Turtle.penWidth(width.valueOf(), id.toString());
+    };
+    interpreter.setProperty(scope, 'penWidth',
+        interpreter.createNativeFunction(wrapper));
 
-  wrapper = function(color, id) {
-    Turtle.penColor(color.toString(), id.toString());
-  };
-  interpreter.setProperty(scope, 'penColor',
-      interpreter.createNativeFunction(wrapper));
+    wrapper = function(color, id)
+    {
+        Turtle.penColor(color.toString(), id.toString());
+    };
+    interpreter.setProperty(scope, 'penColor',
+        interpreter.createNativeFunction(wrapper));
 
-  wrapper = function(id) {
-    Turtle.isVisible(false, id.toString());
-  };
-  interpreter.setProperty(scope, 'hideTurtle',
-      interpreter.createNativeFunction(wrapper));
-  wrapper = function(id) {
-    Turtle.isVisible(true, id.toString());
-  };
-  interpreter.setProperty(scope, 'showTurtle',
-      interpreter.createNativeFunction(wrapper));
+    wrapper = function(id)
+    {
+        Turtle.isVisible(false, id.toString());
+    };
+    interpreter.setProperty(scope, 'hideTurtle',
+        interpreter.createNativeFunction(wrapper));
+    wrapper = function(id)
+    {
+        Turtle.isVisible(true, id.toString());
+    };
+    interpreter.setProperty(scope, 'showTurtle',
+        interpreter.createNativeFunction(wrapper));
 
-  wrapper = function(text, id) {
-    Turtle.drawPrint(text.toString(), id.toString());
-  };
-  interpreter.setProperty(scope, 'print',
-      interpreter.createNativeFunction(wrapper));
+    wrapper = function(text, id)
+    {
+        Turtle.drawPrint(text.toString(), id.toString());
+    };
+    interpreter.setProperty(scope, 'print',
+        interpreter.createNativeFunction(wrapper));
 
-  wrapper = function(font, size, style, id) {
-    Turtle.drawFont(font.toString(), size.valueOf(), style.toString(),
-                  id.toString());
-  };
-  interpreter.setProperty(scope, 'font',
-      interpreter.createNativeFunction(wrapper));
+    wrapper = function(font, size, style, id)
+    {
+        Turtle.drawFont(font.toString(), size.valueOf(), style.toString(),
+            id.toString());
+    };
+    interpreter.setProperty(scope, 'font',
+        interpreter.createNativeFunction(wrapper));
 };
 
 /**
  * Execute the user's code.  Heaven help us...
  */
 Turtle.execute = function() {
-  // if (!('Interpreter' in window)) {
-  //   // Interpreter lazy loads and hasn't arrived yet.  Try again later.
-  //   setTimeout(Turtle.execute, 250);
-  //   return;
-  // }
+    // if (!('Interpreter' in window)) {
+    //   // Interpreter lazy loads and hasn't arrived yet.  Try again later.
+    //   setTimeout(Turtle.execute, 250);
+    //   return;
+    // }
 
-  Turtle.reset();
-  var code = Blockly.JavaScript.workspaceToCode(SpeechGames.workspace);
-  Turtle.interpreter = new Interpreter(code, Turtle.initInterpreter);
-  Turtle.pidList.push(setTimeout(Turtle.executeChunk_, 100));
+    Turtle.reset();
+    var code = Blockly.JavaScript.workspaceToCode(SpeechGames.workspace);
+    Turtle.interpreter = new Interpreter(code, Turtle.initInterpreter);
+    Turtle.pidList.push(setTimeout(Turtle.executeChunk_, 100));
 };
 
 /**
@@ -500,33 +511,33 @@ Turtle.execute = function() {
  * @private
  */
 Turtle.executeChunk_ = function() {
-  // All tasks should be complete now.  Clean up the PID list.
-  Turtle.pidList.length = 0;
-  Turtle.pause = 0;
-  var go;
-  do {
-    try {
-      go = Turtle.interpreter.step();
-    } catch (e) {
-      // User error, terminate in shame.
-      alert(e);
-      go = false;
+    // All tasks should be complete now.  Clean up the PID list.
+    Turtle.pidList.length = 0;
+    Turtle.pause = 0;
+    var go;
+    do {
+        try {
+            go = Turtle.interpreter.step();
+        } catch (e) {
+            // User error, terminate in shame.
+            alert(e);
+            go = false;
+        }
+        if (go && Turtle.pause) {
+            // The last executed command requested a pause.
+            go = false;
+            Turtle.pidList.push(
+                setTimeout(Turtle.executeChunk_, Turtle.pause));
+        }
+    } while (go);
+    // Wrap up if complete.
+    if (!Turtle.pause) {
+        // document.getElementById('spinner').style.visibility = 'hidden';
+        SpeechGames.workspace.highlightBlock(null);
+        Turtle.checkAnswer();
+        // // Image complete; allow the user to submit this image to Reddit.
+        // Turtle.canSubmit = true;
     }
-    if (go && Turtle.pause) {
-      // The last executed command requested a pause.
-      go = false;
-      Turtle.pidList.push(
-          setTimeout(Turtle.executeChunk_, Turtle.pause));
-    }
-  } while (go);
-  // Wrap up if complete.
-  if (!Turtle.pause) {
-    // document.getElementById('spinner').style.visibility = 'hidden';
-    SpeechGames.workspace.highlightBlock(null);
-    Turtle.checkAnswer();
-    // // Image complete; allow the user to submit this image to Reddit.
-    // Turtle.canSubmit = true;
-  }
 };
 
 /**
@@ -534,14 +545,14 @@ Turtle.executeChunk_ = function() {
  * @param {?string} id ID of block.
  */
 Turtle.animate = function(id) {
-  Turtle.display();
-  if (id) {
-    BlocklyInterface.highlight(id);
-    // Scale the speed non-linearly, to give better precision at the fast end.
-    // var stepSpeed = 1000 * Math.pow(1 - Turtle.speedSlider.getValue(), 2);
-    var stepSpeed = 1000 * Math.pow(1 - 0.5, 2);
-    Turtle.pause = Math.max(1, stepSpeed);
-  }
+    Turtle.display();
+    if (id) {
+        BlocklyInterface.highlight(id);
+        // Scale the speed non-linearly, to give better precision at the fast end.
+        // var stepSpeed = 1000 * Math.pow(1 - Turtle.speedSlider.getValue(), 2);
+        var stepSpeed = 1000 * Math.pow(1 - 0.5, 2);
+        Turtle.pause = Math.max(1, stepSpeed);
+    }
 };
 
 /**
@@ -549,7 +560,7 @@ Turtle.animate = function(id) {
  * @param {?string} id ID of block.
  */
 Turtle.step = function(id) {
-  Turtle.move(100, id);
+    Turtle.move(100, id);
 };
 
 /**
@@ -558,23 +569,23 @@ Turtle.step = function(id) {
  * @param {?string} id ID of block.
  */
 Turtle.move = function(distance, id) {
-  if (Turtle.penDownValue) {
-    Turtle.ctxScratch.beginPath();
-    Turtle.ctxScratch.moveTo(Turtle.x, Turtle.y);
-  }
-  if (distance) {
-    Turtle.x += distance * Math.sin(2 * Math.PI * Turtle.heading / 360);
-    Turtle.y -= distance * Math.cos(2 * Math.PI * Turtle.heading / 360);
-    var bump = 0;
-  } else {
-    // WebKit (unlike Gecko) draws nothing for a zero-length line.
-    var bump = 0.1;
-  }
-  if (Turtle.penDownValue) {
-    Turtle.ctxScratch.lineTo(Turtle.x, Turtle.y + bump);
-    Turtle.ctxScratch.stroke();
-  }
-  Turtle.animate(id);
+    if (Turtle.penDownValue) {
+        Turtle.ctxScratch.beginPath();
+        Turtle.ctxScratch.moveTo(Turtle.x, Turtle.y);
+    }
+    if (distance) {
+        Turtle.x += distance * Math.sin(2 * Math.PI * Turtle.heading / 360);
+        Turtle.y -= distance * Math.cos(2 * Math.PI * Turtle.heading / 360);
+        var bump = 0;
+    } else {
+        // WebKit (unlike Gecko) draws nothing for a zero-length line.
+        var bump = 0.1;
+    }
+    if (Turtle.penDownValue) {
+        Turtle.ctxScratch.lineTo(Turtle.x, Turtle.y + bump);
+        Turtle.ctxScratch.stroke();
+    }
+    Turtle.animate(id);
 };
 
 /**
@@ -583,12 +594,12 @@ Turtle.move = function(distance, id) {
  * @param {?string} id ID of block.
  */
 Turtle.turn = function(angle, id) {
-  Turtle.heading += angle;
-  Turtle.heading %= 360;
-  if (Turtle.heading < 0) {
-    Turtle.heading += 360;
-  }
-  Turtle.animate(id);
+    Turtle.heading += angle;
+    Turtle.heading %= 360;
+    if (Turtle.heading < 0) {
+        Turtle.heading += 360;
+    }
+    Turtle.animate(id);
 };
 
 /**
@@ -597,8 +608,8 @@ Turtle.turn = function(angle, id) {
  * @param {?string} id ID of block.
  */
 Turtle.penDown = function(down, id) {
-  Turtle.penDownValue = down;
-  Turtle.animate(id);
+    Turtle.penDownValue = down;
+    Turtle.animate(id);
 };
 
 /**
@@ -607,8 +618,8 @@ Turtle.penDown = function(down, id) {
  * @param {?string} id ID of block.
  */
 Turtle.penWidth = function(width, id) {
-  Turtle.ctxScratch.lineWidth = width;
-  Turtle.animate(id);
+    Turtle.ctxScratch.lineWidth = width;
+    Turtle.animate(id);
 };
 
 /**
@@ -617,9 +628,9 @@ Turtle.penWidth = function(width, id) {
  * @param {?string} id ID of block.
  */
 Turtle.penColor = function(color, id) {
-  Turtle.ctxScratch.strokeStyle = color;
-  Turtle.ctxScratch.fillStyle = color;
-  Turtle.animate(id);
+    Turtle.ctxScratch.strokeStyle = color;
+    Turtle.ctxScratch.fillStyle = color;
+    Turtle.animate(id);
 };
 
 /**
@@ -628,8 +639,8 @@ Turtle.penColor = function(color, id) {
  * @param {?string} id ID of block.
  */
 Turtle.isVisible = function(visible, id) {
-  Turtle.visible = visible;
-  Turtle.animate(id);
+    Turtle.visible = visible;
+    Turtle.animate(id);
 };
 
 /**
@@ -638,12 +649,12 @@ Turtle.isVisible = function(visible, id) {
  * @param {?string} id ID of block.
  */
 Turtle.drawPrint = function(text, id) {
-  Turtle.ctxScratch.save();
-  Turtle.ctxScratch.translate(Turtle.x, Turtle.y);
-  Turtle.ctxScratch.rotate(2 * Math.PI * (Turtle.heading - 90) / 360);
-  Turtle.ctxScratch.fillText(text, 0, 0);
-  Turtle.ctxScratch.restore();
-  Turtle.animate(id);
+    Turtle.ctxScratch.save();
+    Turtle.ctxScratch.translate(Turtle.x, Turtle.y);
+    Turtle.ctxScratch.rotate(2 * Math.PI * (Turtle.heading - 90) / 360);
+    Turtle.ctxScratch.fillText(text, 0, 0);
+    Turtle.ctxScratch.restore();
+    Turtle.animate(id);
 };
 
 /**
@@ -654,8 +665,8 @@ Turtle.drawPrint = function(text, id) {
  * @param {?string} id ID of block.
  */
 Turtle.drawFont = function(font, size, style, id) {
-  Turtle.ctxScratch.font = style + ' ' + size + 'pt ' + font;
-  Turtle.animate(id);
+    Turtle.ctxScratch.font = style + ' ' + size + 'pt ' + font;
+    Turtle.animate(id);
 };
 
 /**
@@ -663,30 +674,30 @@ Turtle.drawFont = function(font, size, style, id) {
  * If so, move on to next level.
  */
 Turtle.checkAnswer = function() {
-  // Compare the Alpha (opacity) byte of each pixel in the user's image and
-  // the sample answer image.
-  var userImage =
-      Turtle.ctxScratch.getImageData(0, 0, Turtle.WIDTH, Turtle.HEIGHT);
-  var answerImage =
-      Turtle.ctxAnswer.getImageData(0, 0, Turtle.WIDTH, Turtle.HEIGHT);
-  var len = Math.min(userImage.data.length, answerImage.data.length);
-  var delta = 0;
-  // Pixels are in RGBA format.  Only check the Alpha bytes.
-  for (var i = 3; i < len; i += 4) {
-    // Check the Alpha byte.
-    if (Math.abs(userImage.data[i] - answerImage.data[i]) > 64) {
-      delta++;
+    // Compare the Alpha (opacity) byte of each pixel in the user's image and
+    // the sample answer image.
+    var userImage =
+        Turtle.ctxScratch.getImageData(0, 0, Turtle.WIDTH, Turtle.HEIGHT);
+    var answerImage =
+        Turtle.ctxAnswer.getImageData(0, 0, Turtle.WIDTH, Turtle.HEIGHT);
+    var len = Math.min(userImage.data.length, answerImage.data.length);
+    var delta = 0;
+    // Pixels are in RGBA format.  Only check the Alpha bytes.
+    for (var i = 3; i < len; i += 4) {
+        // Check the Alpha byte.
+        if (Math.abs(userImage.data[i] - answerImage.data[i]) > 64) {
+            delta++;
+        }
     }
-  }
-  if (Turtle.isCorrect(delta)) {
-    // if (BlocklyGames.LEVEL < BlocklyGames.MAX_LEVEL) {
-      // No congrats for last level, it is open ended.
-      // BlocklyGames.workspace.playAudio('win', 0.5);
-      BlocklyDialogs.congratulations();
-    // }
-  } else {
-    Turtle.penColor('#ff0000');
-  }
+    if (Turtle.isCorrect(delta)) {
+        // if (BlocklyGames.LEVEL < BlocklyGames.MAX_LEVEL) {
+        // No congrats for last level, it is open ended.
+        // BlocklyGames.workspace.playAudio('win', 0.5);
+        BlocklyDialogs.congratulations();
+        // }
+    } else {
+        Turtle.penColor('#ff0000');
+    }
 };
 
 // /**
