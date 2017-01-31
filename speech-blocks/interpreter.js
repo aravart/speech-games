@@ -268,7 +268,7 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
         }
     }
 
-    var block = SpeechBlocks.Blocks.getBlock(command.blockId, SpeechGames.workspace);
+    var block = SpeechBlocks.BlockUtils.getBlock(command.blockId, SpeechGames.workspace);
     var value = $("#synonyms synonym[type='" + block.type + "'][field='" + fields[fieldIndex] + "'][alias='" + command.value + "']").attr("property") || command.value;
     var dropdowns = this.getDropdownValues_(block, fields[fieldIndex]);
     if(dropdowns.length > 0) {
