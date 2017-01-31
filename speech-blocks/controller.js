@@ -45,7 +45,7 @@ SpeechBlocks.Controller = function(workspace) {
   this.blockCounter_ = 1;
 
   /** @public */
-  this.layout = new SpeechBlocks.Layout()
+  this.layout_ = new SpeechBlocks.Layout()
 
   // Override the newBlock function to use our default IDs.
   var nextId = function() { return (this.blockCounter_++).toString(); }.bind(this);
@@ -122,7 +122,7 @@ SpeechBlocks.Controller.prototype.addBlock = function(type, opt_where) {
   } else {
     this.workspace_.render();
   }
-  this.layout.validateAdd(newBlock)
+  this.layout_.validateAdd(newBlock)
   return newBlock.id;
 };
 
@@ -147,7 +147,7 @@ SpeechBlocks.Controller.prototype.disconnectBlock = function(blockId) {
   var block = SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_);
   block.unplug(true /* Heal stack! */);
   this.moveBlock(blockId, new SpeechBlocks.Translation(block.width + 20, 0));
-  this.layout.validateDisconnect(block);
+  this.layout_.validateDisconnect(block);
 };
 
 /**
@@ -158,7 +158,7 @@ SpeechBlocks.Controller.prototype.disconnectBlock = function(blockId) {
 SpeechBlocks.Controller.prototype.removeBlock = function(blockId) {
   var block = SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_);
   block.unplug(true /* Heal the stack! */);
-  this.layout.validateRemove(block)
+  this.layout_.validateRemove(block)
   block.dispose();
 };
 
