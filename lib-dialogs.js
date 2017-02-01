@@ -386,10 +386,10 @@ BlocklyDialogs.congratulations = function() {
   }
 
   if (SpeechGames.LEVEL < SpeechGames.MAX_LEVEL) {
-    var text = "Are you ready for level %1?"
+    var text = "You are ready for level %1!"
         .replace('%1', SpeechGames.LEVEL + 1);
   } else {
-    var text = "Are you ready for the next challenge?"
+    var text = "Are you ready for the final challenge?"
   }
 
   if(document.getElementById('doneCancel')) {
