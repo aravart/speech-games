@@ -9,21 +9,20 @@ goog.provide('SpeechBlocks.Layout');
 goog.require('SpeechBlocks.Translation');
 
 /**
- * @private
  * @constructor
  */
 SpeechBlocks.Layout = function() {
 };
 
-SpeechBlocks.Layout.validateAdd = function(block) {
+SpeechBlocks.Layout.prototype.validateAdd = function(block) {
 
 };
 
-SpeechBlocks.Layout.validateDisconnect = function(block) {
+SpeechBlocks.Layout.prototype.validateDisconnect = function(block) {
 
 };
 
-SpeechBlocks.Layout.validateRemove = function(block) {
+SpeechBlocks.Layout.prototype.validateRemove = function(block) {
 
 };
 
