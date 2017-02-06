@@ -25,8 +25,8 @@ var textIndex = -1;
 
 var manualTitles = ["Adding blocks:", "Putting blocks:", "Changing blocks:", "Running the program:"];
 var manualPages = [
-  ["Add a move   block", "Add a turn   block", "Add a repeat block"],
-  ["Put block 1 before block 2", "Put block 1 after  block 2"],
+  ["Add a move block", "Add a turn block", "Add a repeat block"],
+  ["Put block 1 before block 2", "Put block 1 after block 2"],
   ["Change the first  field in block 1 to left", "Change the second field in block 2 to 1000"],
   ["Run the program"]
 ]
@@ -46,7 +46,7 @@ var advanceManualPage = function()
 var updateManual = function() {
   textIndex = (textIndex + 1) % manualPages[manualPageIndex].length;
   $("#manual-title").text(manualTitles[manualPageIndex]);
-  $("#manual-text").text("You can say \"" + manualPages[manualPageIndex][textIndex] + "\" ").fadeIn().delay(1000).fadeOut(200, updateManual);
+  $("#manual-text").text("\"" + manualPages[manualPageIndex][textIndex] + "\" ").fadeIn().delay(1000).fadeOut(200, updateManual);
 }
 
 updateManual();

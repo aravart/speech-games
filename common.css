@@ -165,6 +165,14 @@ button:hover:not(:disabled) {
 }
 
 #cheatsheetbox {
-  border: 1px solid blue;
+  border: 5px solid #ddd;
+  height: 120px;
+  animation: fade-in;
+}
+
+#userbox {
+  border: 5px solid #ddd;
+  padding-top: 25px;
+  height: 120px;
   animation: fade-in;
 }
