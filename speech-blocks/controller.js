@@ -25,6 +25,7 @@ goog.require('SpeechBlocks.BlockUtils');
 goog.require('SpeechBlocks.FieldTypes');
 goog.require('SpeechBlocks.Translation');
 goog.require('SpeechBlocks.Where');
+goog.require('SpeechBlocks.WorkspaceStates');
 goog.require('goog.asserts');
 goog.require('goog.structs.Map');
 goog.require('goog.structs.Set');
@@ -41,11 +42,17 @@ SpeechBlocks.Controller = function(workspace) {
   /** @private @const {!Blockly.Workspace} */
   this.workspace_ = workspace;
 
+  /** @public @const */
+  this.layout = new SpeechBlocks.Layout(workspace);
+
+  /** @private */
+  this.workspaceState_ = SpeechBlocks.WorkspaceStates.stateOf(this.workspace_);
+
+  /** @private {!Array<!Function>} */
+  this.stateChangeListeners_ = [];
+
   /** @private */
   this.blockCounter_ = 1;
-
-  /** @public */
-  this.layout = new SpeechBlocks.Layout()
 
   // Override the newBlock function to use our default IDs.
   var nextId = function() { return (this.blockCounter_++).toString(); }.bind(this);
@@ -64,9 +71,20 @@ SpeechBlocks.Controller = function(workspace) {
     }
   }.bind(this));
 
+  // For any other event, update the workspace state.
+  this.workspace_.addChangeListener(function(event) {
+    var state = SpeechBlocks.WorkspaceState.stateOf(this.workspace_);
+    if (state != this.workspaceState_) {
+      this.workspaceState_ = state;
+      this.stateChangeListeners_.forEach(function(listener) {
+        listener(this.workspaceState_);
+      }.bind(this));
+    }
+  }.bind(this));
+
   // Create a map of block definitions.
   this.blockXmlMap_ = new goog.structs.Map();
-  if(this.workspace_.options.hasCategories) {
+  if (this.workspace_.options.hasCategories) {
     this.workspace_.toolbox_.tree_.forEachChild(function(blockTab) {
       blockTab.blocks.forEach(function(block) {
         this.blockXmlMap_.set(block.getAttribute('type'), block);
@@ -74,7 +92,7 @@ SpeechBlocks.Controller = function(workspace) {
     }, this);
   } else {
     var arr = this.workspace_.options.languageTree.children;
-    for(var i = 0, len = arr.length; i < len; i++) {
+    for (var i = 0, len = arr.length; i < len; i++) {
       this.blockXmlMap_.set(arr[i].getAttribute('type'), arr[i]);
     }
   }
@@ -122,7 +140,7 @@ SpeechBlocks.Controller.prototype.addBlock = function(type, opt_where) {
   } else {
     this.workspace_.render();
   }
-  this.layout.validateAdd(newBlock)
+  this.layout.validateAdd(newBlock);
   return newBlock.id;
 };
 
@@ -158,7 +176,7 @@ SpeechBlocks.Controller.prototype.disconnectBlock = function(blockId) {
 SpeechBlocks.Controller.prototype.removeBlock = function(blockId) {
   var block = SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_);
   block.unplug(true /* Heal the stack! */);
-  this.layout.validateRemove(block)
+  this.layout.validateRemove(block);
   block.dispose();
 };
 
@@ -389,6 +407,15 @@ SpeechBlocks.Controller.prototype.isFieldValueValid = function(blockId, fieldNam
 SpeechBlocks.Controller.prototype.getField_ = function(blockId, fieldName) {
   return goog.asserts.assertInstanceof(
       SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_)).getField(fieldName);
+};
+
+/**
+ * Add a listener to be fired everytime the workspace state changes.
+ * @param {Function} listener The listener to add.
+ * @public
+ */
+SpeechBlocks.Controller.prototype.addStateChangeListener = function(listener) {
+  this.stateChangeListeners_.push(listener);
 };
 
 /**

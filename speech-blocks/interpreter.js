@@ -102,7 +102,6 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
  * @private
  */
 SpeechBlocks.Interpreter.prototype.run_ = function() {
-
   document.getElementById('runButton').click();
 };
 

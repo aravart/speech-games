@@ -96,7 +96,6 @@ SpeechBlocks.BlockUtils.getInputConnection = function(blockId, inputName, worksp
  */
 SpeechBlocks.BlockUtils.areBlocksInSameChain = function(refBlockId, blockToFindId, workspace) {
   var toCheck = [SpeechBlocks.BlockUtils.getBlock(refBlockId, workspace)];
-  
   while (toCheck.length > 0) {
     var curr = toCheck.pop();
 
@@ -107,7 +106,6 @@ SpeechBlocks.BlockUtils.areBlocksInSameChain = function(refBlockId, blockToFindI
 
     // Otherwise, add all connected blocks to the queue.
     var conn; 
-    
     if (curr.nextConnection) {
       conn = SpeechBlocks.BlockUtils.asConnection_(curr.nextConnection);
       if (conn.isConnected()) {
@@ -122,8 +120,6 @@ SpeechBlocks.BlockUtils.areBlocksInSameChain = function(refBlockId, blockToFindI
       }
     }
 
-    console.log(curr);
-    console.log(curr.inputList);
     curr.inputList.forEach(function(input) {
       if (!input.connection) {
         return;
