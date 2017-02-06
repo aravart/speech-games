@@ -158,3 +158,13 @@ button:hover:not(:disabled) {
 .readonly .blocklyMainBackground {
   stroke: none;
 }
+
+.block-id-style {
+  text-shadow: 2px 2px #000000;
+  font-size: smaller;
+}
+
+#cheatsheetbox {
+  border: 1px solid blue;
+  animation: fade-in;
+}
