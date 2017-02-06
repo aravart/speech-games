@@ -91,43 +91,9 @@
     <!--<pre id="user-message">Click on the microphone and say something!</pre>-->
     <div id="levelDescription">foo</div>
   </div>
-  <div id="cheatsheetbox" class="mui-col-md-6">
-    <ul class="mui-tabs__bar" id="manual">
-      <li class="mui--is-active"><a data-mui-toggle="tab" data-mui-controls="pane-default-1">Tab-1</a></li>
-      <li><a data-mui-toggle="tab" data-mui-controls="pane-default-2">Tab-2</a></li>
-      <li><a data-mui-toggle="tab" data-mui-controls="pane-default-3">Tab-3</a></li>
-    </ul>
-    <div class="mui-tabs__pane mui--is-active" id="pane-default-1">
-      <pre>
-      Adding a block:
-      </pre>
-      <p>"Add a <span id="rotate">move</span> block"</p>
-      <script>
-        var terms = ["move", "turn", "pen", "color", "repeat"];
-        function rotateTerm() {
-          var ct = $("#rotate").data("term") || 0;
-          $("#rotate").data("term", ct == terms.length -1 ? 0 : ct + 1).text(terms[ct]).fadeIn()
-              .delay(1000).fadeOut(200, rotateTerm);
-        }
-        $(rotateTerm);
-      </script>
-    </div>
-    <div class="mui-tabs__pane" id="pane-default-2">
-      <pre>
-      Changing block values:
-        "Change the first field in block 1 to left"
-        "Change the second field in block 1 to 120"
-      Running the program:
-        "Run the program"
-      </pre>
-    </div>
-    <div class="mui-tabs__pane" id="pane-default-3">
-      <pre>
-      Moving blocks around:
-        "Put block 2 after block 1"
-        "Put block 1 before block 2"
-      </pre>
-    </div>
+  <div class="mui-col-md-6">
+    <h3 id="manual-title">title</h3>
+    <pre id="manual-text">text</pre>
   </div>
 </div>
 
