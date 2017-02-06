@@ -439,7 +439,7 @@ SpeechBlocks.Controller.prototype.openMenu = function(menuName) {
  * @public
  */
 SpeechBlocks.Controller.prototype.closeMenu = function() {
-   if(this.workspace_.options.hasCategories) {
+   if (this.workspace_.options.hasCategories) {
      this.workspace_.toolbox_.clearSelection()
    }
 }

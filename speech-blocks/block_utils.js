@@ -82,6 +82,24 @@ SpeechBlocks.BlockUtils.getInputConnection = function(blockId, inputName, worksp
 };
 
 /**
+ * Retruns true if the blocks are connected directly or indirectly.
+ * 
+ * This function offers a looser definition of "connected" than its sibling
+ * function, areBlocksInSameChain. Here, we do not take into account the order 
+ * of block1 and block2 - as long as there is some path from one to the other,
+ * they are connected.
+ * 
+ * @param {string} block1Id
+ * @param {string} block2Id
+ * @param {!Blockly.Workspace} workspace
+ * @return {boolean}
+ */
+SpeechBlocks.BlockUtils.areBlocksConnected = function(block1Id, block2Id, workspace) {
+  return SpeechBlocks.BlockUtils.areBlocksInSameChain(block1Id, block2Id, workspace)
+      || SpeechBlocks.BlockUtils.areBlocksInSameChain(block2Id, block1Id, workspace);
+};
+
+/**
  * Returns true if the blocks belong to the same chain, false otherwise.
  *  
  * Here, the term "chain" refers to all blocks after the given block.
@@ -147,7 +165,7 @@ SpeechBlocks.BlockUtils.getInput_ = function(blockId, inputName, workspace) {
 };
 
 /**
- * Traverses the chain of blocks and returns a reference to the last.
+ * Traverses the chain of blocks and returns a reference to the last at the highest level.
  * @param {string} blockId ID of the first block in the chain.
  * @return {!Blockly.Block} ID of the last block in the chain.
  * @private
