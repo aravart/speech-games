@@ -73,7 +73,7 @@ SpeechBlocks.Controller = function(workspace) {
 
   // For any other event, update the workspace state.
   this.workspace_.addChangeListener(function(event) {
-    var state = SpeechBlocks.WorkspaceState.stateOf(this.workspace_);
+    var state = SpeechBlocks.WorkspaceStates.stateOf(this.workspace_);
     if (state != this.workspaceState_) {
       this.workspaceState_ = state;
       this.stateChangeListeners_.forEach(function(listener) {

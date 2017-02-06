@@ -18,14 +18,14 @@ SpeechBlocks.WorkspaceStates = {
   ALL_BLOCKS_CONNECTED: 2,
 
   /** Some blocks are unconnected. */
-  SOME_BLOCKS_UNCONNECTED: 3
+  BLOCKS_UNCONNECTED: 3
 };
 
 /**
  * @param {!Blockly.Workspace} workspace The workspace whose state we must determine.
  * @return {number}
  */
-SpeechBlocks.WorkspaceStates.stateOf(workspace) = function() {
+SpeechBlocks.WorkspaceStates.stateOf = function(workspace) {
   // TODO(ehernandez4): Implement this function.
-  return SpeechBlocks.WorkspaceState.EMPTY;
+  return SpeechBlocks.WorkspaceStates.EMPTY;
 };
