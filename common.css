@@ -172,9 +172,9 @@ button:hover:not(:disabled) {
 
 #userbox {
   border: 5px solid #ddd;
-  padding-top: 25px;
   height: 120px;
   animation: fade-in;
+<<<<<<< HEAD
 }
 
 .full-container {
@@ -190,3 +190,27 @@ button:hover:not(:disabled) {
   height: 500px;
   width: 100%;
 }
+=======
+  padding: 0px;
+}
+
+#levelDescription {
+  border: 1px solid #ddd;
+  padding: 2px;
+  padding-top: 10px;
+  height: 35%;
+  text-align: center;
+}
+
+#user-message {
+  border: 1px solid #ddd;
+  padding: 2px;
+  padding-top: 20px;
+  height: 65%;
+  text-align: center;
+}
+
+.mui-col-md-6 {
+  width: 30vw;
+}
+>>>>>>> 3c6ef26edcb921a1ebd2e30f79d67617c8eb6f52
