@@ -165,7 +165,7 @@ button:hover:not(:disabled) {
 }
 
 #cheatsheetbox {
-  border: 5px solid #ddd;
+  /*border: 5px solid #ddd;*/
   height: 120px;
   animation: fade-in;
 }
@@ -174,7 +174,6 @@ button:hover:not(:disabled) {
   border: 5px solid #ddd;
   height: 120px;
   animation: fade-in;
-<<<<<<< HEAD
 }
 
 .full-container {
@@ -190,12 +189,9 @@ button:hover:not(:disabled) {
   height: 500px;
   width: 100%;
 }
-=======
-  padding: 0px;
-}
 
 #levelDescription {
-  border: 1px solid #ddd;
+  /*border: 1px solid #ddd;*/
   padding: 2px;
   padding-top: 10px;
   height: 35%;
@@ -203,7 +199,7 @@ button:hover:not(:disabled) {
 }
 
 #user-message {
-  border: 1px solid #ddd;
+  /*border: 1px solid #ddd;*/
   padding: 2px;
   padding-top: 20px;
   height: 65%;
@@ -213,4 +209,3 @@ button:hover:not(:disabled) {
 .mui-col-md-6 {
   width: 30vw;
 }
->>>>>>> 3c6ef26edcb921a1ebd2e30f79d67617c8eb6f52
