@@ -183,16 +183,14 @@ button:hover:not(:disabled) {
   padding-top: 10px;
   height: 35%;
   text-align: center;
-  vertical-align: middle;
 }
 
-#feedbackBox {
+#user-message {
   border: 1px solid #ddd;
   padding: 2px;
   padding-top: 20px;
   height: 65%;
   text-align: center;
-  vertical-align: middle;
 }
 
 .mui-col-md-6 {
