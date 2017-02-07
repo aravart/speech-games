@@ -172,7 +172,29 @@ button:hover:not(:disabled) {
 
 #userbox {
   border: 5px solid #ddd;
-  padding-top: 25px;
   height: 120px;
   animation: fade-in;
+  padding: 0px;
+}
+
+#levelDescription {
+  border: 1px solid #ddd;
+  padding: 2px;
+  padding-top: 10px;
+  height: 35%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+#feedbackBox {
+  border: 1px solid #ddd;
+  padding: 2px;
+  padding-top: 20px;
+  height: 65%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.mui-col-md-6 {
+  width: 30vw;
 }
