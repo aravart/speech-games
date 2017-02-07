@@ -2,6 +2,7 @@ goog.provide('SpeechGames');
 
 goog.require('Turtle.Answers');
 
+SpeechGames.controller = null;
 SpeechGames.workspace = null;
 
 /**
@@ -60,13 +61,13 @@ $(document).ready(function() {
   var oldQ = null;
   var parseTimer = null;
   var output = null;
-  controller = SpeechBlocks.Controller.injectIntoDiv('blocklyDiv', { 
+  SpeechGames.controller = SpeechBlocks.Controller.injectIntoDiv('blocklyDiv', { 
        media: 'lib/google-blockly/media/',
        trashcan: false,
        scrollbars: false,
        toolbox: document.getElementById('toolbox')}); 
-  SpeechGames.workspace = controller.workspace_;
-  var interpreter = new SpeechBlocks.Interpreter(controller);
+  SpeechGames.workspace = SpeechGames.controller.workspace_;
+  var interpreter = new SpeechBlocks.Interpreter(SpeechGames.controller);
 
   function speechCorrections(speech) {
     speech = speech.toLowerCase();
@@ -187,7 +188,7 @@ $("#levelDescription").text(Turtle.descriptions[SpeechGames.LEVEL])
 
 function createCode() {
   Blockly.JavaScript.addReservedWords('code');
-  return Blockly.JavaScript.workspaceToCode(controller.workspace_);
+  return Blockly.JavaScript.workspaceToCode(SpeechGames.controller.workspace_);
 }
 
 function showCode() {

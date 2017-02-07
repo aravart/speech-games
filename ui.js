@@ -1,5 +1,8 @@
 goog.require('goog.dom');
+goog.require('SpeechBlocks.WorkspaceStates');
 goog.require('SpeechGames');
+
+$(document).ready(function() {
 
 var title = goog.dom.$('levels')
 for (var i = 0; i < SpeechGames.MAX_LEVEL; i++) {
@@ -60,3 +63,22 @@ var updateManual = function() {
 }
 
 updateManual();
+
+SpeechGames.controller.addStateChangeListener(function(state) {
+  switch (state) {
+    case SpeechBlocks.WorkspaceStates.EMPTY:
+      displayManualPage(0);
+      break;
+    case SpeechBlocks.WorkspaceStates.ALL_BLOCKS_CONNECTED:
+      displayManualPage(2);
+      break;
+    case SpeechBlocks.WorkspaceStates.BLOCKS_UNCONNECTED:
+      displayManualPage(1);
+      break;
+    default:
+      console.log('Unknown state! Cannot update manual.');
+  }
+
+});
+
+});
