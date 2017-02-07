@@ -176,3 +176,17 @@ button:hover:not(:disabled) {
   height: 120px;
   animation: fade-in;
 }
+
+.full-container {
+  margin-right: 10%;
+  margin-left: 10%;
+}
+
+#suggestionDiv {
+  border: 5px solid #ddd;
+  /*overflow:hidden;*/
+  white-space: normal;
+  word-wrap: break-word;
+  height: 500px;
+  width: 100%;
+}

@@ -48,7 +48,7 @@
 
 <body>
 
-  <div class="mui-container">
+  <div class="full-container">
     
     <table width="100%">
       <tbody>
@@ -86,28 +86,28 @@
     </div>
 
     <div class="mui-row form-inline">
-      <div id="userbox" class="mui-col-md-6">
+      <div id="userbox" class="mui-col-md-12">
         <span>Your task: </span> <span id="levelDescription">foo</span>
         <pre id="user-message">Click on the microphone and say something!</pre>
-      </div>
-      <div id="cheatsheetbox" class="mui-col-md-6">
-        <h3 id="manual-title">title</h3>
-        <span id="prefix">You can say </span>
-        <span id="manual-text">text</span>
       </div>
     </div>
 
     <div class="space"><p></p></div>
 
     <div class="mui-row">
-      <div class="mui-col-md-6">
+      <div class="mui-col-md-4">
         <canvas id="display" height="500" width="500" style="border:1px solid #ccc;"></canvas>
         <canvas id="answer" height="500" width="500" style="border:1px solid #ccc; display: none;"></canvas>
         <canvas id="scratch" height="500" width="500" style="border:1px solid #ccc; display: none;"></canvas>
-    </div>
-    <div class="mui-col-md-6">
-      <div id="blocklyDiv" style="height: 500"></div>
-    </div>
+      </div>
+      <div class="mui-col-md-5">
+        <div id="blocklyDiv" style="height: 500"></div>
+      </div>
+      <div class="mui-col-md-3">
+        <div  id="suggestionDiv">
+          <div id="suggestionHead"> suggestions </div>
+        </div>
+      </div>
     </div>
     <div id="blocklyDiv" style="top: 112px; left: 420px; width: 348px;"></div>
 
@@ -148,9 +148,12 @@
       <!-- <button id="doneCancel"> -->
       <!--   Stay at this level -->
       <!-- </button> -->
+      <button id="doneCancel" class="secondary">
+          Stay on this level
+      </button>
       <button id="doneOk" class="secondary">
-            Go to the next level
-          </button>
+          Go to the next level
+      </button>
       </div>
     </div>
   </div>
@@ -160,6 +163,7 @@
 <script src="answers.js"></script>
 <script src="speech.js"></script>
 <script src="turtle.js"></script>
+<script src="block_suggestions.js"></script>
 <script src="ui.js"></script>
 </body>
 
