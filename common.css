@@ -191,7 +191,6 @@ button:hover:not(:disabled) {
 }
 
 #levelDescription {
-  /*border: 1px solid #ddd;*/
   padding: 2px;
   padding-top: 10px;
   height: 35%;
@@ -199,7 +198,6 @@ button:hover:not(:disabled) {
 }
 
 #user-message {
-  /*border: 1px solid #ddd;*/
   padding: 2px;
   padding-top: 20px;
   height: 65%;
