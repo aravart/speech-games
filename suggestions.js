@@ -1,9 +1,23 @@
+/**
+ * @fileoverview Manager for command manual.
+ * @author david.liang@wisc.edu (David Liang), pandori@wisc.edu (Sahib Pandori)
+ */
+goog.provide('SpeechGames.Suggestions');
+
 goog.require('goog.structs.Map');
 
-SpeechBlocks.Suggestions = function() {
+/** @constructor */
+SpeechGames.Suggestions = function() {
+  /** @public */
   this.page = 0;
+
+  /** @public */
   this.textIndex = -1;
+
+  /** @private {!goog.structs.Map<string, number>} */
   this.map_ = new goog.structs.Map();
+
+  /** @private */
   this.suggestionList_ = [
     [
       ["add"], // key
@@ -36,18 +50,32 @@ SpeechBlocks.Suggestions = function() {
   {
     this.map_.set(this.suggestionList_[i][0][0], i);
   }
+
+  /** @private */
   this.suggestions_ = [];
 }
 
-SpeechBlocks.Suggestions.prototype.getAllSuggestions = function() {
+/** 
+ * @return {!Array<string>}
+ * @public
+ */
+SpeechGames.Suggestions.prototype.getAllSuggestions = function() {
   return this.map_.getKeys();
 }
 
-SpeechBlocks.Suggestions.prototype.getSuggestions = function() {
+/**
+ * @return {!Array<string>}
+ * @public
+ */
+SpeechGames.Suggestions.prototype.getSuggestions = function() {
   return this.suggestions_;
 }
 
-SpeechBlocks.Suggestions.prototype.setSuggestions = function(suggestions) {
+/**
+ * @param {!Array<string>} suggestions
+ * @public
+ */
+SpeechGames.Suggestions.prototype.setSuggestions = function(suggestions) {
   this.suggestions_ = [];
   var suggestionIndex = 0;
   for (var i = 0; i < suggestions.length; i++)
@@ -66,7 +94,8 @@ SpeechBlocks.Suggestions.prototype.setSuggestions = function(suggestions) {
   this.updateSuggestions();
 }
 
-SpeechBlocks.Suggestions.prototype.updateSuggestions = function() {
+/** @public */
+SpeechGames.Suggestions.prototype.updateSuggestions = function() {
   var suggestionDiv = document.getElementById("suggestionDiv");
   $("#suggestionDiv").empty();
   for (var i = 0; i < this.suggestions_.length; i++)

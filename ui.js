@@ -1,8 +1,3 @@
-goog.require('goog.dom');
-goog.require('SpeechBlocks.WorkspaceStates');
-goog.require('SpeechGames');
-
-
 $(document).ready(function() {
 
 var title = goog.dom.$('levels')
@@ -21,26 +16,32 @@ for (var i = 0; i < SpeechGames.MAX_LEVEL; i++) {
       (i == SpeechGames.MAX_LEVEL - 1) ? (i+1).toString() : '');
   }
   goog.dom.appendChild(title, levelElement);
-  goog.dom.appendChild(title, goog.dom.createTextNode(" "));
+  goog.dom.appendChild(title, goog.dom.createTextNode(' '));
 }
 
-var sug = new SpeechBlocks.Suggestions();
-sug.setSuggestions(["add"]);
+var sug = new SpeechGames.Suggestions();
+sug.setSuggestions(['add']); // Initially, suggest adding a block.
 SpeechGames.controller.addStateChangeListener(function(state) {
-  switch (state) {
-    case SpeechBlocks.WorkspaceStates.EMPTY:
-      sug.setSuggestions(["add"]);
-      break;
-    case SpeechBlocks.WorkspaceStates.ALL_BLOCKS_CONNECTED:
-      sug.setSuggestions(["add","change","delete","run"]);
-      break;
-    case SpeechBlocks.WorkspaceStates.BLOCKS_UNCONNECTED:
-      sug.setSuggestions(["add","change","delete","run","put"]);
-      break;
-    default:
-      console.log('Unknown state! Cannot update manual.');
+  var sugs = ['add']; // We always suggest adding blocks.
+  if (state.empty) {
+    sug.setSuggestions(sugs); 
+    return;
+  }
+  
+  if (!state.allBlocksConnected) {
+    sugs.push('put');
   }
 
+  if (state.blocksAreModifiable) {
+    sugs.push('change');
+  }
+
+  // When the workspace is nonempty, we always suggest deleting blocks
+  // and running the program.
+  sugs.push('delete');
+  sugs.push('run');
+
+  sug.setSuggestions(sugs);
 });
 
 });

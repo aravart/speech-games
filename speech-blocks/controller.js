@@ -25,7 +25,7 @@ goog.require('SpeechBlocks.BlockUtils');
 goog.require('SpeechBlocks.FieldTypes');
 goog.require('SpeechBlocks.Translation');
 goog.require('SpeechBlocks.Where');
-goog.require('SpeechBlocks.WorkspaceStates');
+goog.require('SpeechBlocks.WorkspaceState');
 goog.require('goog.asserts');
 goog.require('goog.structs.Map');
 goog.require('goog.structs.Set');
@@ -46,7 +46,7 @@ SpeechBlocks.Controller = function(workspace) {
   this.layout = new SpeechBlocks.Layout(workspace);
 
   /** @private */
-  this.workspaceState_ = SpeechBlocks.WorkspaceStates.stateOf(this.workspace_);
+  this.workspaceState_ = SpeechBlocks.WorkspaceState.stateOf(this.workspace_);
 
   /** @private {!Array<!Function>} */
   this.stateChangeListeners_ = [];
@@ -73,8 +73,8 @@ SpeechBlocks.Controller = function(workspace) {
 
   // For any other event, update the workspace state.
   this.workspace_.addChangeListener(function(event) {
-    var state = SpeechBlocks.WorkspaceStates.stateOf(this.workspace_);
-    if (state != this.workspaceState_) {
+    var state = SpeechBlocks.WorkspaceState.stateOf(this.workspace_);
+    if (!this.workspaceState_.equals(state)) {
       this.workspaceState_ = state;
       this.stateChangeListeners_.forEach(function(listener) {
         listener(this.workspaceState_);
@@ -307,7 +307,7 @@ SpeechBlocks.Controller.prototype.getFieldsForBlock = function(blockId) {
   var blockFields = new goog.structs.Map();
   SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_).inputList.forEach(function(input) {
     input.fieldRow.forEach(function(field) {
-      var type = SpeechBlocks.Controller.getFieldType_(field);
+      var type = SpeechBlocks.FieldTypes.typeOf(field);
       if (field.name && type != SpeechBlocks.FieldTypes.IRRELEVANT) {
         blockFields.set(field.name, type);
       }
@@ -327,37 +327,13 @@ SpeechBlocks.Controller.prototype.getFieldValuesForBlock = function(blockId) {
   var blockFieldValues = new goog.structs.Map();
   SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_).inputList.forEach(function(input) {
     input.fieldRow.forEach(function(field) {
-      var type = SpeechBlocks.Controller.getFieldType_(field)
+      var type = SpeechBlocks.FieldTypes.typeOf(field)
       if (field.name && type != SpeechBlocks.IRRELEVANT) {
         blockFieldValues.set(field.name, field.getValue());
       }
     });
   });
   return blockFieldValues;
-};
-
-/**
- * Returns the corresponding type enum for the given field.
- * @param {!Blockly.Field} field Field to get type for.
- * @return {number} Enum value for field type.
- * @private
- */
-SpeechBlocks.Controller.getFieldType_ = function(field) {
-  if (field instanceof Blockly.FieldTextInput) {
-    return SpeechBlocks.FieldTypes.TEXT_INPUT;
-  } else if (field instanceof Blockly.FieldNumber) {
-    return SpeechBlocks.FieldTypes.NUMBER_INPUT;
-  } else if (field instanceof Blockly.FieldAngle) {
-    return SpeechBlocks.FieldTypes.ANGLE_PICKER;
-  } else if (field instanceof Blockly.FieldColour) {
-    return SpeechBlocks.FieldTypes.COLOUR_PICKER;
-  } else if (field instanceof Blockly.FieldVariable) {
-    return SpeechBlocks.FieldTypes.VARIABLE_PICKER;
-  } else if (field instanceof Blockly.FieldDropdown) {
-    return SpeechBlocks.FieldTypes.DROP_DOWN;
-  } else {
-    return SpeechBlocks.FieldTypes.IRRELEVANT;
-  }
 };
 
 /**
