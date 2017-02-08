@@ -165,14 +165,45 @@ button:hover:not(:disabled) {
 }
 
 #cheatsheetbox {
-  border: 5px solid #ddd;
+  /*border: 5px solid #ddd;*/
   height: 120px;
   animation: fade-in;
 }
 
 #userbox {
   border: 5px solid #ddd;
-  padding-top: 25px;
   height: 120px;
   animation: fade-in;
+}
+
+.full-container {
+  margin-right: 10%;
+  margin-left: 10%;
+}
+
+#suggestionDiv {
+  border: 5px solid #ddd;
+  /*overflow:hidden;*/
+  white-space: normal;
+  word-wrap: break-word;
+  height: 500px;
+  width: 100%;
+}
+
+#levelDescription {
+  padding: 2px;
+  padding-top: 10px;
+  height: 35%;
+  text-align: center;
+}
+
+#user-message {
+  padding: 2px;
+  padding-top: 20px;
+  height: 65%;
+  text-align: center;
+}
+
+.mui-col-md-6 {
+  width: 30vw;
 }

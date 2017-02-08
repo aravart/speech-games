@@ -57,7 +57,6 @@ SpeechBlocks.Interpreter.prototype.createBlockTypeMap_ = function() {
  * @public
  */
 SpeechBlocks.Interpreter.prototype.interpret = function(command) {
-  console.log(command);
   this.controller_.closeMenu()
   switch (command.action) {
     case 'run':
@@ -93,6 +92,10 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
 
     case 'menu':
       this.menuAction_(command);
+      break;
+
+    case 'next':
+      this.nextLevel_();
       break;
   }
 };
@@ -364,3 +367,8 @@ SpeechBlocks.Interpreter.prototype.menuAction_ = function(command) {
     this.controller_.closeMenu();
   }
 };
+
+
+SpeechBlocks.Interpreter.prototype.nextLevel_ = function() {
+  document.getElementById("doneOk").click();
+}
