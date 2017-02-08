@@ -183,7 +183,6 @@ button:hover:not(:disabled) {
 
 #suggestionDiv {
   border: 5px solid #ddd;
-  /*overflow:hidden;*/
   white-space: normal;
   word-wrap: break-word;
   height: 500px;
@@ -193,17 +192,31 @@ button:hover:not(:disabled) {
 #levelDescription {
   padding: 2px;
   padding-top: 10px;
-  height: 35%;
+  height: 20%;
   text-align: center;
 }
 
 #user-message {
   padding: 2px;
   padding-top: 20px;
-  height: 65%;
+  height: 50%;
   text-align: center;
 }
 
 .mui-col-md-6 {
   width: 30vw;
+}
+
+
+.relative{
+  position:relative; 
+}
+.absolute-text{
+  position:absolute; 
+  bottom:0; 
+  font-size:24px; 
+  background:rgba(251,251,251,0.5);
+  padding:10px 20px; 
+  width:100%; 
+  text-align:center;
 }

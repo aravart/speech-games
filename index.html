@@ -87,7 +87,6 @@
 
     <div class="mui-row form-inline">
       <div id="userbox" class="mui-col-md-12">
-        <span>Your task: </span> <span id="levelDescription">foo</span>
         <pre id="user-message">Click on the microphone and say something!</pre>
       </div>
     </div>
@@ -95,7 +94,8 @@
     <div class="space"><p></p></div>
 
     <div class="mui-row">
-      <div class="mui-col-md-4">
+      <div class="mui-col-md-4 relative">
+        <span class="absolute-text" id="levelDescription">foo</span>
         <canvas id="display" height="500" width="500" style="border:1px solid #ccc;"></canvas>
         <canvas id="answer" height="500" width="500" style="border:1px solid #ccc; display: none;"></canvas>
         <canvas id="scratch" height="500" width="500" style="border:1px solid #ccc; display: none;"></canvas>
