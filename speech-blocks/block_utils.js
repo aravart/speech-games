@@ -82,10 +82,10 @@ SpeechBlocks.BlockUtils.getInputConnection = function(blockId, inputName, worksp
 };
 
 /**
- * Retruns true if the blocks are connected directly or indirectly.
+ * Returns true if the blocks are connected directly or indirectly.
  * 
  * This function offers a looser definition of "connected" than its sibling
- * function, areBlocksInSameChain. Here, we do not take into account the order 
+ * function, areBlocksInSuccession. Here, we do not take into account the order 
  * of block1 and block2 - as long as there is some path from one to the other,
  * they are connected.
  * 
@@ -95,14 +95,14 @@ SpeechBlocks.BlockUtils.getInputConnection = function(blockId, inputName, worksp
  * @return {boolean}
  */
 SpeechBlocks.BlockUtils.areBlocksConnected = function(block1Id, block2Id, workspace) {
-  return SpeechBlocks.BlockUtils.areBlocksInSameChain(block1Id, block2Id, workspace)
-      || SpeechBlocks.BlockUtils.areBlocksInSameChain(block2Id, block1Id, workspace);
+  return SpeechBlocks.BlockUtils.areBlocksInSuccession(block1Id, block2Id, workspace)
+      || SpeechBlocks.BlockUtils.areBlocksInSuccession(block2Id, block1Id, workspace);
 };
 
 /**
  * Returns true if the blocks belong to the same chain, false otherwise.
  *  
- * Here, the term "chain" refers to all blocks after the given block.
+ * Here, the term "succession" refers to all blocks after the given block.
  * Note this includes nested structures; e.g., a repeat block's
  * statement inputs belong to the same chain as the repeat block itself.
  * 
@@ -112,7 +112,7 @@ SpeechBlocks.BlockUtils.areBlocksConnected = function(block1Id, block2Id, worksp
  * @return {boolean}
  * @public
  */
-SpeechBlocks.BlockUtils.areBlocksInSameChain = function(refBlockId, blockToFindId, workspace) {
+SpeechBlocks.BlockUtils.areBlocksInSuccession = function(refBlockId, blockToFindId, workspace) {
   var toCheck = [SpeechBlocks.BlockUtils.getBlock(refBlockId, workspace)];
   while (toCheck.length > 0) {
     var curr = toCheck.pop();
