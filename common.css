@@ -175,6 +175,12 @@ button:hover:not(:disabled) {
   height: 120px;
   animation: fade-in;
   padding: 0px;
+  border-radius: 25px;
+}
+
+#user-message {
+  font-size: 30;
+  text-align: center;
 }
 
 .full-container {
@@ -183,7 +189,7 @@ button:hover:not(:disabled) {
 }
 
 #suggestionDiv {
-  border: 5px solid #ddd;
+  border: 1px solid #ddd;
   white-space: normal;
   word-wrap: break-word;
   height: 500px;
@@ -199,12 +205,6 @@ button:hover:not(:disabled) {
   text-align: center;
 }
 
-#user-message {
-  padding: 2px;
-  padding-top: 20px;
-  height: 50%;
-  text-align: center;
-}
 
 .relative{
   position:relative; 
