@@ -8,51 +8,50 @@ goog.require('goog.structs.Map');
 
 /** @constructor */
 SpeechGames.Suggestions = function() {
-  /** @public */
-  this.page = 0;
+    /** @public */
+    this.page = 0;
 
-  /** @public */
-  this.textIndex = -1;
+    /** @public */
+    this.textIndex = -1;
 
-  /** @private {!goog.structs.Map<string, number>} */
-  this.map_ = new goog.structs.Map();
+    /** @private {!goog.structs.Map<string, number>} */
+    this.map_ = new goog.structs.Map();
 
-  /** @private */
-  this.suggestionList_ = [
-    [
-      ["add"], // key
-      ["Adding blocks:"], // title
-      ["Add a move block", "Add a turn block", "Add a repeat block"] // text
-    ],
-    [
-      ["put"],
-      ["Putting blocks:"],
-      ["Put block 2 after block 1", "Put block 1 after block 2"]
-    ],
-    [
-      ["change"],
-      ["Changing blocks:"],
-      ["Change the first field in block 1 to left", "Change the second field in block 2 to 1000"]
-    ],
-    [
-      ["delete"],
-      ["Deleting blocks:"],
-      ["Delete block 1"]
-    ],
-    [
-      ["run"],
-      ["Running the program:"],
-      ["Run the program"]
-    ]
-  ];
+    /** @private */
+    this.suggestionList_ = [
+        [
+            ["add"], // key
+            ["Adding a block:"], // title
+            ["Add a <span style=font-weight:bold>move</span> block"] //text
+        ],
+        [
+            ["put"],
+            ["Connecting blocks:"],
+            ["Put block <span style=font-weight:bold>2</span> after block <span style=font-weight:bold>1</span>"]
+        ],
+        [
+            ["change"],
+            ["Changing a block:"],
+            ["Change the <span style=font-weight:bold>first</span> field in block <span style=font-weight:bold>1</span> to <span style=font-weight:bold>left</span>"]
+        ],
+        [
+            ["delete"],
+            ["Deleting a block:"],
+            ["Delete block <span style=font-weight:bold>1</span>"]
+        ],
+        [
+            ["run"],
+            ["Running the program:"],
+            ["Run the program"]
+        ]
+    ];
 
-  for (var i = 0; i < this.suggestionList_.length; i++)
-  {
-    this.map_.set(this.suggestionList_[i][0][0], i);
-  }
+    for (var i = 0; i < this.suggestionList_.length; i++) {
+        this.map_.set(this.suggestionList_[i][0][0], i);
+    }
 
-  /** @private */
-  this.suggestions_ = [];
+    /** @private */
+    this.suggestions_ = [];
 }
 
 /** 
@@ -60,7 +59,7 @@ SpeechGames.Suggestions = function() {
  * @public
  */
 SpeechGames.Suggestions.prototype.getAllSuggestions = function() {
-  return this.map_.getKeys();
+    return this.map_.getKeys();
 }
 
 /**
@@ -68,7 +67,7 @@ SpeechGames.Suggestions.prototype.getAllSuggestions = function() {
  * @public
  */
 SpeechGames.Suggestions.prototype.getSuggestions = function() {
-  return this.suggestions_;
+    return this.suggestions_;
 }
 
 /**
@@ -76,36 +75,27 @@ SpeechGames.Suggestions.prototype.getSuggestions = function() {
  * @public
  */
 SpeechGames.Suggestions.prototype.setSuggestions = function(suggestions) {
-  this.suggestions_ = [];
-  var suggestionIndex = 0;
-  for (var i = 0; i < suggestions.length; i++)
-  {
-    var page = this.map_.get(suggestions[i]);
-    if (page === undefined)
-    {
-      continue;
+    this.suggestions_ = [];
+    var suggestionIndex = 0;
+    for (var i = 0; i < suggestions.length; i++) {
+        var page = this.map_.get(suggestions[i]);
+        if (page === undefined) {
+            continue;
+        } else {
+            this.suggestions_[suggestionIndex++] = this.suggestionList_[page];
+        }
     }
-    else
-    {
-      this.suggestions_[suggestionIndex++] = this.suggestionList_[page];
-    }
-
-  }
-  this.updateSuggestions();
+    this.updateSuggestions();
 }
 
 /** @public */
 SpeechGames.Suggestions.prototype.updateSuggestions = function() {
-  var suggestionDiv = document.getElementById("suggestionDiv");
-  $("#suggestionDiv").empty();
-  for (var i = 0; i < this.suggestions_.length; i++)
-  {
-    var title = document.createElement("H3");
-    title.append(document.createTextNode(this.suggestions_[i][1][0]));
-    var text = document.createElement("SPAN");
-    text.append(document.createTextNode("\"" + this.suggestions_[i][2][0] + "\""));
-
-    suggestionDiv.append(title);
-    suggestionDiv.append(text);
-  }
+    var suggestionDiv = document.getElementById("suggestionDiv");
+    $("#suggestionDiv").empty();
+    for (var i = 0; i < this.suggestions_.length; i++) {
+        var title = "<h3>" + this.suggestions_[i][1][0] + "</h3>";
+        var text = "<span>\"" + this.suggestions_[i][2][0] + "\"</span>";
+        $(title).hide().appendTo("#suggestionDiv").delay(i*100).fadeIn(500);
+        $(text).hide().appendTo("#suggestionDiv").delay(i*100).fadeIn(500);
+    }
 }

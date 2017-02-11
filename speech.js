@@ -127,7 +127,7 @@ $(document).ready(function() {
       $("#output").removeClass("disabled").text(jsDump.parse(output));
       interpretSpeech();
       var result = true;
-      $("#user-message").text("Got it!");
+      $("#user-message").hide().text("Got it!").fadeIn(200);
     } catch (e) {
       if(e instanceof SpeechBlocks.UserError) {
         $("#user-message").text(e.message)
@@ -173,6 +173,7 @@ $(document).ready(function() {
   $("#microphone")
   .click(startDictation);
 
+  $("#user-message").hide().text("Click on the microphone and say something!").fadeIn(500);
 
 // $("#runButton").on("click", run);
 // $("#showButton").on("click", showCode);
