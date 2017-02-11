@@ -194,7 +194,7 @@ $(document).ready(function() {
     parseTimer = setTimeout(function() {
       parseSpeech();
       parseTimer = null;
-    }, 500);
+    }, 1000);
   }
 
   $('#q')

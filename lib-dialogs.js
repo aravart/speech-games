@@ -411,7 +411,7 @@ BlocklyDialogs.congratulations = function() {
 
   document.getElementById('dialogDoneText').textContent = text;
 
-  var continuationText = "Say \"stay on this level\"  or \"next level\" to proceed.";
+  var continuationText = "Say \"Stay on this level\"  or \"Next level\" to proceed.";
   $('</br></br><span>' + continuationText + '</span>').appendTo('#dialogDoneText')
 };
 
