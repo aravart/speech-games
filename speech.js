@@ -75,8 +75,6 @@ SpeechGames.bindClick = function(el, func) {
   el.addEventListener('touchend', func, true);
 };
 
-var startDictation;
-
 // Initialize microphone and speech handling.
 $(document).ready(function() {
   var oldQ = null;
@@ -109,7 +107,7 @@ $(document).ready(function() {
     return speech;
   }
 
-  startDictation = function startDictation() {
+  function startDictation() {
     if (window.hasOwnProperty('webkitSpeechRecognition')) {
       var mic_animate = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic-animate.gif';
       var mic = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
@@ -127,10 +125,11 @@ $(document).ready(function() {
         // document.getElementById('microphone').src = mic;
         parseSpeech();
       };
-      // recognition.onerror = function(e) {
-      //   recognition.stop();
-      //   document.getElementById('microphone').src = mic;
-      // }
+      recognition.onerror = function(e) {
+        recognition.stop();
+        parseSpeech();
+        // document.getElementById('microphone').src = mic;
+      }
     }
   }
 
@@ -161,8 +160,8 @@ $(document).ready(function() {
       if(e instanceof SpeechBlocks.UserError) {
         $('#user-message').text(e.message)
       } else {
-        console.log(output);
-        console.log(e);
+        // console.log(output);
+        // console.log(e);
         $('#parse-message').attr('class', 'message error').text(buildErrorMessage(e));
         if(speech != '') {
           $('#user-message').hide().text('Sorry, I didn\'t understand \"' + speech + '\"').fadeIn(200);
