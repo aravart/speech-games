@@ -100,9 +100,9 @@ SpeechBlocks.BlockUtils.areBlocksConnected = function(block1Id, block2Id, worksp
 };
 
 /**
- * Returns true if the blocks belong to the same chain, false otherwise.
+ * Returns true if refBlock succeeds blockToFind, false otherwise.
  *  
- * Here, the term "succession" refers to all blocks after the given block.
+ * Here, the term "succession" refers to all blocks after a given block.
  * Note this includes nested structures; e.g., a repeat block's
  * statement inputs belong to the same chain as the repeat block itself.
  * 

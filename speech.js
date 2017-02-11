@@ -1,8 +1,24 @@
+/**
+ * @fileoverview Driver script for speech processing.
+ * @author aravart@cs.wisc.edu (Ara Vartanian)
+ */
 goog.provide('SpeechGames');
 
+goog.require('Blockly.Workspace');
+goog.require('SpeechBlocks.Controller');
+goog.require('SpeechBlocks.Interpreter');
 goog.require('Turtle.Answers');
 
+/**
+ * A global reference to the current workspace's controller.
+ * @public {SpeechBlocks.Controller}
+ */
 SpeechGames.controller = null;
+
+/**
+ * A global reference to the workspace itself.
+ * @public {Blockly.Workspace}
+ */
 SpeechGames.workspace = null;
 
 /**
@@ -32,13 +48,15 @@ SpeechGames.getNumberParamFromUrl = function(name, minValue, maxValue) {
   return isNaN(val) ? minValue : goog.math.clamp(minValue, val, maxValue);
 };
 
-/**
+/** 
  * Maximum number of levels.  Common to all apps.
+ * @public @const
  */
 SpeechGames.MAX_LEVEL = 12;
 
 /**
- * User's level (e.g. 5).
+ * User's current level (e.g. 5).
+ * @public
  */
 SpeechGames.LEVEL =
     SpeechGames.getNumberParamFromUrl('level', 1, SpeechGames.MAX_LEVEL);
@@ -57,6 +75,7 @@ SpeechGames.bindClick = function(el, func) {
   el.addEventListener('touchend', func, true);
 };
 
+// Initialize microphone and speech handling.
 $(document).ready(function() {
   var oldQ = null;
   var parseTimer = null;
@@ -71,14 +90,14 @@ $(document).ready(function() {
 
   function speechCorrections(speech) {
     speech = speech.toLowerCase();
-    speech = speech.replace(/\batom\b/,"add a");
-    speech = speech.replace(/\badam's\b/,"add a");
-    speech = speech.replace(/\bblack\b/,"block");
-    speech = speech.replace(/\block\b/,"block");
-    speech = speech.replace(/\badam block\b/,"add a move block");
-    speech = speech.replace(/\bnumber to\b/,"number 2");
-    speech = speech.replace(/\bone\b/,"1");
-    speech = speech.replace(/\b425\b/,"4 to 5");
+    speech = speech.replace(/\batom\b/, 'add a');
+    speech = speech.replace(/\badam's\b/, 'add a');
+    speech = speech.replace(/\bblack\b/, 'block');
+    speech = speech.replace(/\block\b/, 'block');
+    speech = speech.replace(/\badam block\b/, 'add a move block');
+    speech = speech.replace(/\bnumber to\b/, 'number 2');
+    speech = speech.replace(/\bone\b/, '1');
+    speech = speech.replace(/\b425\b/, '4 to 5');
     return speech;
   }
 
@@ -89,7 +108,7 @@ $(document).ready(function() {
       var recognition = new webkitSpeechRecognition();
       recognition.continuous = false;
       recognition.interimResults = false;
-      recognition.lang = "en-US";
+      recognition.lang = 'en-US';
       document.getElementById('microphone').src = mic_animate;
       recognition.start();
       recognition.onresult = function(e) {
@@ -108,33 +127,33 @@ $(document).ready(function() {
   }
 
   function buildErrorMessage(e) {
-    return e.location !== undefined ? "Line " + e.location.start.line + ", column " + e.location.start.column + ": " + e.message : e.message;
+    return e.location !== undefined ? 'Line ' + e.location.start.line + ', column ' + e.location.start.column + ': ' + e.message : e.message;
   }
 
   function parseSpeech() {
-    oldQ = $("#q").val();
+    oldQ = $('#q').val();
 
-    $("#parse-message").attr("class", "message progress").text("Parsing the input...");
-    $("#output").addClass("disabled").text("Output not available.");
+    $('#parse-message').attr('class', 'message progress').text('Parsing the input...');
+    $('#output').addClass('disabled').text('Output not available.');
 
     try {
-      var speech = $("#q").val()
+      var speech = $('#q').val()
       output = parser.parse(speech.toLowerCase());
 
-      $("#parse-message")
-            .attr("class", "message info")
-            .text("Input parsed successfully.");
-      $("#output").removeClass("disabled").text(jsDump.parse(output));
+      $('#parse-message')
+            .attr('class', 'message info')
+            .text('Input parsed successfully.');
+      $('#output').removeClass('disabled').text(jsDump.parse(output));
       interpretSpeech();
       var result = true;
       $("#user-message").hide().text("Got it!").fadeIn(200);
     } catch (e) {
       if(e instanceof SpeechBlocks.UserError) {
-        $("#user-message").text(e.message)
+        $('#user-message').text(e.message)
       } else {
-      $("#parse-message").attr("class", "message error").text(buildErrorMessage(e));
-      if(speech != "") {
-        $("#user-message").text("Sorry, I didn't understand '" + speech + "'");
+      $('#parse-message').attr('class', 'message error').text(buildErrorMessage(e));
+      if(speech != '') {
+        $('#user-message').text('Sorry, I didn\'t understand \"' + speech + '.\"');
       }
       }
       var result = false;
@@ -149,7 +168,7 @@ $(document).ready(function() {
   }
 
   function scheduleParse() {
-    if ($("#q").val() === oldQ) { return; }
+    if ($('#q').val() === oldQ) { return; }
     if (parseTimer !== null) {
       clearTimeout(parseTimer);
       parseTimer = null;
@@ -161,7 +180,7 @@ $(document).ready(function() {
     }, 500);
   }
 
-  $("#q")
+  $('#q')
   .change(scheduleParse)
   .mousedown(scheduleParse)
   .mouseup(scheduleParse)
@@ -170,20 +189,20 @@ $(document).ready(function() {
   .keyup(scheduleParse)
   .keypress(scheduleParse);
 
-  $("#microphone")
+  $('#microphone')
   .click(startDictation);
 
   $("#user-message").hide().text("Click on the microphone and say something!").fadeIn(500);
 
-// $("#runButton").on("click", run);
-// $("#showButton").on("click", showCode);
-if(!getParameterByName("debug")) {
-  $("#debug").hide();
+// $('#runButton').on('click', run);
+// $('#showButton').on('click', showCode);
+if(!getParameterByName('debug')) {
+  $('#debug').hide();
 }
-$("#debugButton").on("click", function() { $("#debug").toggle() });
-$("#buttonRow").hide();
+$('#debugButton').on('click', function() { $('#debug').toggle() });
+$('#buttonRow').hide();
 
-$("#levelDescription").text(Turtle.descriptions[SpeechGames.LEVEL])
+$('#levelDescription').text(Turtle.descriptions[SpeechGames.LEVEL])
 
 });
 
@@ -203,13 +222,13 @@ function showCode() {
 }
 
 function getParameterByName(name, url) {
-    if (!url) {
-      url = window.location.href;
-    }
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  if (!url) {
+    url = window.location.href;
+  }
+  name = name.replace(/[\[\]]/g, '\\$&');
+  var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+      results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }

@@ -14,8 +14,7 @@ goog.require('SpeechBlocks.ValueInput');
 goog.require('goog.structs.Map');
 
 /**
- * Constructs an interpreter that takes actions as input and controls the Blockly Workspace.
- * @param {!SpeechBlocks.Controller} controller The Blockly Workspace controller.
+ * @param {!SpeechBlocks.Controller} controller The Blockly workspace controller.
  * @constructor
  */
 SpeechBlocks.Interpreter = function(controller) {
@@ -108,7 +107,7 @@ SpeechBlocks.Interpreter.prototype.run_ = function() {
 };
 
 /**
- * Adds a specified block. Can be added to aspecific place.
+ * Adds a specified block. Can be added to a specific place.
  * @param {Object} command Command object from parser.
  * @private
  */
@@ -141,9 +140,7 @@ SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
     !this.isBlockIdValid_(command.where.blockId)) {
     var msg = 'Block ' + command.where.blockId + ' does not exist!';
     throw new SpeechBlocks.UserError(msg);
-  }
-  else if (command.blockId == command.where.blockId)
-  {
+  } else if (command.blockId == command.where.blockId) {
     var msg = 'Sorry, cannot move block ' + command.where.blockId + ' ' + command.where.position 
         + ' itself!';
     throw new SpeechBlocks.UserError(msg);
@@ -156,12 +153,11 @@ SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
     return;
   }
 
-  if (wheres.length == 0)
-  {
+  if (wheres.length == 0) {
     var msg = 'Sorry, invalid location.'
     throw new SpeechBlocks.UserError(msg);
   }
-  
+
   for (var i = 0; i < wheres.length; i++) {
     try {
       this.controller_.moveBlock(command.blockId, wheres[i]);
@@ -328,7 +324,7 @@ SpeechBlocks.Interpreter.prototype.getDropdownValues_ = function(block, field) {
 };
 
 /**
- * Delete a specified block.
+ * Delete the specified block.
  * @param {string} blockId The ID of the block to delete.
  * @private
  */
@@ -343,13 +339,19 @@ SpeechBlocks.Interpreter.prototype.deleteBlock_ = function(command) {
 
 /**
  * Checks to see if a block Id is valid.
- * @param {string} blockId as string.
+ * @param {string} blockId The (string) ID of the block.
+ * @return {boolean} True if the block ID is valid, false otherwise.
  * @private
  */
 SpeechBlocks.Interpreter.prototype.isBlockIdValid_ = function(blockId) {
   return this.controller_.getAllBlockIds().contains(blockId);
 };
 
+/**
+ * Separates the given block from all connected blocks.
+ * @param {Object} command Command object from parser.
+ * @private
+ */
 SpeechBlocks.Interpreter.prototype.separate_ = function(command) {
   this.controller_.disconnectBlock(command.blockId);
 }
@@ -366,7 +368,6 @@ SpeechBlocks.Interpreter.prototype.menuAction_ = function(command) {
     this.controller_.closeMenu();
   }
 };
-
 
 SpeechBlocks.Interpreter.prototype.nextLevel_ = function() {
   document.getElementById("doneOk").click();
