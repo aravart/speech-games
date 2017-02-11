@@ -20,29 +20,29 @@ SpeechGames.Suggestions = function() {
   /** @private */
   this.suggestionList_ = [
     [
-      ["add"], // key
-      ["Adding blocks:"], // title
-      ["Add a move block", "Add a turn block", "Add a repeat block"] // text
+      ['add'], // key
+      ['Add a block:'], // title
+      ['Add a move block', 'Add a turn block', 'Add a repeat block'] // text
     ],
     [
-      ["put"],
-      ["Putting blocks:"],
-      ["Put block 2 after block 1", "Put block 1 after block 2"]
+      ['put'],
+      ['Attach two blocks:'],
+      ['Put block 2 after block 1', 'Put block 1 after block 2']
     ],
     [
-      ["change"],
-      ["Changing blocks:"],
-      ["Change the first field in block 1 to left", "Change the second field in block 2 to 1000"]
+      ['change'],
+      ['Change a block:'],
+      ['Change the first field in block 1 to left', 'Change the second field in block 2 to 1000']
     ],
     [
-      ["delete"],
-      ["Deleting blocks:"],
-      ["Delete block 1"]
+      ['delete'],
+      ['Delete a block:'],
+      ['Delete block 1']
     ],
     [
-      ["run"],
-      ["Running the program:"],
-      ["Run the program"]
+      ['run'],
+      ['Run the program:'],
+      ['Run the program']
     ]
   ];
 
@@ -96,14 +96,14 @@ SpeechGames.Suggestions.prototype.setSuggestions = function(suggestions) {
 
 /** @public */
 SpeechGames.Suggestions.prototype.updateSuggestions = function() {
-  var suggestionDiv = document.getElementById("suggestionDiv");
-  $("#suggestionDiv").empty();
+  var suggestionDiv = document.getElementById('suggestionDiv');
+  $('#suggestionDiv').empty();
   for (var i = 0; i < this.suggestions_.length; i++)
   {
-    var title = document.createElement("H3");
+    var title = document.createElement('H3');
     title.append(document.createTextNode(this.suggestions_[i][1][0]));
-    var text = document.createElement("SPAN");
-    text.append(document.createTextNode("\"" + this.suggestions_[i][2][0] + "\""));
+    var text = document.createElement('SPAN');
+    text.append(document.createTextNode('\"' + this.suggestions_[i][2][0] + '\"'));
 
     suggestionDiv.append(title);
     suggestionDiv.append(text);

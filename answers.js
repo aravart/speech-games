@@ -26,18 +26,18 @@
 goog.provide('Turtle.Answers');
 
 Turtle.descriptions = {
-  1: "Create a program that draws a line",
-  2: "Create a program that draws a right angle",
-  3: "Create a program that draws a square.",
-  4: "Create a program that draws a pentagon",
-  5: "Create a program that draws a 5-pointed star",
-  6: "Create a program that draws a 5-pointed star and a line",
-  7: "Create a program that draws four 5-pointed stars",
-  8: "Create a program that draws three 5-pointed stars and a line",
-  9: "Create a program that draws three 5-pointed stars and 4 lines",
-  10: "",
-  11: "",
-  12: ""
+  1: 'Create a program that draws a line.',
+  2: 'Create a program that draws a right angle',
+  3: 'Create a program that draws a square.',
+  4: 'Create a program that draws a pentagon.',
+  5: 'Create a program that draws a 5-pointed star.',
+  6: 'Create a program that draws a 5-pointed star and a line.',
+  7: 'Create a program that draws four 5-pointed stars.',
+  8: 'Create a program that draws three 5-pointed stars and a line.',
+  9: 'Create a program that draws three 5-pointed stars and 4 lines.',
+  10: '',
+  11: '',
+  12: ''
 }
 
 /**

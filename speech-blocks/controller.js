@@ -30,7 +30,7 @@ goog.require('goog.asserts');
 goog.require('goog.structs.Map');
 goog.require('goog.structs.Set');
 
-// TODO(evanfredhernandez): Remove direct access of private fields of workspace
+// TODO(ehernandez4): Remove direct access of private fields of workspace
 // (particularly workspace.toolbox_) once accessors are provided.
 
 /**
@@ -82,8 +82,10 @@ SpeechBlocks.Controller = function(workspace) {
     }
   }.bind(this));
 
-  // Create a map of block definitions.
+  /** @private @const {!goog.structs.Map<string, !Element>} */
   this.blockXmlMap_ = new goog.structs.Map();
+  
+  // Initialize the map of block definitions.
   if (this.workspace_.options.hasCategories) {
     this.workspace_.toolbox_.tree_.forEachChild(function(blockTab) {
       blockTab.blocks.forEach(function(block) {
@@ -184,10 +186,10 @@ SpeechBlocks.Controller.prototype.removeBlock = function(blockId) {
  * Removes all blocks from the workspace.
  * @public
  */
- SpeechBlocks.Controller.prototype.removeAllBlocks = function() {
-   this.workspace_.clear();
-   this.blockCounter_ = 1;
- };
+SpeechBlocks.Controller.prototype.removeAllBlocks = function() {
+  this.workspace_.clear();
+  this.blockCounter_ = 1;
+};
 
 /**
  * Undos the last action.
@@ -376,7 +378,7 @@ SpeechBlocks.Controller.prototype.isFieldValueValid = function(blockId, fieldNam
 /**
  * Asserts that the field with the given name exists and returns it.
  * @param {string} blockId The ID of the block.
- * @oaram {string} fieldName The name of the field.
+ * @param {string} fieldName The name of the field.
  * @return {!Blockly.Field} Field with given name in given block.
  * @public
  */
@@ -415,7 +417,7 @@ SpeechBlocks.Controller.prototype.openMenu = function(menuName) {
  * @public
  */
 SpeechBlocks.Controller.prototype.closeMenu = function() {
-   if (this.workspace_.options.hasCategories) {
-     this.workspace_.toolbox_.clearSelection()
-   }
+  if (this.workspace_.options.hasCategories) {
+    this.workspace_.toolbox_.clearSelection()
+  }
 }

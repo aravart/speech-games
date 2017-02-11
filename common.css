@@ -179,7 +179,7 @@ button:hover:not(:disabled) {
 }
 
 #user-message {
-  font-size: 30;
+  font-size: 22pt;
   text-align: center;
 }
 
@@ -188,14 +188,27 @@ button:hover:not(:disabled) {
   margin-left: 10%;
 }
 
-#suggestionDiv {
+h3 {
+  font-weight: bold;
+}
+
+#suggestionContainer {
   border: 1px solid #ddd;
-  white-space: normal;
   word-wrap: break-word;
-  height: 500px;
+  white-space: normal;
+  height: 502px;
   width: 100%;
   padding: 20px;
-  margin: 0px;
+}
+
+#suggestionHead {
+  font-size: 22pt;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+#suggestionDiv {
+  margin-left: 13px;
 }
 
 #levelDescription {
@@ -205,22 +218,21 @@ button:hover:not(:disabled) {
   text-align: center;
 }
 
-
-.relative{
-  position:relative; 
-}
-.absolute-text{
-  position:absolute; 
-  bottom:0; 
-  font-size:24px; 
-  background:rgba(251,251,251,0.5);
-  padding:10px 20px; 
-  width:100%; 
-  text-align:center;
+.relative {
+  position: relative; 
 }
 
-.no-margin
-{
+.absolute-text {
+  position: absolute; 
+  bottom: 0;
+  font-size: 20px; 
+  background:rgba(255, 255, 255, 1);
+  border: 1px solid #ddd;
+  width: 100%; 
+  text-align: center;
+}
+
+.no-margin {
   margin: 0px;
   padding: 0px;
 }

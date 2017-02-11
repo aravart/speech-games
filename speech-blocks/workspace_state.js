@@ -60,7 +60,7 @@ SpeechBlocks.WorkspaceState.prototype.equals = function(state) {
  */
 SpeechBlocks.WorkspaceState.stateOf = function(workspace) {
   var state = new SpeechBlocks.WorkspaceState();
-  
+
   var blocks = workspace.getAllBlocks();
   if (!blocks.length) {
     state.empty = true;
@@ -75,16 +75,14 @@ SpeechBlocks.WorkspaceState.stateOf = function(workspace) {
       state.allBlocksConnected = false;
     }
 
+    // Check for blocks with fields.
     block.inputList.forEach(function(input) {
       input.fieldRow.forEach(function(field) {
-        // Check for blocks with fields.
         if (SpeechBlocks.FieldTypes.typeOf(field) != SpeechBlocks.FieldTypes.IRRELEVANT) {
           state.blocksAreModifiable = true;
         }
       });
     });
-
   });
-
   return state;
 };
