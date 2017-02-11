@@ -534,7 +534,7 @@ Turtle.executeChunk_ = function() {
     if (!Turtle.pause) {
         // document.getElementById('spinner').style.visibility = 'hidden';
         SpeechGames.workspace.highlightBlock(null);
-        Turtle.checkAnswer();
+        setTimeout(Turtle.checkAnswer, 500);
         // // Image complete; allow the user to submit this image to Reddit.
         // Turtle.canSubmit = true;
     }

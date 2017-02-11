@@ -58,43 +58,37 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
   this.controller_.closeMenu()
   switch (command.action) {
     case 'run':
-      this.run_();
-      break;
+      return this.run_();
 
     case 'add':
-      this.addBlock_(command);
-      break;
+      return this.addBlock_(command);
 
     case 'put':
-      this.moveBlock_(command);
-      break;
+      return this.moveBlock_(command);
 
     case 'modify':
-      this.modifyBlock_(command);
-      break;
+      return this.modifyBlock_(command);
 
     case 'delete':
-      this.deleteBlock_(command);
-      break;
+      return this.deleteBlock_(command);
 
     case 'separate':
-      this.separate_(command);
+      return this.separate_(command);
 
     case 'undo':
-      this.controller_.undo();
-      break;
+      return this.controller_.undo();
 
     case 'redo':
-      this.controller_.redo();
-      break;
+      return this.controller_.redo();
 
     case 'menu':
-      this.menuAction_(command);
-      break;
+      return this.menuAction_(command);
 
     case 'next':
-      this.nextLevel_();
-      break;
+      return this.nextLevel_();
+
+    case 'stay':
+      return this.stay_();
   }
 };
 
@@ -103,7 +97,8 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
  * @private
  */
 SpeechBlocks.Interpreter.prototype.run_ = function() {
-  document.getElementById('runButton').click();
+  $('#runButton').click();
+  return 'Running the program!';
 };
 
 /**
@@ -120,6 +115,7 @@ SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
   command.blockId = this.controller_.addBlock(
     this.blockTypeMap_.get(command.type),
     this.controller_.layout.getNewPosition_());
+  return 'Added a ' + command.type + ' block!';
 };
 
 /**
@@ -150,7 +146,9 @@ SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
     wheres = this.getWheres_(command);
   } catch (e) {
     console.log(e);
-    return;
+    var msg = 'Sorry, cannot move block ' + command.where.blockId + ' ' + command.where.position 
+        + ' itself!';
+    throw new SpeechBlocks.UserError(msg);
   }
 
   if (wheres.length == 0) {
@@ -165,7 +163,7 @@ SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
       console.log(e);
       continue;
     }
-    break;
+    return 'Moved block ' + command.blockId + ' ' + command.where.position + ' ' + command.where.blockId + '!';
   }
 };
 
@@ -257,7 +255,7 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
     // Otherwise we try to match by type
     var fieldValuesMap = this.controller_.getFieldValuesForBlock(command.blockId);
     var valueType = typeof (command.value);
-    if (valueType == "string") {
+    if (valueType == 'string') {
       for (var i = 0; i < fieldValuesMap.keys_.length; i++) {
         if (this.controller_.isFieldValueValid(command.blockId, fieldValuesMap.keys_[i], 
             command.value) && valueType == typeof (fieldValuesMap.get(fieldValuesMap.keys_[i]))) {
@@ -265,8 +263,8 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
           break;
         }
       }
-    } else if (valueType == "number") {
-      command.value += "";
+    } else if (valueType == 'number') {
+      command.value += '';
       for (var i = 0; i < fieldValuesMap.keys_.length; i++) {
         if (!this.controller_.isFieldValueValid(command.blockId, fieldValuesMap.keys_[i], 
             command.value) || isNaN(parseInt(fieldValuesMap.get(fieldValuesMap.keys_[i])))) {
@@ -305,6 +303,7 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
     }
   }
   this.controller_.setBlockField(command.blockId, fields[fieldIndex], value);
+  return 'Changed the ' + command.ordinal + ' field to ' + value + '!';
 };
 
 SpeechBlocks.Interpreter.prototype.getDropdownValues_ = function(block, field) {
@@ -332,8 +331,10 @@ SpeechBlocks.Interpreter.prototype.deleteBlock_ = function(command) {
   command.blockId = command.blockId.toString();
   if (command.blockId == 'all') {
     this.controller_.removeAllBlocks();
+    return 'Deleted all blocks!';
   } else if (this.isBlockIdValid_(command.blockId)) {
     this.controller_.removeBlock(command.blockId);
+    return 'Deleted block ' + command.blockId + '!';
   }
 };
 
@@ -354,6 +355,7 @@ SpeechBlocks.Interpreter.prototype.isBlockIdValid_ = function(blockId) {
  */
 SpeechBlocks.Interpreter.prototype.separate_ = function(command) {
   this.controller_.disconnectBlock(command.blockId);
+  return 'Block ' + command.blockId + ' separated!'
 }
 
 /**
@@ -364,11 +366,19 @@ SpeechBlocks.Interpreter.prototype.separate_ = function(command) {
 SpeechBlocks.Interpreter.prototype.menuAction_ = function(command) {
   if (command.actionType == 'open') {
     this.controller_.openMenu(command.menu);
+    return 'Menu opened!';
   } else if (command.actionType == 'close') {
     this.controller_.closeMenu();
+    return 'Menu closed!';
   }
 };
 
 SpeechBlocks.Interpreter.prototype.nextLevel_ = function() {
-  document.getElementById("doneOk").click();
+  $('#doneOk').click();
+  return 'Moving on to the next level!';
+}
+
+SpeechBlocks.Interpreter.prototype.stay_ = function() {
+  $("#doneCancel").click();
+  return 'Staying on this level!';
 }

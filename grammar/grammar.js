@@ -428,6 +428,11 @@
         peg$c234 = function() { return {
           "action": "next"
         } },
+        peg$c235 = "stay on this level",
+        peg$c236 = peg$literalExpectation("stay on this level", false),
+        peg$c237 = function() { return {
+          "action": "stay"
+        } },
 
         peg$currPos          = 0,
         peg$savedPos         = 0,
@@ -601,6 +606,9 @@
                           s3 = peg$parseMenu();
                           if (s3 === peg$FAILED) {
                             s3 = peg$parseNext();
+                            if (s3 === peg$FAILED) {
+                              s3 = peg$parseStay();
+                            }
                           }
                         }
                       }
@@ -2963,6 +2971,26 @@
       if (s1 !== peg$FAILED) {
         peg$savedPos = s0;
         s1 = peg$c234();
+      }
+      s0 = s1;
+
+      return s0;
+    }
+
+    function peg$parseStay() {
+      var s0, s1;
+
+      s0 = peg$currPos;
+      if (input.substr(peg$currPos, 18) === peg$c235) {
+        s1 = peg$c235;
+        peg$currPos += 18;
+      } else {
+        s1 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c236); }
+      }
+      if (s1 !== peg$FAILED) {
+        peg$savedPos = s0;
+        s1 = peg$c237();
       }
       s0 = s1;
 

@@ -75,11 +75,14 @@ SpeechGames.bindClick = function(el, func) {
   el.addEventListener('touchend', func, true);
 };
 
+var startDictation;
+
 // Initialize microphone and speech handling.
 $(document).ready(function() {
   var oldQ = null;
   var parseTimer = null;
   var output = null;
+  var timeout = null;
   SpeechGames.controller = SpeechBlocks.Controller.injectIntoDiv('blocklyDiv', { 
        media: 'lib/google-blockly/media/',
        trashcan: false,
@@ -97,11 +100,16 @@ $(document).ready(function() {
     speech = speech.replace(/\badam block\b/, 'add a move block');
     speech = speech.replace(/\bnumber to\b/, 'number 2');
     speech = speech.replace(/\bone\b/, '1');
+    speech = speech.replace(/\btwo\b/, '2');
+    speech = speech.replace(/\bthree\b/, '3');
     speech = speech.replace(/\b425\b/, '4 to 5');
+    speech = speech.replace(/\bblock to\b/, 'block 2');
+    speech = speech.replace(/\bblock what\b/, 'block 1');
+    speech = speech.replace(/\bblock won\b/, 'block 1');
     return speech;
   }
 
-  function startDictation() {
+  startDictation = function startDictation() {
     if (window.hasOwnProperty('webkitSpeechRecognition')) {
       var mic_animate = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic-animate.gif';
       var mic = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
@@ -116,13 +124,13 @@ $(document).ready(function() {
         corrections = speechCorrections(unfiltered);
         document.getElementById('q').value = corrections;
         recognition.stop();
-        document.getElementById('microphone').src = mic;
+        // document.getElementById('microphone').src = mic;
         parseSpeech();
       };
-      recognition.onerror = function(e) {
-        recognition.stop();
-        document.getElementById('microphone').src = mic;
-      }
+      // recognition.onerror = function(e) {
+      //   recognition.stop();
+      //   document.getElementById('microphone').src = mic;
+      // }
     }
   }
 
@@ -132,7 +140,7 @@ $(document).ready(function() {
 
   function parseSpeech() {
     oldQ = $('#q').val();
-
+    console.log($("#q").val());
     $('#parse-message').attr('class', 'message progress').text('Parsing the input...');
     $('#output').addClass('disabled').text('Output not available.');
 
@@ -144,26 +152,36 @@ $(document).ready(function() {
             .attr('class', 'message info')
             .text('Input parsed successfully.');
       $('#output').removeClass('disabled').text(jsDump.parse(output));
-      interpretSpeech();
+      var response = interpretSpeech();
+      clearTimeout(timeout);
       var result = true;
-      $("#user-message").hide().text("Got it!").fadeIn(200);
+      $("#user-message").hide().text(response).fadeIn(200);
+      $("#q").val("");
     } catch (e) {
       if(e instanceof SpeechBlocks.UserError) {
         $('#user-message').text(e.message)
       } else {
-      $('#parse-message').attr('class', 'message error').text(buildErrorMessage(e));
-      if(speech != '') {
-        $('#user-message').text('Sorry, I didn\'t understand \"' + speech + '.\"');
-      }
+        console.log(output);
+        console.log(e);
+        $('#parse-message').attr('class', 'message error').text(buildErrorMessage(e));
+        if(speech != '') {
+          $('#user-message').hide().text('Sorry, I didn\'t understand \"' + speech + '\"').fadeIn(200);
+          $("#q").val("");
+          clearTimeout(timeout);
+          timeout = setTimeout(function(){
+            $('#user-message').hide().text("Awaiting your command!").fadeIn(200);
+          },5000);
+        }
       }
       var result = false;
     }
+    startDictation();
     return result;
   }
 
   function interpretSpeech() {
     if (output !== null) {
-       interpreter.interpret(output);
+      return interpreter.interpret(output);
     }
   }
 
@@ -192,17 +210,19 @@ $(document).ready(function() {
   $('#microphone')
   .click(startDictation);
 
-  $("#user-message").hide().text("Click on the microphone and say something!").fadeIn(500);
+  $("#user-message").hide().text("Awaiting your command!").fadeIn(500);
 
-// $('#runButton').on('click', run);
-// $('#showButton').on('click', showCode);
-if(!getParameterByName('debug')) {
-  $('#debug').hide();
-}
-$('#debugButton').on('click', function() { $('#debug').toggle() });
-$('#buttonRow').hide();
+  // $('#runButton').on('click', run);
+  // $('#showButton').on('click', showCode);
+  if(!getParameterByName('debug')) {
+    $('#debug').hide();
+  }
+  $('#debugButton').on('click', function() { $('#debug').toggle() });
+  $('#buttonRow').hide();
 
-$('#levelDescription').text(Turtle.descriptions[SpeechGames.LEVEL])
+  $('#levelDescription').text(Turtle.descriptions[SpeechGames.LEVEL])
+
+  startDictation();
 
 });
 

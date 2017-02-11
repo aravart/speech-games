@@ -1,4 +1,4 @@
-Start = ("please")? _ command:( Put / Add / Delete / Change / Run / Undo / Redo / Separate / Menu / Next) { return command }
+Start = ("please")? _ command:( Put / Add / Delete / Change / Run / Undo / Redo / Separate / Menu / Next / Stay) { return command }
 
 Article = "an" / "a"
 Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "put" / "turn" / "pen" / "color" / "move"
@@ -140,6 +140,10 @@ SeparateVerb = "separate"
 
 Next = "next level" { return {
   "action": "next"
+} }
+
+Stay = "stay on this level" { return {
+  "action": "stay"
 } }
 
 _   = ' '*
