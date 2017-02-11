@@ -226,7 +226,7 @@ h3 {
   position: absolute; 
   bottom: 0;
   font-size: 20px; 
-  background:rgba(255, 255, 255, 1);
+  color: white;
   border: 1px solid #ddd;
   width: 100%; 
   text-align: center;
