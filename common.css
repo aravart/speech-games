@@ -232,3 +232,17 @@ button:hover:not(:disabled) {
   margin: 0px;
   padding: 0px;
 }
+
+#suggestionContainer {
+    /*border: 1px solid transparent;    */
+    -webkit-transition: border 1s linear, box-shadow 1s linear;
+       -moz-transition: border 1s linear, box-shadow 1s linear;
+            transition: border 1s linear, box-shadow 1s linear;
+}
+
+#suggestionContainer.active {
+    border-color: grey;
+    -webkit-box-shadow: 0 0 20px grey;
+       -moz-box-shadow: 0 0 20px grey;
+            box-shadow: 0 0 20px grey;
+}

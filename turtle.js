@@ -418,7 +418,7 @@ Turtle.initInterpreter = function(interpreter, scope) {
     {
         Turtle.step(id.toString());
     };
-    interpreter.setProperty(scope, 'step',
+    interpreter.setProperty(scope, 'move',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(angle, id)

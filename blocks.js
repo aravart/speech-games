@@ -16,7 +16,7 @@ Blockly.Blocks['turtle_move'] = {
 Blockly.JavaScript['turtle_move'] = function (block)
 {
   var value = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_NONE) || '0';
-  return 'step(\'block_id_' + block.id + '\');\n';
+  return 'move(\'block_id_' + block.id + '\');\n';
 };
 
 // Blockly.Blocks['turtle_move'] = {
