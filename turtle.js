@@ -382,7 +382,7 @@ Turtle.runButtonClick = function(e) {
     resetButton.style.display = 'inline';
     // document.getElementById('spinner').style.visibility = 'visible';
     // BlocklyGames.workspace.traceOn(true);
-    Turtle.execute();
+    setTimeout(Turtle.execute, 1000);
 };
 
 /**
@@ -418,7 +418,7 @@ Turtle.initInterpreter = function(interpreter, scope) {
     {
         Turtle.step(id.toString());
     };
-    interpreter.setProperty(scope, 'step',
+    interpreter.setProperty(scope, 'move',
         interpreter.createNativeFunction(wrapper));
 
     wrapper = function(angle, id)
@@ -534,7 +534,7 @@ Turtle.executeChunk_ = function() {
     if (!Turtle.pause) {
         // document.getElementById('spinner').style.visibility = 'hidden';
         SpeechGames.workspace.highlightBlock(null);
-        Turtle.checkAnswer();
+        setTimeout(Turtle.checkAnswer, 1000);
         // // Image complete; allow the user to submit this image to Reddit.
         // Turtle.canSubmit = true;
     }

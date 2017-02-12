@@ -82,9 +82,27 @@ SpeechBlocks.BlockUtils.getInputConnection = function(blockId, inputName, worksp
 };
 
 /**
- * Returns true if the blocks belong to the same chain, false otherwise.
+ * Returns true if the blocks are connected directly or indirectly.
+ * 
+ * This function offers a looser definition of "connected" than its sibling
+ * function, areBlocksInSuccession. Here, we do not take into account the order 
+ * of block1 and block2 - as long as there is some path from one to the other,
+ * they are connected.
+ * 
+ * @param {string} block1Id
+ * @param {string} block2Id
+ * @param {!Blockly.Workspace} workspace
+ * @return {boolean}
+ */
+SpeechBlocks.BlockUtils.areBlocksConnected = function(block1Id, block2Id, workspace) {
+  return SpeechBlocks.BlockUtils.areBlocksInSuccession(block1Id, block2Id, workspace)
+      || SpeechBlocks.BlockUtils.areBlocksInSuccession(block2Id, block1Id, workspace);
+};
+
+/**
+ * Returns true if refBlock succeeds blockToFind, false otherwise.
  *  
- * Here, the term "chain" refers to all blocks after the given block.
+ * Here, the term "succession" refers to all blocks after a given block.
  * Note this includes nested structures; e.g., a repeat block's
  * statement inputs belong to the same chain as the repeat block itself.
  * 
@@ -94,9 +112,8 @@ SpeechBlocks.BlockUtils.getInputConnection = function(blockId, inputName, worksp
  * @return {boolean}
  * @public
  */
-SpeechBlocks.BlockUtils.areBlocksInSameChain = function(refBlockId, blockToFindId, workspace) {
+SpeechBlocks.BlockUtils.areBlocksInSuccession = function(refBlockId, blockToFindId, workspace) {
   var toCheck = [SpeechBlocks.BlockUtils.getBlock(refBlockId, workspace)];
-  
   while (toCheck.length > 0) {
     var curr = toCheck.pop();
 
@@ -107,7 +124,6 @@ SpeechBlocks.BlockUtils.areBlocksInSameChain = function(refBlockId, blockToFindI
 
     // Otherwise, add all connected blocks to the queue.
     var conn; 
-    
     if (curr.nextConnection) {
       conn = SpeechBlocks.BlockUtils.asConnection_(curr.nextConnection);
       if (conn.isConnected()) {
@@ -122,8 +138,6 @@ SpeechBlocks.BlockUtils.areBlocksInSameChain = function(refBlockId, blockToFindI
       }
     }
 
-    console.log(curr);
-    console.log(curr.inputList);
     curr.inputList.forEach(function(input) {
       if (!input.connection) {
         return;
@@ -151,7 +165,7 @@ SpeechBlocks.BlockUtils.getInput_ = function(blockId, inputName, workspace) {
 };
 
 /**
- * Traverses the chain of blocks and returns a reference to the last.
+ * Traverses the chain of blocks and returns a reference to the last at the highest level.
  * @param {string} blockId ID of the first block in the chain.
  * @return {!Blockly.Block} ID of the last block in the chain.
  * @private

@@ -28,7 +28,7 @@ SpeechBlocks.StatementInput = function(parentBlockId, inputName) {
  * @override
  */
 SpeechBlocks.StatementInput.prototype.place = function(blockId, workspace) {
-  if (SpeechBlocks.BlockUtils.areBlocksInSameChain(
+  if (SpeechBlocks.BlockUtils.areBlocksInSuccession(
       blockId, this.parentBlockId_, workspace)) {
     throw 'Block ' + blockId + ' and block ' + this.parentBlockId_ + ' are connected!';
   }

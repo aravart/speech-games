@@ -30,7 +30,7 @@ SpeechBlocks.ValueInput = function(parentBlockId, inputName) {
 SpeechBlocks.ValueInput.prototype.place = function(blockId, workspace) {
   // If the successor block comes after the given block in the same chain,
   // the placement is invalid.
-  if (SpeechBlocks.BlockUtils.areBlocksInSameChain(
+  if (SpeechBlocks.BlockUtils.areBlocksInSuccession(
       blockId, this.parentBlockId_, workspace)) {
     throw 'Block ' + blockId + ' and block ' + this.parentBlockId_ + ' are connected!';
   }

@@ -25,7 +25,7 @@ SpeechBlocks.Successor = function(predecessorBlockId) {
 SpeechBlocks.Successor.prototype.place = function(blockId, workspace) {
   // If the successor block comes after the given block in the same chain,
   // the placement is invalid.
-  if (SpeechBlocks.BlockUtils.areBlocksInSameChain(
+  if (SpeechBlocks.BlockUtils.areBlocksInSuccession(
       blockId, this.predecessorBlockId_, workspace)) {
     throw 'Block ' + blockId + ' and block ' + this.predecessorBlockId_ + ' are connected!';
   }

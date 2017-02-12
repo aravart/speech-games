@@ -158,3 +158,91 @@ button:hover:not(:disabled) {
 .readonly .blocklyMainBackground {
   stroke: none;
 }
+
+.block-id-style {
+  text-shadow: 2px 2px #000000;
+  font-size: smaller;
+}
+
+#cheatsheetbox {
+  /*border: 5px solid #ddd;*/
+  height: 120px;
+  animation: fade-in;
+}
+
+#userbox {
+  border: 5px solid #ddd;
+  height: 120px;
+  animation: fade-in;
+  padding: 0px;
+  border-radius: 25px;
+}
+
+#user-message {
+  font-size: 22pt;
+  text-align: center;
+}
+
+.full-container {
+  margin-right: 10%;
+  margin-left: 10%;
+}
+
+#suggestionContainer {
+  border: 1px solid #ddd;
+  word-wrap: break-word;
+  white-space: normal;
+  height: 502px;
+  width: 100%;
+  padding: 20px;
+}
+
+#suggestionHead {
+  font-size: 22pt;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+#suggestionDiv {
+  margin-left: 13px;
+}
+
+#levelDescription {
+  padding: 2px;
+  padding-top: 10px;
+  height: 20%;
+  text-align: center;
+}
+
+.relative {
+  position: relative; 
+}
+
+.absolute-text {
+  position: absolute; 
+  bottom: 0;
+  font-size: 20px; 
+  color: rgba(255, 255, 255, 0.9);
+  border-top: 1px solid #ddd;
+  width: 100%; 
+  text-align: center;
+}
+
+.no-margin {
+  margin: 0px;
+  padding: 0px;
+}
+
+#suggestionContainer {
+    /*border: 1px solid transparent;    */
+    -webkit-transition: border 1s linear, box-shadow 1s linear;
+       -moz-transition: border 1s linear, box-shadow 1s linear;
+            transition: border 1s linear, box-shadow 1s linear;
+}
+
+#suggestionContainer.active {
+    border-color: grey;
+    -webkit-box-shadow: 0 0 20px grey;
+       -moz-box-shadow: 0 0 20px grey;
+            box-shadow: 0 0 20px grey;
+}

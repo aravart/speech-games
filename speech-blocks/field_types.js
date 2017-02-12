@@ -38,3 +38,27 @@ SpeechBlocks.FieldTypes = {
   /** Field types that we do not support. */
   IRRELEVANT: 7
 };
+
+/**
+ * Returns the corresponding type enum for the given field.
+ * @param {!Blockly.Field} field Field to get type for.
+ * @return {number} Enum value for field type.
+ * @public
+ */
+SpeechBlocks.FieldTypes.typeOf = function(field) {
+  if (field instanceof Blockly.FieldTextInput) {
+    return SpeechBlocks.FieldTypes.TEXT_INPUT;
+  } else if (field instanceof Blockly.FieldNumber) {
+    return SpeechBlocks.FieldTypes.NUMBER_INPUT;
+  } else if (field instanceof Blockly.FieldAngle) {
+    return SpeechBlocks.FieldTypes.ANGLE_PICKER;
+  } else if (field instanceof Blockly.FieldColour) {
+    return SpeechBlocks.FieldTypes.COLOUR_PICKER;
+  } else if (field instanceof Blockly.FieldVariable) {
+    return SpeechBlocks.FieldTypes.VARIABLE_PICKER;
+  } else if (field instanceof Blockly.FieldDropdown) {
+    return SpeechBlocks.FieldTypes.DROP_DOWN;
+  } else {
+    return SpeechBlocks.FieldTypes.IRRELEVANT;
+  }
+};

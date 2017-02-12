@@ -1,7 +1,6 @@
 /**
  * @fileoverview Interprets a given command and calls workspace controller_.functions.
- * @author david.liang@wisc.edu (David Liang)
- * @author pandori@wisc.edu (Sahib Pandori)
+ * @author david.liang@wisc.edu (David Liang), pandori@wisc.edu (Sahib Pandori)
  */
 'use strict';
 
@@ -15,8 +14,7 @@ goog.require('SpeechBlocks.ValueInput');
 goog.require('goog.structs.Map');
 
 /**
- * Constructs an interpreter that takes actions as input and controls the Blockly Workspace.
- * @param {!SpeechBlocks.Controller} controller The Blockly Workspace controller.
+ * @param {!SpeechBlocks.Controller} controller The Blockly workspace controller.
  * @constructor
  */
 SpeechBlocks.Interpreter = function(controller) {
@@ -57,43 +55,40 @@ SpeechBlocks.Interpreter.prototype.createBlockTypeMap_ = function() {
  * @public
  */
 SpeechBlocks.Interpreter.prototype.interpret = function(command) {
-  console.log(command);
   this.controller_.closeMenu()
   switch (command.action) {
     case 'run':
-      this.run_();
-      break;
+      return this.run_();
 
     case 'add':
-      this.addBlock_(command);
-      break;
+      return this.addBlock_(command);
 
     case 'put':
-      this.moveBlock_(command);
-      break;
+      return this.moveBlock_(command);
 
     case 'modify':
-      this.modifyBlock_(command);
-      break;
+      return this.modifyBlock_(command);
 
     case 'delete':
-      this.deleteBlock_(command);
-      break;
+      return this.deleteBlock_(command);
 
     case 'separate':
-      this.separate_(command);
+      return this.separate_(command);
 
     case 'undo':
-      this.controller_.undo();
-      break;
+      return this.controller_.undo();
 
     case 'redo':
-      this.controller_.redo();
-      break;
+      return this.controller_.redo();
 
     case 'menu':
-      this.menuAction_(command);
-      break;
+      return this.menuAction_(command);
+
+    case 'next':
+      return this.nextLevel_();
+
+    case 'stay':
+      return this.stay_();
   }
 };
 
@@ -102,12 +97,12 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
  * @private
  */
 SpeechBlocks.Interpreter.prototype.run_ = function() {
-
-  document.getElementById('runButton').click();
+  $('#runButton').click();
+  return 'Running the program!';
 };
 
 /**
- * Adds a specified block. Can be added to aspecific place.
+ * Adds a specified block. Can be added to a specific place.
  * @param {Object} command Command object from parser.
  * @private
  */
@@ -120,6 +115,7 @@ SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
   command.blockId = this.controller_.addBlock(
     this.blockTypeMap_.get(command.type),
     this.controller_.layout.getNewPosition_());
+  return 'Added a ' + command.type + ' block!';
 };
 
 /**
@@ -140,9 +136,7 @@ SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
     !this.isBlockIdValid_(command.where.blockId)) {
     var msg = 'Block ' + command.where.blockId + ' does not exist!';
     throw new SpeechBlocks.UserError(msg);
-  }
-  else if (command.blockId == command.where.blockId)
-  {
+  } else if (command.blockId == command.where.blockId) {
     var msg = 'Sorry, cannot move block ' + command.where.blockId + ' ' + command.where.position 
         + ' itself!';
     throw new SpeechBlocks.UserError(msg);
@@ -152,15 +146,16 @@ SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
     wheres = this.getWheres_(command);
   } catch (e) {
     console.log(e);
-    return;
+    var msg = 'Sorry, cannot move block ' + command.where.blockId + ' ' + command.where.position 
+        + ' itself!';
+    throw new SpeechBlocks.UserError(msg);
   }
 
-  if (wheres.length == 0)
-  {
+  if (wheres.length == 0) {
     var msg = 'Sorry, invalid location.'
     throw new SpeechBlocks.UserError(msg);
   }
-  
+
   for (var i = 0; i < wheres.length; i++) {
     try {
       this.controller_.moveBlock(command.blockId, wheres[i]);
@@ -168,7 +163,7 @@ SpeechBlocks.Interpreter.prototype.moveBlock_ = function(command) {
       console.log(e);
       continue;
     }
-    break;
+    return 'Moved block ' + command.blockId + ' ' + command.where.position + ' ' + command.where.blockId + '!';
   }
 };
 
@@ -260,7 +255,7 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
     // Otherwise we try to match by type
     var fieldValuesMap = this.controller_.getFieldValuesForBlock(command.blockId);
     var valueType = typeof (command.value);
-    if (valueType == "string") {
+    if (valueType == 'string') {
       for (var i = 0; i < fieldValuesMap.keys_.length; i++) {
         if (this.controller_.isFieldValueValid(command.blockId, fieldValuesMap.keys_[i], 
             command.value) && valueType == typeof (fieldValuesMap.get(fieldValuesMap.keys_[i]))) {
@@ -268,8 +263,8 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
           break;
         }
       }
-    } else if (valueType == "number") {
-      command.value += "";
+    } else if (valueType == 'number') {
+      command.value += '';
       for (var i = 0; i < fieldValuesMap.keys_.length; i++) {
         if (!this.controller_.isFieldValueValid(command.blockId, fieldValuesMap.keys_[i], 
             command.value) || isNaN(parseInt(fieldValuesMap.get(fieldValuesMap.keys_[i])))) {
@@ -308,6 +303,7 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
     }
   }
   this.controller_.setBlockField(command.blockId, fields[fieldIndex], value);
+  return 'Changed the ' + command.ordinal + ' field to ' + value + '!';
 };
 
 SpeechBlocks.Interpreter.prototype.getDropdownValues_ = function(block, field) {
@@ -327,7 +323,7 @@ SpeechBlocks.Interpreter.prototype.getDropdownValues_ = function(block, field) {
 };
 
 /**
- * Delete a specified block.
+ * Delete the specified block.
  * @param {string} blockId The ID of the block to delete.
  * @private
  */
@@ -335,22 +331,31 @@ SpeechBlocks.Interpreter.prototype.deleteBlock_ = function(command) {
   command.blockId = command.blockId.toString();
   if (command.blockId == 'all') {
     this.controller_.removeAllBlocks();
+    return 'Deleted all blocks!';
   } else if (this.isBlockIdValid_(command.blockId)) {
     this.controller_.removeBlock(command.blockId);
+    return 'Deleted block ' + command.blockId + '!';
   }
 };
 
 /**
  * Checks to see if a block Id is valid.
- * @param {string} blockId as string.
+ * @param {string} blockId The (string) ID of the block.
+ * @return {boolean} True if the block ID is valid, false otherwise.
  * @private
  */
 SpeechBlocks.Interpreter.prototype.isBlockIdValid_ = function(blockId) {
   return this.controller_.getAllBlockIds().contains(blockId);
 };
 
+/**
+ * Separates the given block from all connected blocks.
+ * @param {Object} command Command object from parser.
+ * @private
+ */
 SpeechBlocks.Interpreter.prototype.separate_ = function(command) {
   this.controller_.disconnectBlock(command.blockId);
+  return 'Block ' + command.blockId + ' separated!'
 }
 
 /**
@@ -361,7 +366,19 @@ SpeechBlocks.Interpreter.prototype.separate_ = function(command) {
 SpeechBlocks.Interpreter.prototype.menuAction_ = function(command) {
   if (command.actionType == 'open') {
     this.controller_.openMenu(command.menu);
+    return 'Menu opened!';
   } else if (command.actionType == 'close') {
     this.controller_.closeMenu();
+    return 'Menu closed!';
   }
 };
+
+SpeechBlocks.Interpreter.prototype.nextLevel_ = function() {
+  $('#doneOk').click();
+  return 'Moving on to the next level!';
+}
+
+SpeechBlocks.Interpreter.prototype.stay_ = function() {
+  $("#doneCancel").click();
+  return 'Staying on this level!';
+}

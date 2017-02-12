@@ -25,11 +25,12 @@ goog.require('SpeechBlocks.BlockUtils');
 goog.require('SpeechBlocks.FieldTypes');
 goog.require('SpeechBlocks.Translation');
 goog.require('SpeechBlocks.Where');
+goog.require('SpeechBlocks.WorkspaceState');
 goog.require('goog.asserts');
 goog.require('goog.structs.Map');
 goog.require('goog.structs.Set');
 
-// TODO(evanfredhernandez): Remove direct access of private fields of workspace
+// TODO(ehernandez4): Remove direct access of private fields of workspace
 // (particularly workspace.toolbox_) once accessors are provided.
 
 /**
@@ -41,11 +42,17 @@ SpeechBlocks.Controller = function(workspace) {
   /** @private @const {!Blockly.Workspace} */
   this.workspace_ = workspace;
 
+  /** @public @const */
+  this.layout = new SpeechBlocks.Layout(workspace);
+
+  /** @private */
+  this.workspaceState_ = SpeechBlocks.WorkspaceState.stateOf(this.workspace_);
+
+  /** @private {!Array<!Function>} */
+  this.stateChangeListeners_ = [];
+
   /** @private */
   this.blockCounter_ = 1;
-
-  /** @public */
-  this.layout = new SpeechBlocks.Layout()
 
   // Override the newBlock function to use our default IDs.
   var nextId = function() { return (this.blockCounter_++).toString(); }.bind(this);
@@ -64,9 +71,22 @@ SpeechBlocks.Controller = function(workspace) {
     }
   }.bind(this));
 
-  // Create a map of block definitions.
+  // For any other event, update the workspace state.
+  this.workspace_.addChangeListener(function(event) {
+    var state = SpeechBlocks.WorkspaceState.stateOf(this.workspace_);
+    if (!this.workspaceState_.equals(state)) {
+      this.workspaceState_ = state;
+      this.stateChangeListeners_.forEach(function(listener) {
+        listener(this.workspaceState_);
+      }.bind(this));
+    }
+  }.bind(this));
+
+  /** @private @const {!goog.structs.Map<string, !Element>} */
   this.blockXmlMap_ = new goog.structs.Map();
-  if(this.workspace_.options.hasCategories) {
+  
+  // Initialize the map of block definitions.
+  if (this.workspace_.options.hasCategories) {
     this.workspace_.toolbox_.tree_.forEachChild(function(blockTab) {
       blockTab.blocks.forEach(function(block) {
         this.blockXmlMap_.set(block.getAttribute('type'), block);
@@ -74,7 +94,7 @@ SpeechBlocks.Controller = function(workspace) {
     }, this);
   } else {
     var arr = this.workspace_.options.languageTree.children;
-    for(var i = 0, len = arr.length; i < len; i++) {
+    for (var i = 0, len = arr.length; i < len; i++) {
       this.blockXmlMap_.set(arr[i].getAttribute('type'), arr[i]);
     }
   }
@@ -122,7 +142,7 @@ SpeechBlocks.Controller.prototype.addBlock = function(type, opt_where) {
   } else {
     this.workspace_.render();
   }
-  this.layout.validateAdd(newBlock)
+  this.layout.validateAdd(newBlock);
   return newBlock.id;
 };
 
@@ -158,7 +178,7 @@ SpeechBlocks.Controller.prototype.disconnectBlock = function(blockId) {
 SpeechBlocks.Controller.prototype.removeBlock = function(blockId) {
   var block = SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_);
   block.unplug(true /* Heal the stack! */);
-  this.layout.validateRemove(block)
+  this.layout.validateRemove(block);
   block.dispose();
 };
 
@@ -166,10 +186,10 @@ SpeechBlocks.Controller.prototype.removeBlock = function(blockId) {
  * Removes all blocks from the workspace.
  * @public
  */
- SpeechBlocks.Controller.prototype.removeAllBlocks = function() {
-   this.workspace_.clear();
-   this.blockCounter_ = 1;
- };
+SpeechBlocks.Controller.prototype.removeAllBlocks = function() {
+  this.workspace_.clear();
+  this.blockCounter_ = 1;
+};
 
 /**
  * Undos the last action.
@@ -289,7 +309,7 @@ SpeechBlocks.Controller.prototype.getFieldsForBlock = function(blockId) {
   var blockFields = new goog.structs.Map();
   SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_).inputList.forEach(function(input) {
     input.fieldRow.forEach(function(field) {
-      var type = SpeechBlocks.Controller.getFieldType_(field);
+      var type = SpeechBlocks.FieldTypes.typeOf(field);
       if (field.name && type != SpeechBlocks.FieldTypes.IRRELEVANT) {
         blockFields.set(field.name, type);
       }
@@ -309,37 +329,13 @@ SpeechBlocks.Controller.prototype.getFieldValuesForBlock = function(blockId) {
   var blockFieldValues = new goog.structs.Map();
   SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_).inputList.forEach(function(input) {
     input.fieldRow.forEach(function(field) {
-      var type = SpeechBlocks.Controller.getFieldType_(field)
+      var type = SpeechBlocks.FieldTypes.typeOf(field)
       if (field.name && type != SpeechBlocks.IRRELEVANT) {
         blockFieldValues.set(field.name, field.getValue());
       }
     });
   });
   return blockFieldValues;
-};
-
-/**
- * Returns the corresponding type enum for the given field.
- * @param {!Blockly.Field} field Field to get type for.
- * @return {number} Enum value for field type.
- * @private
- */
-SpeechBlocks.Controller.getFieldType_ = function(field) {
-  if (field instanceof Blockly.FieldTextInput) {
-    return SpeechBlocks.FieldTypes.TEXT_INPUT;
-  } else if (field instanceof Blockly.FieldNumber) {
-    return SpeechBlocks.FieldTypes.NUMBER_INPUT;
-  } else if (field instanceof Blockly.FieldAngle) {
-    return SpeechBlocks.FieldTypes.ANGLE_PICKER;
-  } else if (field instanceof Blockly.FieldColour) {
-    return SpeechBlocks.FieldTypes.COLOUR_PICKER;
-  } else if (field instanceof Blockly.FieldVariable) {
-    return SpeechBlocks.FieldTypes.VARIABLE_PICKER;
-  } else if (field instanceof Blockly.FieldDropdown) {
-    return SpeechBlocks.FieldTypes.DROP_DOWN;
-  } else {
-    return SpeechBlocks.FieldTypes.IRRELEVANT;
-  }
 };
 
 /**
@@ -382,13 +378,22 @@ SpeechBlocks.Controller.prototype.isFieldValueValid = function(blockId, fieldNam
 /**
  * Asserts that the field with the given name exists and returns it.
  * @param {string} blockId The ID of the block.
- * @oaram {string} fieldName The name of the field.
+ * @param {string} fieldName The name of the field.
  * @return {!Blockly.Field} Field with given name in given block.
  * @public
  */
 SpeechBlocks.Controller.prototype.getField_ = function(blockId, fieldName) {
   return goog.asserts.assertInstanceof(
       SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_)).getField(fieldName);
+};
+
+/**
+ * Add a listener to be fired everytime the workspace state changes.
+ * @param {Function} listener The listener to add.
+ * @public
+ */
+SpeechBlocks.Controller.prototype.addStateChangeListener = function(listener) {
+  this.stateChangeListeners_.push(listener);
 };
 
 /**
@@ -412,7 +417,7 @@ SpeechBlocks.Controller.prototype.openMenu = function(menuName) {
  * @public
  */
 SpeechBlocks.Controller.prototype.closeMenu = function() {
-   if(this.workspace_.options.hasCategories) {
-     this.workspace_.toolbox_.clearSelection()
-   }
+  if (this.workspace_.options.hasCategories) {
+    this.workspace_.toolbox_.clearSelection()
+  }
 }
