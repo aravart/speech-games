@@ -104,6 +104,11 @@ $(document).ready(function() {
     speech = speech.replace(/\bblock to\b/, 'block 2');
     speech = speech.replace(/\bblock what\b/, 'block 1');
     speech = speech.replace(/\bblock won\b/, 'block 1');
+    speech = speech.replace(/\bunblock\b/, 'in block');
+    speech = speech.replace(/\bhad\b/, 'add');
+    speech = speech.replace(/\bterm\b/, 'turn');
+    speech = speech.replace(/\b - \b/, ' to ');
+    speech = speech.replace(/\b272\b/, 'to 72');
     return speech;
   }
 
@@ -139,7 +144,6 @@ $(document).ready(function() {
 
   function parseSpeech() {
     oldQ = $('#q').val();
-    console.log($("#q").val());
     $('#parse-message').attr('class', 'message progress').text('Parsing the input...');
     $('#output').addClass('disabled').text('Output not available.');
 
