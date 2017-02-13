@@ -79,8 +79,10 @@ SpeechGames.bindClick = function(el, func) {
 $(document).ready(function() {
   var oldQ = null;
   var parseTimer = null;
+  var previousRecognitionTime = null;
   var output = null;
   var timeout = null;
+  var animating = false;
   SpeechGames.controller = SpeechBlocks.Controller.injectIntoDiv('blocklyDiv', { 
        media: 'lib/google-blockly/media/',
        trashcan: false,
@@ -120,7 +122,12 @@ $(document).ready(function() {
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.lang = 'en-US';
-      document.getElementById('microphone').src = mic_animate;
+      recognition.onstart = function() {
+        if (!animating) {
+          animating = true;
+          document.getElementById('microphone').src = mic_animate;
+        }
+      }
       recognition.start();
       recognition.onresult = function(e) {
         unfiltered = e.results[0][0].transcript;
@@ -130,10 +137,15 @@ $(document).ready(function() {
         // document.getElementById('microphone').src = mic;
         parseSpeech();
       };
-      recognition.onerror = function(e) {
+      recognition.onend = function(e) {
+        animating = false;
+        document.getElementById('microphone').src = mic;
+        if (Date.now() - previousRecognitionTime < 10)
+        {
+          return;
+        }
         recognition.stop();
         parseSpeech();
-        // document.getElementById('microphone').src = mic;
       }
     }
   }
@@ -143,6 +155,7 @@ $(document).ready(function() {
   }
 
   function parseSpeech() {
+    previousRecognitionTime = Date.now();
     oldQ = $('#q').val();
     $('#parse-message').attr('class', 'message progress').text('Parsing the input...');
     $('#output').addClass('disabled').text('Output not available.');
