@@ -2,6 +2,7 @@ import heapq
 import itertools
 import numpy
 import pandas
+import tqdm
 import random
 
 verbose = False
@@ -12,16 +13,31 @@ class Node:
         self.x = x
         self.edges = []
         self.accept = []
+        self.parents = []
 
     def __repr__(self):
         return str(self.x)
 
 
-def construct(k, depth):
-    res = []
-    for i in range(depth+1):
-        res += list(itertools.product(range(k), repeat=i))
-    return res
+def construct(k=3, d=3, m=3, undirected=False):
+    v = []
+    for i in range(d+1):
+        v += list(itertools.product(range(k), repeat=i))
+    v = dict(zip(v, map(Node, v)))
+    for node in v.values():
+        if len(node.x) < d:
+            for j in range(min(m, d-len(node.x))):
+                for s in succ(node.x, k, j+1):
+                    node.edges.append(v[s])
+                    v[s].parents.append(node)
+                    if undirected:
+                        v[s].edges.append(node)
+    # if undirected:
+    #     for node in v.values():
+    #         for child in node.edges:
+    #             child.edges.append(node)
+
+    return v
 
 
 def succ(x, k, j=1):
@@ -75,7 +91,7 @@ def path(prev, source, target):
     return path
 
 
-def simulate(n=100, k=3, d=3, m=3, undirected=False):
+def simulate(n=100, k=3, d=3, m=3, undirected=False, progress=False):
     """Simulates search
 
     Args:
@@ -85,26 +101,16 @@ def simulate(n=100, k=3, d=3, m=3, undirected=False):
     m: Edges are up to m blocks larger than their source
     """
 
-    v = construct(k, d)
-    v = dict(zip(v, map(Node, v)))
-
-    for node in v.values():
-        if len(node.x) < d:
-            for j in range(min(m, d-len(node.x))):
-                for s in succ(node.x, k, j+1):
-                    node.edges.append(v[s])
-                    if undirected:
-                        v[s].edges.append(node)
-    # if undirected:
-    #     for node in v.values():
-    #         for child in node.edges:
-    #             child.edges.append(node)
+    v = construct(k, d, m, undirected)
 
     source = v[()]
     targets = filter(lambda x: len(x.x) == d, v.values())
     res = []
-    for p in [i / 10.0 for i in range(11)]:
-        for _ in range(n):
+    for i in tqdm.trange(11):
+        for _ in tqdm.trange(n):
+            p = i / 10.0
+    # for p in [i / 10.0 for i in range(11)]:
+    #     for _ in range(n):
             prune(v.values(), accept=p)
             target = targets[random.randint(0, len(targets)-1)]
             found, prev, explored = dijkstra(v.values(),
@@ -117,7 +123,7 @@ def simulate(n=100, k=3, d=3, m=3, undirected=False):
             res.append((p, found, l, explored, target))
             if verbose:
                 print p, found, l, explored, target
-    df = pandas.DataFrame(res, columns = ('p','found','length','explored','target'))
+    df = pandas.DataFrame(res, columns = ('p', 'found', 'length', 'explored', 'target'))
     return df
 
 
@@ -146,3 +152,24 @@ def plot_3(df, show=True):
     plt.xlabel('Probability of retaining edge')
     if show:
         plt.show()
+
+
+def dfs(n, res=[]):
+    """Topological sort"""
+    for child in reversed(n.edges):
+        dfs(child, res)
+    res.append(n)
+    return res
+
+# p = 0.5
+# v = construct(m=1,d=2)
+# tsort = list(reversed(dfs(v[()])))
+# for n in v.values():
+#     n.x = (None, n.x)
+# for n in range(1,len(tsort)):
+#     q = 1
+#     tsort[n].x = (1, tsort[n].x)
+#     q = 
+#     # take all parents and multiply by p
+
+# map(lambda n: n.parents, list(reversed(dfs(v[()]))))
