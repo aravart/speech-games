@@ -114,11 +114,13 @@ $(document).ready(function() {
     return speech;
   }
 
+  var recognition;
+
   function startDictation() {
     if (window.hasOwnProperty('webkitSpeechRecognition')) {
       var mic_animate = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic-animate.gif';
       var mic = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
-      var recognition = new webkitSpeechRecognition();
+      recognition = new webkitSpeechRecognition();
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.lang = 'en-US';
@@ -130,23 +132,20 @@ $(document).ready(function() {
       }
       recognition.start();
       recognition.onresult = function(e) {
+        // console.log("result")
         unfiltered = e.results[0][0].transcript;
         corrections = speechCorrections(unfiltered);
         document.getElementById('q').value = corrections;
         recognition.stop();
-        // document.getElementById('microphone').src = mic;
         parseSpeech();
       };
-      recognition.onend = function(e) {
+      recognition.onerror = function(e) {
+        document.getElementById('microphone').src = mic;
+        // console.log("err");
         animating = false;
         document.getElementById('microphone').src = mic;
-        if (Date.now() - previousRecognitionTime < 10)
-        {
-          return;
-        }
         recognition.stop();
-        parseSpeech();
-      }
+      };
     }
   }
 
@@ -159,26 +158,24 @@ $(document).ready(function() {
     oldQ = $('#q').val();
     $('#parse-message').attr('class', 'message progress').text('Parsing the input...');
     $('#output').addClass('disabled').text('Output not available.');
-
+    var result = false;
     try {
       var speech = $('#q').val()
       output = parser.parse(speech.toLowerCase());
-
+      console.log(output);
       $('#parse-message')
             .attr('class', 'message info')
             .text('Input parsed successfully.');
       $('#output').removeClass('disabled').text(jsDump.parse(output));
       var response = interpretSpeech();
       clearTimeout(timeout);
-      var result = true;
+      result = true;
       $("#user-message").hide().text(response).fadeIn(200);
       $("#q").val("");
     } catch (e) {
       if(e instanceof SpeechBlocks.UserError) {
         $('#user-message').text(e.message)
       } else {
-        // console.log(output);
-        // console.log(e);
         $('#parse-message').attr('class', 'message error').text(buildErrorMessage(e));
         if(speech != '') {
           $('#user-message').hide().text('Sorry, I didn\'t understand \"' + speech + '\"').fadeIn(200);
@@ -189,7 +186,6 @@ $(document).ready(function() {
           },5000);
         }
       }
-      var result = false;
     }
     startDictation();
     return result;
