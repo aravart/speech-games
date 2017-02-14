@@ -154,22 +154,6 @@ def plot_3(df, show=True):
         plt.show()
 
 
-def plot_4(maxd=4, show=True):
-    """Simulate probability of being found for a range of values"""
-    import matplotlib.pyplot as plt
-    res = pandas.DataFrame()
-    for d in range(1, maxd+1):
-        print "\n\nd=", d, "\n"
-        df = simulate(n=1000, k=3, d=d, m=1, progress=True)
-        s = df.groupby(['p']).mean()['found']
-        s.name = d
-        res = res.append(s)
-    res.transpose().to_pickle('barplots.pkl')
-    res.transpose().plot(kind='bar')
-    if show:
-        plt.show()
-
-
 def dfs(n, res=[]):
     """Topological sort"""
     for child in reversed(n.edges):
