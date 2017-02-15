@@ -75,7 +75,7 @@ def dijkstra(vs, edges, source, target):
     return False, prev, explored
 
 
-def prune(vs, accept=0.5):
+def drop(vs, accept=0.5):
     for v in vs:
         v.accept = [random.uniform(0, 1) < accept for _ in range(len(v.edges))]
 
@@ -111,7 +111,7 @@ def simulate(n=100, k=3, d=3, m=3, undirected=False, progress=False):
             p = i / 10.0
     # for p in [i / 10.0 for i in range(11)]:
     #     for _ in range(n):
-            prune(v.values(), accept=p)
+            drop(v.values(), accept=p)
             target = targets[random.randint(0, len(targets)-1)]
             found, prev, explored = dijkstra(v.values(),
                                              stochasticedges,
@@ -161,20 +161,28 @@ def dfs(n, res=[]):
     res.append(n)
     return res
 
-def count():
-    for d in range(1, 9):
-        v = construct(k=3, d=d, m=1)
-        print d, len(v.values()), sum(map(lambda x: len(x.edges), v.values()))
 
-# p = 0.5
-# v = construct(m=1,d=2)
-# tsort = list(reversed(dfs(v[()])))
-# for n in v.values():
-#     n.x = (None, n.x)
-# for n in range(1,len(tsort)):
-#     q = 1
-#     tsort[n].x = (1, tsort[n].x)
-#     q = 
-#     # take all parents and multiply by p
+def count(v):
+    return (len(v.values()), sum(map(lambda x: len(x.edges), v.values())))
 
-# map(lambda n: n.parents, list(reversed(dfs(v[()]))))
+
+def ancestors(leaf):
+    current = [leaf]
+    visited = []
+    while current:
+        c = current.pop()
+        visited.append(c)
+        for p in c.parents:
+            if p not in visited and p not in current:
+                current.append(p)
+    return visited
+
+
+def prune(v, s):
+    for n in v.values():
+        if n not in s:
+            del v[n.x]
+        else:
+            for e in list(n.edges):
+                if e not in s:
+                    n.edges.remove(e)

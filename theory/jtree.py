@@ -1,18 +1,19 @@
 from optparse import OptionParser
 from pickle import dump
-from simulate import construct
+from simulate import construct, prune, ancestors
 from pgmpy.models import BayesianModel
 from pgmpy.factors import TabularCPD
 from pgmpy.inference import BeliefPropagation
 
 parser = OptionParser()
-parser.add_option("--d", type="int", default=2)
 parser.add_option("--p", type="float", default=0.5)
+parser.add_option("--target", type="string", default="11")
+parser.add_option("-s", action="store_true", dest="save")
 options, _ = parser.parse_args()
 
-d = options.d
 p = options.p
-
+target = tuple(map(int, list(options.target)))
+d = len(target)
 
 def compute_probabilities(p, l):
     zeros = []
@@ -26,6 +27,14 @@ def compute_probabilities(p, l):
 
 g = BayesianModel()
 vs = construct(m=1, d=d)
+
+prune(vs, ancestors(vs[target]))
+# For d = 6, why a bug with the above but not the below?
+# prune(vs, ancestors(vs[(0, 1, 0, 1, 1, 0)]))
+# prune(vs, ancestors(vs[(0, 1, 0, 1, 1, 1)]))
+# python jtree2.py --target 010110
+# python jtree2.py --target 010111
+
 for v in vs.values():
     for child in v.edges:
         g.add_edge(str(v), str(child))
@@ -45,7 +54,11 @@ for v in vs.values():
 bp = BeliefPropagation(g)
 ms = bp.query(variables=map(str, vs.values()))
 
-dump(ms, "d_%s.pkl" % d)
-
 for m in ms.values():
     print(m)
+
+if options.save:
+    with open("%s.pkl" % "".join(map(str, target)), 'wb') as f:
+        dump(ms, f)
+
+# Now can we verify this with simulation?
