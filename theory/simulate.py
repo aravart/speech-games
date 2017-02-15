@@ -109,8 +109,6 @@ def simulate(n=100, k=3, d=3, m=3, undirected=False, progress=False):
     for i in tqdm.trange(11):
         for _ in tqdm.trange(n):
             p = i / 10.0
-    # for p in [i / 10.0 for i in range(11)]:
-    #     for _ in range(n):
             drop(v.values(), accept=p)
             target = targets[random.randint(0, len(targets)-1)]
             found, prev, explored = dijkstra(v.values(),
@@ -123,7 +121,36 @@ def simulate(n=100, k=3, d=3, m=3, undirected=False, progress=False):
             res.append((p, found, l, explored, target))
             if verbose:
                 print p, found, l, explored, target
-    df = pandas.DataFrame(res, columns = ('p', 'found', 'length', 'explored', 'target'))
+    df = pandas.DataFrame(res, columns=('p', 'found', 'length', 'explored', 'target'))
+    return df
+
+def simulate_small(target, n=100, k=3, d=3, m=3, p=0.5, undirected=False, progress=False):
+    """Simulates search for a given target and p
+
+    Args:
+    n: The number of samples per probability
+    k: The size of the alphabet
+    d: The size of the largest node in the graph (depth)
+    m: Edges are up to m blocks larger than their source
+    """
+
+    v = construct(k, d, m, undirected)
+    source = v[()]
+    target = v[target]
+    res = []
+    for _ in tqdm.trange(n):
+        drop(v.values(), accept=p)
+        found, prev, explored = dijkstra(v.values(),
+                                         stochasticedges,
+                                         source,
+                                         target)
+        l = None
+        if found:
+            l = len(path(prev, source, target))-1
+        res.append((p, found, l, explored, target))
+        if verbose:
+            print p, found, l, explored, target
+    df = pandas.DataFrame(res, columns=('p', 'found', 'length', 'explored', 'target'))
     return df
 
 

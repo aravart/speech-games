@@ -1,6 +1,6 @@
 from optparse import OptionParser
 from pickle import dump
-from simulate import construct, prune, ancestors
+from simulate import construct, prune, ancestors, simulate_small
 from pgmpy.models import BayesianModel
 from pgmpy.factors import TabularCPD
 from pgmpy.inference import BeliefPropagation
@@ -9,6 +9,7 @@ parser = OptionParser()
 parser.add_option("--p", type="float", default=0.5)
 parser.add_option("--target", type="string", default="11")
 parser.add_option("-s", action="store_true", dest="save")
+parser.add_option("-m", action="store_true", dest="print_all_marginals")
 options, _ = parser.parse_args()
 
 p = options.p
@@ -54,11 +55,15 @@ for v in vs.values():
 bp = BeliefPropagation(g)
 ms = bp.query(variables=map(str, vs.values()))
 
-for m in ms.values():
-    print(m)
+if options.print_all_marginals:
+    for m in ms.values():
+        print(m)
+else:
+    print ms[str(target)]
 
 if options.save:
     with open("%s.pkl" % "".join(map(str, target)), 'wb') as f:
         dump(ms, f)
 
-# Now can we verify this with simulation?
+df = simulate_small(target, n=1000, m=1, d=d)
+print df.mean()['found']
