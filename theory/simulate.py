@@ -161,6 +161,11 @@ def dfs(n, res=[]):
     res.append(n)
     return res
 
+def count():
+    for d in range(1, 9):
+        v = construct(k=3, d=d, m=1)
+        print d, len(v.values()), sum(map(lambda x: len(x.edges), v.values()))
+
 # p = 0.5
 # v = construct(m=1,d=2)
 # tsort = list(reversed(dfs(v[()])))
