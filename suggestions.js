@@ -27,7 +27,7 @@ SpeechGames.Suggestions = function() {
     [
       ['put'],
       ['Connecting blocks:'],
-      ['Put block <span style=font-weight:bold>2</span> after block' + 
+      ['Put block <span style=font-weight:bold>2</span> after block ' + 
           '<span style=font-weight:bold>1</span>']
     ],
     [

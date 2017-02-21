@@ -20,7 +20,7 @@ BlockPosition = position:Position _ block:BlockToken { return {
   "position": position
 } }
 
-Position = Before / After / Left / Right / Top / "inside"
+Position = Before / After / Left / Right / Top / "inside of"
 
 Before = ("above" / "before") { return "before" }
 After = ("below" / "after") { return "after" }

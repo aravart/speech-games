@@ -191,8 +191,8 @@
           "blockId": block,
           "position": position
         } },
-        peg$c43 = "inside",
-        peg$c44 = peg$literalExpectation("inside", false),
+        peg$c43 = "inside of",
+        peg$c44 = peg$literalExpectation("inside of", false),
         peg$c45 = "above",
         peg$c46 = peg$literalExpectation("above", false),
         peg$c47 = "before",
@@ -962,9 +962,9 @@
             if (s0 === peg$FAILED) {
               s0 = peg$parseTop();
               if (s0 === peg$FAILED) {
-                if (input.substr(peg$currPos, 6) === peg$c43) {
+                if (input.substr(peg$currPos, 9) === peg$c43) {
                   s0 = peg$c43;
-                  peg$currPos += 6;
+                  peg$currPos += 9;
                 } else {
                   s0 = peg$FAILED;
                   if (peg$silentFails === 0) { peg$fail(peg$c44); }
