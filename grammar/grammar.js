@@ -168,8 +168,8 @@
         peg$c24 = peg$literalExpectation("number", false),
         peg$c25 = "variable",
         peg$c26 = peg$literalExpectation("variable", false),
-        peg$c27 = "put",
-        peg$c28 = peg$literalExpectation("put", false),
+        peg$c27 = "attach",
+        peg$c28 = peg$literalExpectation("attach", false),
         peg$c29 = "turn",
         peg$c30 = peg$literalExpectation("turn", false),
         peg$c31 = "pen",
@@ -179,7 +179,7 @@
         peg$c35 = "move",
         peg$c36 = peg$literalExpectation("move", false),
         peg$c37 = function(block, where) { return {
-          "action": "put",
+          "action": "attach",
           "blockId": block,
           "where": where
         } },
@@ -589,7 +589,7 @@
       if (s1 !== peg$FAILED) {
         s2 = peg$parse_();
         if (s2 !== peg$FAILED) {
-          s3 = peg$parsePut();
+          s3 = peg$parseAttach();
           if (s3 === peg$FAILED) {
             s3 = peg$parseAdd();
             if (s3 === peg$FAILED) {
@@ -746,9 +746,9 @@
                           if (peg$silentFails === 0) { peg$fail(peg$c26); }
                         }
                         if (s0 === peg$FAILED) {
-                          if (input.substr(peg$currPos, 3) === peg$c27) {
+                          if (input.substr(peg$currPos, 6) === peg$c27) {
                             s0 = peg$c27;
-                            peg$currPos += 3;
+                            peg$currPos += 6;
                           } else {
                             s0 = peg$FAILED;
                             if (peg$silentFails === 0) { peg$fail(peg$c28); }
@@ -803,13 +803,13 @@
       return s0;
     }
 
-    function peg$parsePut() {
+    function peg$parseAttach() {
       var s0, s1, s2, s3, s4, s5;
 
       s0 = peg$currPos;
-      if (input.substr(peg$currPos, 3) === peg$c27) {
+      if (input.substr(peg$currPos, 6) === peg$c27) {
         s1 = peg$c27;
-        peg$currPos += 3;
+        peg$currPos += 6;
       } else {
         s1 = peg$FAILED;
         if (peg$silentFails === 0) { peg$fail(peg$c28); }

@@ -1,10 +1,10 @@
-Start = ("please")? _ command:( Put / Add / Delete / Change / Run / Undo / Redo / Separate / Menu / Next / Stay) { return command }
+Start = ("please")? _ command:( Attach / Add / Delete / Change / Run / Undo / Redo / Separate / Menu / Next / Stay) { return command }
 
 Article = "an" / "a"
-Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "put" / "turn" / "pen" / "color" / "move"
+Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "attach" / "turn" / "pen" / "color" / "move"
 
-Put = "put" _ block:BlockToken _ where:Where { return {
-  "action": "put",
+Attach = "attach" _ block:BlockToken _ where:Where { return {
+  "action": "attach",
   "blockId": block,
   "where": where
 } }

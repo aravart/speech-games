@@ -134,6 +134,7 @@ SpeechGames.Speech.prototype.speechCorrections_ = function(speech) {
   speech = speech.replace(/\bone\b/, '1');
   speech = speech.replace(/\btwo\b/, '2');
   speech = speech.replace(/\bthree\b/, '3');
+  speech = speech.replace(/\bfor\b/, '4');
   speech = speech.replace(/\b425\b/, '4 to 5');
   speech = speech.replace(/\bblock to\b/, 'block 2');
   speech = speech.replace(/\bblock what\b/, 'block 1');
