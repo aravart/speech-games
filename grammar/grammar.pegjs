@@ -138,7 +138,7 @@ MenuVerb = "open" / "close"
 
 SeparateVerb = "separate"
 
-Next = "next level" { return {
+Next = ("go to the")? _ "next level" { return {
   "action": "next"
 } }
 

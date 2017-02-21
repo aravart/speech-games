@@ -364,6 +364,7 @@ BlocklyDialogs.congratulations = function() {
     linesText.textContent = '';
     var code = Blockly.JavaScript.workspaceToCode(SpeechGames.workspace);
     code = BlocklyInterface.stripCode(code);
+    code = code.replace(/\n\n/g, '\n');
     var noComments = code.replace(/\/\/[^\n]*/g, '');  // Inline comments.
     noComments = noComments.replace(/\/\*.*\*\//g, '');  /* Block comments. */
     noComments = noComments.replace(/[ \t]+\n/g, '\n');  // Trailing spaces.
@@ -377,19 +378,21 @@ BlocklyDialogs.congratulations = function() {
       code = prettyPrintOne(code, 'js');
       pre.innerHTML = code;
     }
+    var text = "";
     if (lineCount == 1) {
-      var text = "You solved this level with 1 line of JavaScript:";
+      text = "You solved this level with 1 line of JavaScript:";
     } else {
-      var text = "You solved this level with %1 lines of JavaScript:".replace('%1', lineCount);
+      text = "You solved this level with %1 lines of JavaScript:".replace('%1', lineCount);
     }
     linesText.appendChild(document.createTextNode(text));
   }
 
+  var text = "";
   if (SpeechGames.LEVEL < SpeechGames.MAX_LEVEL) {
-    var text = "You are ready for level %1!"
+    text = "You are ready for level %1!"
         .replace('%1', SpeechGames.LEVEL + 1);
   } else {
-    var text = "Are you ready for the final challenge?"
+    text = "Are you ready for the final challenge?";
   }
 
   if(document.getElementById('doneCancel')) {
@@ -411,8 +414,8 @@ BlocklyDialogs.congratulations = function() {
 
   document.getElementById('dialogDoneText').textContent = text;
 
-  var continuationText = "Say \"Stay on this level\"  or \"Next level\" to proceed.";
-  $('</br></br><span>' + continuationText + '</span>').appendTo('#dialogDoneText')
+  var continuationText = "Say \"Stay on this level\"  or \"Go to the next level\" to continue.";
+  $('</br></br><span>' + continuationText + '</span>').appendTo('#dialogDoneText');
 };
 
 /**

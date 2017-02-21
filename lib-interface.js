@@ -187,10 +187,14 @@ BlocklyInterface.changeLanguage = function() {
  */
 BlocklyInterface.nextLevel = function() {
   if (SpeechGames.LEVEL < SpeechGames.MAX_LEVEL) {
+    var demoFlag
+    if(getParameterByName('demo')) {
+      demoFlag = "&?demo=true";
+    }
     window.location = window.location.protocol + '//' +
         window.location.host + window.location.pathname +
         // '?lang=' + BlocklyGames.LANG + '&level=' + (BlocklyGames.LEVEL + 1);
-        '?level=' + (SpeechGames.LEVEL + 1);
+        '?level=' + (SpeechGames.LEVEL + 1) + demoFlag;
   } else {
     BlocklyInterface.indexPage();
   }
