@@ -29,7 +29,7 @@ SpeechGames.controller.addStateChangeListener(function(state) {
   }
   
   if (!state.allBlocksConnected) {
-    sugs.push('put');
+    sugs.push('attach');
   }
 
   if (state.blocksAreModifiable) {

@@ -14,10 +14,10 @@ ________________________________________________________________________________
 
 ### The task of the user is to complete the levels through adding blocks onto the workspace and arranging them in a manner that  completes the task. Below is the basic syntax.
 
-### Commands: move, add, delete, change, run, separate <br/> <br/>
+### Commands: attach, add, delete, change, run, separate <br/> <br/>
 
 #### Easy command for each command type
-> ##### "put block 1 after block 2" <br/> "separate block 1" <br/> "add a move block" <br/> "delete block 1" <br/> "change the first field in block 1 to 100" <br/> "run the program" <br/>
+> ##### "attach block 1 after block 2" <br/> "separate block 1" <br/> "add a move block" <br/> "delete block 1" <br/> "change the first field in block 1 to 100" <br/> "run the program" <br/>
 
 ##### \* note that when using speech, "please" before the command helps the speech-engine e.g.  "please add a move block"
 
@@ -33,10 +33,10 @@ ________________________________________________________________________________
 >#####  {type} means a block type listed in the toolbox on the left like "if," "repeat," etc. <br/> {id} means an ID such as "1," "2," etc. <br/> {value} means any one word (string ends at the first space after the string begins). <br/> {where} means before, after, or inside. <br/> {ordinal} means any of first, second, third, fourth <br/>
 <br/>
 
-### MOVE: Move a block <br/>
->##### "move block {id} {where} block {id2}"  <br/>
+### ATTACH: Attach a block <br/>
+>##### "attach block {id} {where} block {id2}"  <br/>
 ##### Example:
->##### "move block 1 away from block 2"
+>##### "attach block 1 away from block 2"
 
 <br/>
 
@@ -54,10 +54,10 @@ ________________________________________________________________________________
 
 <br/>
 
-### REMOVE: Remove block(s) <br/>
->##### "remove block {id}" <br/>
+### DELETE: Delete a block <br/>
+>##### "delete block {id}" <br/>
 ##### Example:
->##### "remove block 1"
+>##### "delete block 1"
 
 <br/>
 
@@ -91,8 +91,8 @@ specified but wasn't (simple command given), the field in the parser's utterance
 empty string.
 <br/>
 
-### MOVE: "move block 1 after block 2": <br/>
->##### { <br/> &ensp;&ensp;&ensp; "action": "move", <br/> &ensp;&ensp;&ensp; "block": 1, <br/> &ensp;&ensp;&ensp; "where": { <br/>  &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; "block": 2, <br/> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; "position": "after" <br/>  &ensp;&ensp;&ensp; }, <br/> }
+### ATTACH: "attach block 1 after block 2": <br/>
+>##### { <br/> &ensp;&ensp;&ensp; "action": "attach", <br/> &ensp;&ensp;&ensp; "block": 1, <br/> &ensp;&ensp;&ensp; "where": { <br/>  &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; "block": 2, <br/> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; "position": "after" <br/>  &ensp;&ensp;&ensp; }, <br/> }
 
 <br/>
 
@@ -106,7 +106,7 @@ empty string.
 
 <br/>
 
-### REMOVE: "remove block 1": <br/>
+### DELETE: "delete block 1": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "delete", <br/> &ensp;&ensp;&ensp; "block": 1 <br/> }
 
 <br/>

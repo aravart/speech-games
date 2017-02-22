@@ -25,9 +25,9 @@ SpeechGames.Suggestions = function() {
       ['Add a <span style=font-weight:bold>move</span> block'] //text
     ],
     [
-      ['put'],
-      ['Connecting blocks:'],
-      ['Put block <span style=font-weight:bold>2</span> after block ' + 
+      ['attach'],
+      ['Attaching blocks:'],
+      ['Attach block <span style=font-weight:bold>2</span> after block ' + 
           '<span style=font-weight:bold>1</span>']
     ],
     [
