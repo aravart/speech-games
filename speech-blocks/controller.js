@@ -67,7 +67,9 @@ SpeechBlocks.Controller = function(workspace) {
       var newBlock =
           SpeechBlocks.BlockUtils.getBlock(event.blockId, this.workspace_);
       newBlock.appendDummyInput().appendField(
-          new Blockly.FieldLabel('Block ' + newBlock.id, 'block-id-style'));
+          new Blockly.FieldLabel(
+              'Block ' + newBlock.id,
+              'block-id-style block' + newBlock.id));
     }
   }.bind(this));
 

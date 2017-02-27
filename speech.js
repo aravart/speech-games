@@ -438,7 +438,7 @@ $(document).ready(function() {
     $('#debug').toggle();
   });
   $('#buttonRow').hide();
-  $('#levelDescription').text(Turtle.descriptions[SpeechGames.LEVEL]);
-  
+
   SpeechGames.LEVEL = SpeechGames.getNumberParamFromURL_('level', 1, SpeechGames.MAX_LEVEL);
+  $('#levelDescription').text(Turtle.descriptions[SpeechGames.LEVEL]);
 });
