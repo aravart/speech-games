@@ -19,7 +19,7 @@ ________________________________________________________________________________
 #### Easy command for each command type
 > ##### "attach block 1 after block 2" <br/> "separate block 1" <br/> "add a move block" <br/> "delete block 1" <br/> "change the first field in block 1 to 100" <br/> "run the program" <br/>
 
-##### \* note that when using speech, "please" before the command helps the speech-engine e.g.  "please add a move block"
+#### \* note that when using speech, "please" before the command helps the speech-engine e.g.  "please add a move block"
 
 <br/>
 ___________________________________________________________________________________________________
@@ -71,19 +71,9 @@ ________________________________________________________________________________
 ### RUN: Run the program defined by the blocks in the canvas
 >##### "run the program" <br/>
 
-<br/>
-
-### UNDO: Undoes the previous action. Repeatable.
->##### "undo"
-
-<br/>
-
-### REDO: Redoes the previous undo. Repeatable.
->##### "redo"
-
 <br/> <br/>
 ___________________________________________________________________________________________________
-## EXAMPLE OBJECTS
+## EXAMPLE PARSER OBJECTS
 
 These are examples of the objects passed from the parser down to the interpreter for the most
 complex (most specifications) command of each command type. When a property could have been
@@ -96,7 +86,7 @@ empty string.
 
 <br/>
 
-### SEPARATE: "separate block 1 from block 2": <br/>
+### SEPARATE: "separate block 1": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "separate",  <br/> &ensp;&ensp;&ensp; "block": 1, <br/> }
 
 <br/>
@@ -111,7 +101,7 @@ empty string.
 
 <br/>
 
-### CHANGE: "change the property in block 1 to 100": <br/>
+### CHANGE: "change the first field in block 1 to 100": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "change", <br/> &ensp;&ensp;&ensp; "value": 100, <br/> &ensp;&ensp;&ensp; "block": 1, <br/> &ensp;&ensp;&ensp; "ordinal": "first" <br/> }
 
 <br/>
