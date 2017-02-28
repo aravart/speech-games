@@ -21,6 +21,7 @@ goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
 goog.require('Blockly.constants');
 goog.require('Blockly.inject');
+goog.require('SpeechBlocks.Animator');
 goog.require('SpeechBlocks.BlockUtils');
 goog.require('SpeechBlocks.FieldTypes');
 goog.require('SpeechBlocks.Translation');
@@ -45,6 +46,9 @@ SpeechBlocks.Controller = function(workspace) {
   /** @public @const */
   this.layout = new SpeechBlocks.Layout(workspace);
 
+  /** @private @const */
+  this.animator_ = new SpeechBlocks.Animator();
+
   /** @private */
   this.workspaceState_ = SpeechBlocks.WorkspaceState.stateOf(this.workspace_);
 
@@ -52,10 +56,10 @@ SpeechBlocks.Controller = function(workspace) {
   this.stateChangeListeners_ = [];
 
   /** @private */
-  this.blockCounter_ = 1;
+  this.lastBlockId_ = 0;
 
   // Override the newBlock function to use our default IDs.
-  var nextId = function() { return (this.blockCounter_++).toString(); }.bind(this);
+  var nextId = function() { return (++this.lastBlockId_).toString(); }.bind(this);
   var newBlockOld = this.workspace_.newBlock.bind(this.workspace_);
   this.workspace_.newBlock = function(prototypeName) {
     return newBlockOld(prototypeName, nextId());
@@ -84,6 +88,7 @@ SpeechBlocks.Controller = function(workspace) {
     }
   }.bind(this));
 
+  // TODO(ehernandez4): We don't need this anymore.
   /** @private @const {!goog.structs.Map<string, !Element>} */
   this.blockXmlMap_ = new goog.structs.Map();
   
@@ -136,16 +141,16 @@ SpeechBlocks.Controller.constructFromXml = function(xml) {
  * @public
  */
 SpeechBlocks.Controller.prototype.addBlock = function(type, opt_where) {
-  var xml = this.blockXmlMap_.get(type).cloneNode(true);
-  var newBlock = Blockly.Xml.domToBlock(xml, this.workspace_);
-  newBlock.initSvg();
-  if (opt_where) {
-    this.moveBlock(newBlock.id, goog.asserts.assertInstanceof(opt_where, SpeechBlocks.Where));
-  } else {
-    this.workspace_.render();
-  }
-  this.layout.validateAdd(newBlock);
-  return newBlock.id;
+  var newBlockId;
+  this.animator_.animateBlockCreation(type, /* callback */ function() {
+    newBlockId = this.lastBlockId_.toString();
+    if (opt_where) {
+      this.moveBlock(newBlockId, goog.asserts.assertInstanceof(opt_where, SpeechBlocks.Where));
+    }
+    this.layout.validateAdd(
+        SpeechBlocks.BlockUtils.getBlock(newBlockId, this.workspace_));
+  }.bind(this));
+  return newBlockId;
 };
 
 /**
@@ -156,7 +161,7 @@ SpeechBlocks.Controller.prototype.addBlock = function(type, opt_where) {
  * @public
  */
 SpeechBlocks.Controller.prototype.moveBlock = function(blockId, where) {
-  where.place(blockId, this.workspace_);
+  where.place(blockId, this.workspace_, this.animator_);
   this.workspace_.render();
 };
 
@@ -190,7 +195,7 @@ SpeechBlocks.Controller.prototype.removeBlock = function(blockId) {
  */
 SpeechBlocks.Controller.prototype.removeAllBlocks = function() {
   this.workspace_.clear();
-  this.blockCounter_ = 1;
+  this.lastBlockId_ = 0;
 };
 
 /**
@@ -207,12 +212,11 @@ SpeechBlocks.Controller.prototype.redo = function() { this.workspace_.undo(true)
 
 /**
  * Transpiles the workspace into JavaScript code and evaluates it.
- * @throws {Exception} if the code fails to run.
  * @public
  */
 SpeechBlocks.Controller.prototype.run = function() {
-  Blockly.JavaScript.addReservedWords('code');
-  eval(Blockly.JavaScript.workspaceToCode(this.workspace_));
+  // TODO(ehernandez4): Is there a more direct way to do this?
+  $('#runButton').click();
 };
 
 /**
@@ -403,23 +407,23 @@ SpeechBlocks.Controller.prototype.addStateChangeListener = function(listener) {
  * @param {string} menuName Name of the menu to open.
  * @public
  */
-SpeechBlocks.Controller.prototype.openMenu = function(menuName) {
-  var menus = this.workspace_.toolbox_.tree_.children_;
-  for (var i = 0; i < menus.length; i++) {
-    if (menus[i].getText().toLowerCase() == menuName) {
-      menus[i].onMouseDown();
-      return;
-    }
-  }
-  throw 'Menu not found';
-}
+// SpeechBlocks.Controller.prototype.openMenu = function(menuName) {
+//   var menus = this.workspace_.toolbox_.tree_.children_;
+//   for (var i = 0; i < menus.length; i++) {
+//     if (menus[i].getText().toLowerCase() == menuName) {
+//       menus[i].onMouseDown();
+//       return;
+//     }
+//   }
+//   throw 'Menu not found';
+// }
 
 /**
  * Close any open toolbox menus.
  * @public
  */
-SpeechBlocks.Controller.prototype.closeMenu = function() {
-  if (this.workspace_.options.hasCategories) {
-    this.workspace_.toolbox_.clearSelection()
-  }
-}
+// SpeechBlocks.Controller.prototype.closeMenu = function() {
+//   if (this.workspace_.options.hasCategories) {
+//     this.workspace_.toolbox_.clearSelection()
+//   }
+// }

@@ -11,11 +11,17 @@ var addMoveBlock = function(dx, dy) {
 
 var runDemo = function() {
   setTimeout(function() { addMoveBlock(225, 0); }, 500);
-  setTimeout(function() { addMoveBlock(225, 75) }, 1500);
+  setTimeout(function() { addMoveBlock(225, 75); }, 1500);
   setTimeout(function() {
+    var predBlock = SpeechGames.workspace.getBlockById('1');
+    var succBlock = SpeechGames.workspace.getBlockById('2');
+
+    var bottomOfPredY = predBlock.getRelativeToSurfaceXY().y + predBlock.getHeightWidth().height;
+    var topOfSuccY = succBlock.getRelativeToSurfaceXY().y;
+
     $(".block2")
     .simulate("drag-n-drop", {
-      dy:-35,
+      dy:(bottomOfPredY - topOfSuccY),
       interpolation: {
         stepCount: 100,
         stepDelay: 2

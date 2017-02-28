@@ -55,7 +55,7 @@ SpeechBlocks.Interpreter.prototype.createBlockTypeMap_ = function() {
  * @public
  */
 SpeechBlocks.Interpreter.prototype.interpret = function(command) {
-  this.controller_.closeMenu()
+  // this.controller_.closeMenu()
   switch (command.action) {
     case 'run':
       return this.run_();
@@ -81,8 +81,8 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
     case 'redo':
       return this.controller_.redo();
 
-    case 'menu':
-      return this.menuAction_(command);
+    // case 'menu':
+    //   return this.menuAction_(command);
 
     case 'next':
       return this.nextLevel_();
@@ -97,7 +97,7 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
  * @private
  */
 SpeechBlocks.Interpreter.prototype.run_ = function() {
-  $('#runButton').click();
+  this.controller_.run();
   return 'Running the program!';
 };
 
@@ -363,15 +363,15 @@ SpeechBlocks.Interpreter.prototype.separate_ = function(command) {
  * @param {Object} command Command object from parser.
  * @private
  */
-SpeechBlocks.Interpreter.prototype.menuAction_ = function(command) {
-  if (command.actionType == 'open') {
-    this.controller_.openMenu(command.menu);
-    return 'Menu opened!';
-  } else if (command.actionType == 'close') {
-    this.controller_.closeMenu();
-    return 'Menu closed!';
-  }
-};
+// SpeechBlocks.Interpreter.prototype.menuAction_ = function(command) {
+//   if (command.actionType == 'open') {
+//     this.controller_.openMenu(command.menu);
+//     return 'Menu opened!';
+//   } else if (command.actionType == 'close') {
+//     this.controller_.closeMenu();
+//     return 'Menu closed!';
+//   }
+// };
 
 SpeechBlocks.Interpreter.prototype.nextLevel_ = function() {
   $('#doneOk').click();

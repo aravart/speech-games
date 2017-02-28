@@ -6,6 +6,9 @@
 
 goog.provide('SpeechBlocks.Where');
 
+goog.require('Blockly.Workspace');
+goog.require('SpeechBlocks.Animator');
+
 /** @abstract @constructor */
 SpeechBlocks.Where = function() {};
 
@@ -22,6 +25,8 @@ SpeechBlocks.Where = function() {};
  * 
  * @param {string} blockId The ID of the block to move.
  * @param {!Blockly.Workspace} workspace The current workspace.
+ * @param {SpeechBlocks.Animator=} opt_animator An animator to be provided
+ *    if the placement should be animated
  * @abstract
  */
-SpeechBlocks.Where.prototype.place = function(blockId, workspace) {};
+SpeechBlocks.Where.prototype.place = function(blockId, workspace, opt_animator) {};

@@ -6,7 +6,10 @@
 
 goog.provide('SpeechBlocks.BlockUtils');
 
+goog.require('Blockly.Block');
 goog.require('Blockly.Connection');
+goog.require('Blockly.Input');
+goog.require('Blockly.Workspace');
 goog.require('goog.asserts');
 
 /**
