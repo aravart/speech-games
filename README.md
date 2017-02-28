@@ -73,16 +73,6 @@ ________________________________________________________________________________
 ### RUN: Run the program defined by the blocks in the canvas
 >##### "run the program" <br/>
 
-<br/>
-
-### UNDO: Undoes the previous action. Repeatable.
->##### "undo"
-
-<br/>
-
-### REDO: Redoes the previous undo. Repeatable.
->##### "redo"
-
 <br/> <br/>
 ___________________________________________________________________________________________________
 ## EXAMPLE OBJECTS
@@ -113,7 +103,7 @@ empty string.
 
 <br/>
 
-### CHANGE: "change the property in block 1 to 100": <br/>
+### CHANGE: "change the first field in block 1 to 100": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "change", <br/> &ensp;&ensp;&ensp; "value": 100, <br/> &ensp;&ensp;&ensp; "block": 1, <br/> &ensp;&ensp;&ensp; "ordinal": "first" <br/> }
 
 <br/>
