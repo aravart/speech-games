@@ -56,7 +56,6 @@ content of the element:
 * `{selectall}`: Selects all characters.
 * `{enter}`: Inserts a line break. Doesn't work correctly in Opera on Windows (the line break is
 	inserted behind the sequence).
-* `{{}`: Inserts a literal `{`
 
 Except for the `{selectall}` sequence, the special sequences also generate `keydown` and `keyup`
 events for the keys corresponding to the special sequence. The `{enter}` sequence also generates a `keypress`
