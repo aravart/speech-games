@@ -31,9 +31,6 @@ goog.require('goog.asserts');
 goog.require('goog.structs.Map');
 goog.require('goog.structs.Set');
 
-// TODO(ehernandez4): Remove direct access of private fields of workspace
-// (particularly workspace.toolbox_) once accessors are provided.
-
 /**
  * @param {!Blockly.Workspace} workspace
  * @private
@@ -67,13 +64,20 @@ SpeechBlocks.Controller = function(workspace) {
 
   // Listen for create events and tag the block with its ID.
   this.workspace_.addChangeListener(function(event) {
+    if (!event.blockId) {
+      return;
+    }
+    var targetBlock =
+        SpeechBlocks.BlockUtils.getBlock(event.blockId, this.workspace_);
     if (event.type == Blockly.Events.CREATE) {
-      var newBlock =
-          SpeechBlocks.BlockUtils.getBlock(event.blockId, this.workspace_);
-      newBlock.appendDummyInput().appendField(
+      targetBlock.appendDummyInput().appendField(
           new Blockly.FieldLabel(
-              'Block ' + newBlock.id,
-              'block-id-style block' + newBlock.id));
+              'Block ' + targetBlock.id,
+              'block-id-style block' + targetBlock.id)); // Append block ID as CSS class.
+    } else if (event.type == Blockly.Events.MOVE && event.newParentId) {
+      // Unselect blocks after animation.
+      // TODO(ehernandez4): Is there a way to unselect after translation?
+      targetBlock.unselect();
     }
   }.bind(this));
 
@@ -88,23 +92,23 @@ SpeechBlocks.Controller = function(workspace) {
     }
   }.bind(this));
 
-  // TODO(ehernandez4): We don't need this anymore.
+  // TODO(ehernandez4): We don't need this anymore. Delete this.
   /** @private @const {!goog.structs.Map<string, !Element>} */
-  this.blockXmlMap_ = new goog.structs.Map();
+  // this.blockXmlMap_ = new goog.structs.Map();
   
-  // Initialize the map of block definitions.
-  if (this.workspace_.options.hasCategories) {
-    this.workspace_.toolbox_.tree_.forEachChild(function(blockTab) {
-      blockTab.blocks.forEach(function(block) {
-        this.blockXmlMap_.set(block.getAttribute('type'), block);
-      }, this)
-    }, this);
-  } else {
-    var arr = this.workspace_.options.languageTree.children;
-    for (var i = 0, len = arr.length; i < len; i++) {
-      this.blockXmlMap_.set(arr[i].getAttribute('type'), arr[i]);
-    }
-  }
+  // // Initialize the map of block definitions.
+  // if (this.workspace_.options.hasCategories) {
+  //   this.workspace_.toolbox_.tree_.forEachChild(function(blockTab) {
+  //     blockTab.blocks.forEach(function(block) {
+  //       this.blockXmlMap_.set(block.getAttribute('type'), block);
+  //     }, this)
+  //   }, this);
+  // } else {
+  //   var arr = this.workspace_.options.languageTree.children;
+  //   for (var i = 0, len = arr.length; i < len; i++) {
+  //     this.blockXmlMap_.set(arr[i].getAttribute('type'), arr[i]);
+  //   }
+  // }
 };
 
 /**
@@ -209,15 +213,6 @@ SpeechBlocks.Controller.prototype.undo = function() { this.workspace_.undo(false
  * @public
  */
 SpeechBlocks.Controller.prototype.redo = function() { this.workspace_.undo(true); };
-
-/**
- * Transpiles the workspace into JavaScript code and evaluates it.
- * @public
- */
-SpeechBlocks.Controller.prototype.run = function() {
-  // TODO(ehernandez4): Is there a more direct way to do this?
-  $('#runButton').click();
-};
 
 /**
  * Returns the set of IDs for all blocks in the workspace.

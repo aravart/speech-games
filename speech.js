@@ -443,5 +443,4 @@ $(document).ready(function() {
 
   SpeechGames.LEVEL = SpeechGames.getNumberParamFromURL_('level', 1, SpeechGames.MAX_LEVEL);
   $('#levelDescription').text(Turtle.descriptions[SpeechGames.LEVEL]);
-  console.log(Turtle.descriptions[SpeechGames.LEVEL]);
 });

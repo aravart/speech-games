@@ -6,6 +6,8 @@
 
 goog.provide('SpeechBlocks.Interpreter');
 
+goog.require('SpeechBlocks.Controller');
+goog.require('SpeechBlocks.Layout');
 goog.require('SpeechBlocks.Predecessor');
 goog.require('SpeechBlocks.StatementInput')
 goog.require('SpeechBlocks.Successor');
@@ -23,14 +25,6 @@ SpeechBlocks.Interpreter = function(controller) {
 
   /** @private {!goog.structs.Map<string, string>} */
   this.blockTypeMap_ = new goog.structs.Map();
-  this.createBlockTypeMap_();
-
-  /** @private {!Array<string>} */
-  this.blockTypes_ = controller.blockXmlMap_.keys_.slice()
-}
-
-/** @private */
-SpeechBlocks.Interpreter.prototype.createBlockTypeMap_ = function() {
   this.blockTypeMap_.set('if', 'controls_if');
   this.blockTypeMap_.set('comparison', 'logic_compare');
   this.blockTypeMap_.set('repeat', 'controls_repeat_ext');
@@ -46,7 +40,6 @@ SpeechBlocks.Interpreter.prototype.createBlockTypeMap_ = function() {
   this.blockTypeMap_.set('pen', 'turtle_pen');
   this.blockTypeMap_.set('repeat', 'turtle_repeat_internal');
   this.blockTypeMap_.set('color', 'turtle_colour_internal');
-  // this.blockTypeMap_.set('step', 'turtle_step');
 }
 
 /**
@@ -97,7 +90,7 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
  * @private
  */
 SpeechBlocks.Interpreter.prototype.run_ = function() {
-  this.controller_.run();
+  $('#runButton').click();
   return 'Running the program!';
 };
 
@@ -107,11 +100,12 @@ SpeechBlocks.Interpreter.prototype.run_ = function() {
  * @private
  */
 SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
-  if (!this.blockTypes_.includes(this.blockTypeMap_.get(command.type))) {
-    var msg = 'Block type ' + this.blockTypes_.toString() + 'not available';
+  if (!this.blockTypeMap_.containsKey(command.type)) {
+    var msg = 'Block type ' + command.type + ' not available';
     throw new SpeechBlocks.UserError(msg);
   }
 
+  // TODO(ehernandez4): The controller should handle layout management.
   command.blockId = this.controller_.addBlock(
     this.blockTypeMap_.get(command.type),
     this.controller_.layout.getNewPosition_());

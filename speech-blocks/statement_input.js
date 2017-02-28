@@ -74,8 +74,8 @@ SpeechBlocks.StatementInput.prototype.placeWithAnimation_ = function(blockId, wo
   var refBlock = SpeechBlocks.BlockUtils.getBlock(this.parentBlockId_, workspace);
 
   var refXY = refBlock.getRelativeToSurfaceXY();
-  refXY.x += refXY.getHeightWidth().width / 2;
-  refXY.y += refXY.getHeightWidth().height / 2;
+  refXY.x += refBlock.getHeightWidth().width / 3;
+  refXY.y += refBlock.getHeightWidth().height / 3;
 
   // Move the block to the middle of the parent block, and then
   // programmatically snap the block to the correct input.
