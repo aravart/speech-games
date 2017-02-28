@@ -205,7 +205,7 @@ SpeechBlocks.Interpreter.prototype.getWheres_ = function(command) {
     //   }
     //   break;
 
-    case 'inside':
+    case 'inside of':
       // TODO: We should be handling case-by-case scenarios, where we check if the
       // "where" block has value or statement inputs, as well as if the "to place" block
       // has a previous/output connections.
