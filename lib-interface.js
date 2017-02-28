@@ -187,7 +187,7 @@ BlocklyInterface.changeLanguage = function() {
  */
 BlocklyInterface.nextLevel = function() {
   if (SpeechGames.LEVEL < SpeechGames.MAX_LEVEL) {
-    var demoFlag
+    var demoFlag = '';
     if(SpeechGames.getParameterByName_('demo')) {
       demoFlag = "&?demo=true";
     }
