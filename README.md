@@ -1,12 +1,14 @@
 ___________________________________________________________________________________________________
 # GUIDE FOR SPEECHGAMES
-#### Updated 2/21/2016
+#### Updated 2/27/2017
 
 <br/>
 ___________________________________________________________________________________________________
-## INTRO
+## ABOUT
 
 ##### This is a guide for completing the levels at http://aravart.github.io/speech-games.
+
+##### Google Blockly is a system for learning how to program through the visualization of 'blocks' that represent common coding constructs. Speech Games is a series of levels that teach programming using Google Blockly with a twist: everything can be controlled by speech input.
 
 <br/>
 ___________________________________________________________________________________________________
@@ -19,7 +21,7 @@ ________________________________________________________________________________
 #### Easy command for each command type
 > ##### "attach block 1 after block 2" <br/> "separate block 1" <br/> "add a move block" <br/> "delete block 1" <br/> "change the first field in block 1 to 100" <br/> "run the program" <br/>
 
-#### \* note that when using speech, "please" before the command helps the speech-engine e.g.  "please add a move block"
+##### \* note that when using speech, "please" before the command helps the speech-engine e.g.  "please add a move block"
 
 <br/>
 ___________________________________________________________________________________________________
@@ -71,9 +73,19 @@ ________________________________________________________________________________
 ### RUN: Run the program defined by the blocks in the canvas
 >##### "run the program" <br/>
 
+<br/>
+
+### UNDO: Undoes the previous action. Repeatable.
+>##### "undo"
+
+<br/>
+
+### REDO: Redoes the previous undo. Repeatable.
+>##### "redo"
+
 <br/> <br/>
 ___________________________________________________________________________________________________
-## EXAMPLE PARSER OBJECTS
+## EXAMPLE OBJECTS
 
 These are examples of the objects passed from the parser down to the interpreter for the most
 complex (most specifications) command of each command type. When a property could have been
@@ -86,7 +98,7 @@ empty string.
 
 <br/>
 
-### SEPARATE: "separate block 1": <br/>
+### SEPARATE: "separate block 1 from block 2": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "separate",  <br/> &ensp;&ensp;&ensp; "block": 1, <br/> }
 
 <br/>
@@ -101,7 +113,7 @@ empty string.
 
 <br/>
 
-### CHANGE: "change the first field in block 1 to 100": <br/>
+### CHANGE: "change the property in block 1 to 100": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "change", <br/> &ensp;&ensp;&ensp; "value": 100, <br/> &ensp;&ensp;&ensp; "block": 1, <br/> &ensp;&ensp;&ensp; "ordinal": "first" <br/> }
 
 <br/>

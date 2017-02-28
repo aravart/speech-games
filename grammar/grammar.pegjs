@@ -3,7 +3,7 @@ Start = ("please")? _ command:( Attach / Add / Delete / Change / Run / Undo / Re
 Article = "an" / "a"
 Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "attach" / "turn" / "pen" / "color" / "move"
 
-Attach = "attach" _ block:BlockToken _ where:Where { return {
+Attach = "attach" _ block:BlockToken _ where:BlockPosition { return {
   "action": "attach",
   "blockId": block,
   "where": where
@@ -13,17 +13,13 @@ BlockType = type:Type _ "block" { return type }
 
 BlockToken = "block" _ number:Number { return number }
 
-Where = BlockPosition
-
 BlockPosition = position:Position _ block:BlockToken { return {
   "blockId": block,
   "position": position
 } }
 
-Position = Before / After / Left / Right / Top / "inside of"
+Position = "before" / "after" / "inside of" / Left / Right / Top
 
-Before = ("above" / "before") { return "before" }
-After = ("below" / "after") { return "after" }
 Left = ("to" / "into") _ "the" _ ("first blank" / "first field" / "lefthand side" / "left") _ "of" { return "lhs" }
 Right = ("to" / "into") _ "the" _ ("second blank" / "second field" /"last field" / "last blank"/ "righthand side" / "right") _ "of" { return "rhs" }
 Top = ("at" / "to" / "into") _ "the" _ "top" _ "of" { return "top" }
