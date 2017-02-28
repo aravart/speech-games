@@ -411,10 +411,12 @@ $(document).ready(function() {
     SpeechGames.speech.setMicInterval_();
     console.log("demo mode");
   }
+
   if (SpeechGames.getParameterByName_('level')) {
     SpeechGames.speech.awake = true;
   }
-   $('#q')
+
+  $('#q')
     .change(SpeechGames.speech.scheduleParse_.bind(SpeechGames.speech))
     .mousedown(SpeechGames.speech.scheduleParse_.bind(SpeechGames.speech))
     .mouseup(SpeechGames.speech.scheduleParse_.bind(SpeechGames.speech))
@@ -424,9 +426,9 @@ $(document).ready(function() {
     .keypress(SpeechGames.speech.scheduleParse_.bind(SpeechGames.speech));
 
   $('#microphone')
-      .click(SpeechGames.speech.toggleDictation_.bind(SpeechGames.speech));
+    .click(SpeechGames.speech.toggleDictation_.bind(SpeechGames.speech));
   if (SpeechGames.speech.demoMode && !SpeechGames.speech.awake) {
-     $("#user-message").hide().text("Say 'Hey Jerry' to wake me up.").fadeIn(500);
+    $("#user-message").hide().text("Say 'Hey Jerry' to wake me up.").fadeIn(500);
   } else {
     $("#user-message").hide().text("Awaiting your command!").fadeIn(500);
   }
@@ -441,4 +443,5 @@ $(document).ready(function() {
 
   SpeechGames.LEVEL = SpeechGames.getNumberParamFromURL_('level', 1, SpeechGames.MAX_LEVEL);
   $('#levelDescription').text(Turtle.descriptions[SpeechGames.LEVEL]);
+  console.log(Turtle.descriptions[SpeechGames.LEVEL]);
 });
