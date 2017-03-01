@@ -38,11 +38,11 @@ ________________________________________________________________________________
 ### ATTACH: Attach a block <br/>
 >##### "attach block {id} {where} block {id2}"  <br/>
 ##### Example:
->##### "attach block 1 away from block 2"
+>##### "attach block 1 after block 2"
 
 <br/>
 
-### SEPARATE: Segregate a block <br/>
+### SEPARATE: Seperate a block <br/>
 >##### "separate block {id}" (separates block {id} from its predecessor and successor) <br/>
 #### Example:
 >##### "separate block 1"
@@ -64,7 +64,7 @@ ________________________________________________________________________________
 <br/>
 
 ### CHANGE: Change a block's properties (but not type) <br/>
->##### "change the {ordinal} {property} in block {id} to {value}" <br/>
+>##### "change the {ordinal} field in block {id} to {value}" <br/>
 ##### Examples
 >##### "change the first field in block 1 to 120" <br/>
 
@@ -73,24 +73,12 @@ ________________________________________________________________________________
 ### RUN: Run the program defined by the blocks in the canvas
 >##### "run the program" <br/>
 
-<br/>
-
-### UNDO: Undoes the previous action. Repeatable.
->##### "undo"
-
-<br/>
-
-### REDO: Redoes the previous undo. Repeatable.
->##### "redo"
-
 <br/> <br/>
 ___________________________________________________________________________________________________
 ## EXAMPLE OBJECTS
 
 These are examples of the objects passed from the parser down to the interpreter for the most
-complex (most specifications) command of each command type. When a property could have been
-specified but wasn't (simple command given), the field in the parser's utterance object is just an
-empty string.
+complex (most specifications) command of each command type.
 <br/>
 
 ### ATTACH: "attach block 1 after block 2": <br/>
@@ -113,7 +101,7 @@ empty string.
 
 <br/>
 
-### CHANGE: "change the property in block 1 to 100": <br/>
+### CHANGE: "change the first field in block 1 to 100": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "change", <br/> &ensp;&ensp;&ensp; "value": 100, <br/> &ensp;&ensp;&ensp; "block": 1, <br/> &ensp;&ensp;&ensp; "ordinal": "first" <br/> }
 
 <br/>

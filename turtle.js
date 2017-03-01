@@ -52,6 +52,12 @@ Turtle.pidList = [];
 Turtle.pause = 0;
 
 /**
+ * Adjusts speed of execution
+ * @type number
+ */
+Turtle.stepSpeed = 0.5
+
+/**
  * JavaScript interpreter for executing program.
  * @type Interpreter
  */
@@ -550,7 +556,7 @@ Turtle.animate = function(id) {
         BlocklyInterface.highlight(id);
         // Scale the speed non-linearly, to give better precision at the fast end.
         // var stepSpeed = 1000 * Math.pow(1 - Turtle.speedSlider.getValue(), 2);
-        var stepSpeed = 1000 * Math.pow(1 - 0.5, 2);
+        var stepSpeed = 1000 * Math.pow(1 - Turtle.stepSpeed, 2);
         Turtle.pause = Math.max(1, stepSpeed);
     }
 };
