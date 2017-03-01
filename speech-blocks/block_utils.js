@@ -26,8 +26,8 @@ SpeechBlocks.BlockUtils.getBlock = function(blockId, workspace) {
 
 /**
  * Asserts that the block has a previous connection and returns the connection.
- * @param {string} blockId ID of the block.
- * @param {!Blockly.Workspace} workspace Current workspace.
+ * @param {string} blockId
+ * @param {!Blockly.Workspace} workspace
  * @return {!Blockly.Connection}
  * @public
  */
@@ -56,7 +56,7 @@ SpeechBlocks.BlockUtils.getNextConnection = function(blockId, workspace) {
  */
 SpeechBlocks.BlockUtils.getChainNextConnection = function(blockId, workspace) {
   return SpeechBlocks.BlockUtils.asConnection_(
-      SpeechBlocks.BlockUtils.getLastBlockInChain_(blockId, workspace).nextConnection);
+      SpeechBlocks.BlockUtils.getLastTopBlockInChain_(blockId, workspace).nextConnection);
 };
 
 /**
@@ -173,7 +173,7 @@ SpeechBlocks.BlockUtils.getInput_ = function(blockId, inputName, workspace) {
  * @return {!Blockly.Block} ID of the last block in the chain.
  * @private
  */
-SpeechBlocks.BlockUtils.getLastBlockInChain_ = function(blockId, workspace) {
+SpeechBlocks.BlockUtils.getLastTopBlockInChain_ = function(blockId, workspace) {
   var curr = SpeechBlocks.BlockUtils.getBlock(blockId, workspace);
   while (curr.nextConnection && curr.nextConnection.isConnected()) {
     curr = curr.nextConnection.targetConnection.getSourceBlock();

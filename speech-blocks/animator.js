@@ -1,6 +1,6 @@
 /**
  * @fileoverview Provides functionality for animating block movements
- * and block creations. Designed to be agnostic of block and workspace objects.
+ * and block creations. Remains agnostic of block and workspace objects.
  * @author ehernandez4@wisc.edu (Evan Hernandez)
  */
 'use strict';
@@ -32,9 +32,35 @@ SpeechBlocks.Animator = function() {
 };
 
 /**
+ * Drags a new block of the given type from the toolbox.
+ * @param {string} type The type of the block to create.
+ * @param {!goog.math.Coordinate} workspaceXY The target location on the workspace
+ *    where the new block should be placed.
+ * @param {Function()=} opt_onComplete A callback for when the animation finishes.
+ * @public
+ */
+SpeechBlocks.Animator.prototype.animateBlockCreation = function(
+    type, workspaceXY, opt_onComplete) {
+  if (!this.toolboxIdMap_.containsKey(type)) {
+    throw 'Bad block type provided to animator!';
+  };
+  
+  var blockSelector = this.getToolboxBlockSelector_(type);
+  var toolboxSelector = '.blocklyFlyout';
+
+  // TODO(ehernandez4): Split this computation up.
+  var dx = workspaceXY.x + (
+    $(toolboxSelector)[0].getBoundingClientRect().width - (
+        $(blockSelector).position().left - $(toolboxSelector).position().left));
+  var dy = workspaceXY.y - (
+      $(blockSelector).position().top - $(toolboxSelector).position().top);
+  
+  this.animate_(blockSelector, dx, dy, opt_onComplete);
+};
+
+/**
  * Moves the block by dx and dy, animating the process.
- * 
- * @param {string}
+ * @param {string} blockId The ID of the block to animate.
  * @param {number} dx The change in the block's x coordinate.
  * @param {number} dy The change in the block's y coordinate.
  * @param {Function()=} opt_onComplete A callback for when the animation finishes. 
@@ -67,20 +93,6 @@ SpeechBlocks.Animator.prototype.animateRelativeTranslation = function(
 };
 
 /**
- * Drags a new block of the given type from the toolbox.
- * @param {string} type The type of the block to create.
- * @param {Function()=} opt_onComplete A callback for when the animation finishes.
- * @public
- */
-SpeechBlocks.Animator.prototype.animateBlockCreation = function(type, opt_onComplete) {
-  if (!this.toolboxIdMap_.containsKey(type)) {
-    throw 'Bad block type provided to animator!';
-  };
-  // TODO(ehernandez4): The dx, dy should be injected here.
-  this.animate_(this.getToolboxSelector_(type), 225, 0, opt_onComplete);
-};
-
-/**
  * @param {string} selector The jQuery selector of the element to animate.
  * @param {number} dx The x-distance to drag.
  * @param {number} dy The y-distance to drag.
@@ -109,7 +121,7 @@ SpeechBlocks.Animator.prototype.animate_ = function(selector, dx, dy, opt_onComp
  * @return {string} The jQuery selector for this type.
  * @private
  */
-SpeechBlocks.Animator.prototype.getToolboxSelector_ = function(type) {
+SpeechBlocks.Animator.prototype.getToolboxBlockSelector_ = function(type) {
   return '.blocklyFlyout text:contains("' + this.toolboxIdMap_.get(type) + '")';
 };
 

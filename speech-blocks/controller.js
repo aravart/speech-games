@@ -1,7 +1,6 @@
 /**
  * @fileoverview High-level view of a Blockly Workspace that allows
- * for programmatically adding, moving, and deleting blocks. Does NOT
- * provide error checking.
+ * for programmatically adding, moving, and deleting blocks. 
  * @author ehernandez4@wisc.edu (Evan Hernandez)
  */
 'use strict';
@@ -32,21 +31,22 @@ goog.require('goog.structs.Map');
 goog.require('goog.structs.Set');
 
 /**
- * @param {!Blockly.Workspace} workspace
- * @private
+ * @param {!Blockly.Workspace} workspace The current workspace.
+ * @param {boolean} useAnimation If true, the controller will animate
+ *    all actions it performs on the workspace.
  * @constructor
  */
-SpeechBlocks.Controller = function(workspace) {
+SpeechBlocks.Controller = function(workspace, useAnimation) {
   /** @private @const {!Blockly.Workspace} */
   this.workspace_ = workspace;
 
-  /** @public @const */
-  this.layout = new SpeechBlocks.Layout(workspace);
-
   /** @private @const */
-  this.animator_ = new SpeechBlocks.Animator();
+  this.layout_ = new SpeechBlocks.Layout(workspace);
 
-  /** @private */
+  /** @private @const {?SpeechBlocks.Animator} */
+  this.animator_ = useAnimation ? new SpeechBlocks.Animator() : undefined;
+
+  /** @private {!SpeechBlocks.WorkspaceState} */
   this.workspaceState_ = SpeechBlocks.WorkspaceState.stateOf(this.workspace_);
 
   /** @private {!Array<!Function>} */
@@ -64,21 +64,15 @@ SpeechBlocks.Controller = function(workspace) {
 
   // Listen for create events and tag the block with its ID.
   this.workspace_.addChangeListener(function(event) {
-    if (!event.blockId) {
+    if (event.type != Blockly.Events.CREATE) {
       return;
     }
-    var targetBlock =
+    var newBlock =
         SpeechBlocks.BlockUtils.getBlock(event.blockId, this.workspace_);
-    if (event.type == Blockly.Events.CREATE) {
-      targetBlock.appendDummyInput().appendField(
-          new Blockly.FieldLabel(
-              'Block ' + targetBlock.id,
-              'block-id-style block' + targetBlock.id)); // Append block ID as CSS class.
-    } else if (event.type == Blockly.Events.MOVE && event.newParentId) {
-      // Unselect blocks after animation.
-      // TODO(ehernandez4): Is there a way to unselect after translation?
-      targetBlock.unselect();
-    }
+    newBlock.appendDummyInput().appendField(
+        new Blockly.FieldLabel(
+            'Block ' + newBlock.id,
+            'block-id-style block' + newBlock.id)); // Append block ID as CSS class.
   }.bind(this));
 
   // For any other event, update the workspace state.
@@ -92,68 +86,53 @@ SpeechBlocks.Controller = function(workspace) {
     }
   }.bind(this));
 
-  // TODO(ehernandez4): We don't need this anymore. Delete this.
+  // TODO(ehernandez4): Remove access to private fields.
   /** @private @const {!goog.structs.Map<string, !Element>} */
-  // this.blockXmlMap_ = new goog.structs.Map();
+  this.blockXmlMap_ = new goog.structs.Map();
   
-  // // Initialize the map of block definitions.
-  // if (this.workspace_.options.hasCategories) {
-  //   this.workspace_.toolbox_.tree_.forEachChild(function(blockTab) {
-  //     blockTab.blocks.forEach(function(block) {
-  //       this.blockXmlMap_.set(block.getAttribute('type'), block);
-  //     }, this)
-  //   }, this);
-  // } else {
-  //   var arr = this.workspace_.options.languageTree.children;
-  //   for (var i = 0, len = arr.length; i < len; i++) {
-  //     this.blockXmlMap_.set(arr[i].getAttribute('type'), arr[i]);
-  //   }
-  // }
-};
-
-/**
- * Injects Blockly into the given container using the given options, and returns
- * the corresponding SpeechBlocks controller.
- * @param {!Element|string} container Containing element, or its ID, or a CSS selector.
- * @param {Object=} opt_options Optional dictionary of options.
- * @return {!SpeechBlocks.Controller} Controller for the Blockly workspace.
- * @public
- */
-SpeechBlocks.Controller.injectIntoDiv = function(container, opt_options) {
-  return new SpeechBlocks.Controller(Blockly.inject(container, opt_options));
-};
-
-/**
- * Parses the headless XML into a Blockly workspace and returns
- * a corresponding SpeechBlocks controller.
- * @param {!Element} xml XML element to convert to workspace.
- * @return {!SpeechBlocks.Controller} Controller for the Blockly workspace.
- * @public
- */
-SpeechBlocks.Controller.constructFromXml = function(xml) {
-  return new SpeechBlocks.Controller(
-      Blockly.Xml.domToWorkspace(xml, new Blockly.Workspace()));
+  // Initialize the map of block definitions.
+  if (this.workspace_.options.hasCategories) {
+    this.workspace_.toolbox_.tree_.forEachChild(function(blockTab) {
+      blockTab.blocks.forEach(function(block) {
+        this.blockXmlMap_.set(block.getAttribute('type'), block);
+      }, this)
+    }, this);
+  } else {
+    var arr = this.workspace_.options.languageTree.children;
+    for (var i = 0, len = arr.length; i < len; i++) {
+      this.blockXmlMap_.set(arr[i].getAttribute('type'), arr[i]);
+    }
+  }
 };
 
 /**
  * Adds and renders a new block to the workspace.
  * @param {string} type Name of the language object containing
  *     type-specific functions for this block.
- * @param {SpeechBlocks.Where=} opt_where Optional location on the
- *     workspace to place the new block.
  * @return {string} ID of the newly created block.
  * @public
  */
-SpeechBlocks.Controller.prototype.addBlock = function(type, opt_where) {
+SpeechBlocks.Controller.prototype.addBlock = function(type) {
+  var coordsForBlock = this.layout_.getPositionForNewBlock()
+  
+  if (!this.animator_) {
+    var newBlock = Blockly.Xml.domToBlock(
+        this.blockXmlMap_.get(type).cloneNode(true),
+        this.workspace_);
+    this.moveBlock(
+        newBlock.id,
+        new SpeechBlocks.Translation(coordsForBlock.x, coordsForBlock.y));
+    return newBlock.id;
+  }
+  
   var newBlockId;
-  this.animator_.animateBlockCreation(type, /* callback */ function() {
-    newBlockId = this.lastBlockId_.toString();
-    if (opt_where) {
-      this.moveBlock(newBlockId, goog.asserts.assertInstanceof(opt_where, SpeechBlocks.Where));
-    }
-    this.layout.validateAdd(
-        SpeechBlocks.BlockUtils.getBlock(newBlockId, this.workspace_));
-  }.bind(this));
+  this.animator_.animateBlockCreation(
+      type,
+      coordsForBlock,
+      function() { 
+        newBlockId = this.lastBlockId_.toString();
+        SpeechBlocks.BlockUtils.getBlock(newBlockId, this.workspace_).unselect();
+      }.bind(this));
   return newBlockId;
 };
 
@@ -166,7 +145,6 @@ SpeechBlocks.Controller.prototype.addBlock = function(type, opt_where) {
  */
 SpeechBlocks.Controller.prototype.moveBlock = function(blockId, where) {
   where.place(blockId, this.workspace_, this.animator_);
-  this.workspace_.render();
 };
 
 /**
@@ -176,9 +154,7 @@ SpeechBlocks.Controller.prototype.moveBlock = function(blockId, where) {
  */
 SpeechBlocks.Controller.prototype.disconnectBlock = function(blockId) {
   var block = SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_);
-  block.unplug(true /* Heal stack! */);
   this.moveBlock(blockId, new SpeechBlocks.Translation(block.width + 20, 0));
-  this.layout.validateDisconnect(block);
 };
 
 /**
@@ -188,13 +164,16 @@ SpeechBlocks.Controller.prototype.disconnectBlock = function(blockId) {
  */
 SpeechBlocks.Controller.prototype.removeBlock = function(blockId) {
   var block = SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_);
-  block.unplug(true /* Heal the stack! */);
-  this.layout.validateRemove(block);
-  block.dispose();
+  if (!this.animator_) {
+    block.dispose();
+    return;
+  }
+  this.animator_.animateTranslation(
+      blockId, /* dx */ -block.getRelativeToSurfaceXY().x - 100, /* dy */ 0);
 };
 
 /**
- * Removes all blocks from the workspace.
+ * Removes all blocks from the workspace. No animation involved.
  * @public
  */
 SpeechBlocks.Controller.prototype.removeAllBlocks = function() {
@@ -293,7 +272,9 @@ SpeechBlocks.Controller.prototype.getBlockStatementInputs = function(blockId) {
 SpeechBlocks.Controller.prototype.getBlockXInputs_ = function (blockId, type) {
   var inputLabels = [];
   SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_).inputList.forEach(function(input) {
-    if (input.type == type) { inputLabels.push(input.name); }
+    if (input.type == type) { 
+      inputLabels.push(input.name); 
+    }
   });
   return inputLabels;
 };

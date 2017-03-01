@@ -390,14 +390,16 @@ SpeechGames.getParameterByName_ = function(name, url) {
  */
 $(document).ready(function() {
   SpeechGames.speech = new SpeechGames.Speech();
-  SpeechGames.controller = SpeechBlocks.Controller.injectIntoDiv('blocklyDiv', {
+  SpeechGames.workspace = Blockly.inject('blocklyDiv', {
     media: 'lib/google-blockly/media/',
     trashcan: false,
     scrollbars: false,
     toolbox: document.getElementById('toolbox')
   });
+  SpeechGames.controller = new SpeechBlocks.Controller(
+      SpeechGames.workspace,
+      SpeechGames.getParameterByName_('animate'));
   SpeechGames.interpreter = new SpeechBlocks.Interpreter(SpeechGames.controller);
-  SpeechGames.workspace = SpeechGames.controller.workspace_;
 
   if(!SpeechGames.getParameterByName_('debug')) {
     $('#debug').hide();

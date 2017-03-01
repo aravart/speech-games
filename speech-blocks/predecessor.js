@@ -66,5 +66,8 @@ SpeechBlocks.Predecessor.prototype.placeWithAnimation_ = function(blockId, works
   blockToMoveXY.y += blockToMove.getHeightWidth().height;
 
   animator.animateRelativeTranslation(
-      blockId, blockToMoveXY, refBlock.getRelativeToSurfaceXY());
+      blockId,
+      blockToMoveXY,
+      refBlock.getRelativeToSurfaceXY(),
+      function() { blockToMove.unselect(); });
 };

@@ -49,5 +49,9 @@ SpeechBlocks.Translation.prototype.place = function(blockId, workspace, opt_anim
  * @private
  */
 SpeechBlocks.Translation.prototype.placeWithAnimation_ = function(blockId, workspace, animator) {
-  animator.animateTranslation(blockId, this.dx_, this.dy_);
+  animator.animateTranslation(
+      blockId,
+      this.dx_,
+      this.dy_,
+      function() { SpeechBlocks.BlockUtils.getBlock(blockId, workspace).unselect(); });
 };

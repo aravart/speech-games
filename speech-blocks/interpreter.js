@@ -106,9 +106,7 @@ SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
   }
 
   // TODO(ehernandez4): The controller should handle layout management.
-  command.blockId = this.controller_.addBlock(
-    this.blockTypeMap_.get(command.type),
-    this.controller_.layout.getNewPosition_());
+  command.blockId = this.controller_.addBlock(this.blockTypeMap_.get(command.type));
   return 'Added a ' + command.type + ' block!';
 };
 
@@ -367,11 +365,19 @@ SpeechBlocks.Interpreter.prototype.separate_ = function(command) {
 //   }
 // };
 
+/**
+ * Advances the game to the next level.
+ * @private
+ */
 SpeechBlocks.Interpreter.prototype.nextLevel_ = function() {
   $('#doneOk').click();
   return 'Moving on to the next level!';
 }
 
+/**
+ * Closes the popup, allowing the user to stay on the current level.
+ * @private
+ */
 SpeechBlocks.Interpreter.prototype.stay_ = function() {
   $("#doneCancel").click();
   return 'Staying on this level!';

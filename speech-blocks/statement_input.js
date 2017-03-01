@@ -83,5 +83,8 @@ SpeechBlocks.StatementInput.prototype.placeWithAnimation_ = function(blockId, wo
       blockId,
       blockToMove.getRelativeToSurfaceXY(),
       refXY,
-      goog.bind(this.placeProgrammatically_, this, blockId, workspace));
+      function() {
+        this.placeProgrammatically_(blockId, workspace);
+        blockToMove.unselect();
+      }.bind(this));
 };
