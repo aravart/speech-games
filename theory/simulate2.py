@@ -97,7 +97,7 @@ def path(prev, source, target):
     return path
 
 
-def simulate(n=100, k=3, d=3, m=3, undirected=False):
+def simulate(n=100, k=3, d=3, m=3, undirected=False, all_ps=None):
     """Simulates search
 
     Args:
@@ -105,6 +105,8 @@ def simulate(n=100, k=3, d=3, m=3, undirected=False):
     k: The size of the alphabet
     d: The size of the largest node in the graph (depth)
     m: Edges are up to m blocks larger than their source
+    all_ps: The set of probability values of p_i to test,
+    default being all of them from [0,0.1,...,1.0] r the k different types
     """
 
     v = construct(k, d, m, undirected)
@@ -112,8 +114,8 @@ def simulate(n=100, k=3, d=3, m=3, undirected=False):
     source = v[()]
     targets = filter(lambda x: len(x.x) == d, v.values())
     res = []
-    all_ps = list(itertools.product(range(11), repeat=k))
-    for i in tqdm.trange(11 ** k):
+    all_ps = all_ps or list(itertools.product(range(11), repeat=k))
+    for i in tqdm.trange(len(all_ps)):
         for _ in range(n):
             ps = map(lambda i: i / 10.0, all_ps[i])
             drop(v.values(), lambda x: ps[x[0]])
