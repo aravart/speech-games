@@ -42,7 +42,7 @@ ________________________________________________________________________________
 
 <br/>
 
-### SEPARATE: Segregate a block <br/>
+### SEPARATE: Seperate a block <br/>
 >##### "separate block {id}" (separates block {id} from its predecessor and successor) <br/>
 #### Example:
 >##### "separate block 1"
