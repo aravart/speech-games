@@ -56,13 +56,10 @@ SpeechBlocks.Successor.prototype.place = function(blockId, workspace, opt_animat
 SpeechBlocks.Successor.prototype.placeWithAnimation_ = function(blockId, workspace, animator) {
   var blockToMove = SpeechBlocks.BlockUtils.getBlock(blockId, workspace);
   var refBlock = SpeechBlocks.BlockUtils.getBlock(this.predecessorBlockId_, workspace);
-  
   var refXY = refBlock.getRelativeToSurfaceXY();
-  refXY.y += refBlock.getHeightWidth().height;
-
   animator.animateRelativeTranslation(
       blockId,
       blockToMove.getRelativeToSurfaceXY(),
-      refXY,
+      new goog.math.Coordinate(refXY.x, refXY.y + refBlock.height),
       function() { blockToMove.unselect(); });
 };

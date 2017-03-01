@@ -72,17 +72,16 @@ SpeechBlocks.StatementInput.prototype.placeProgrammatically_ = function(blockId,
 SpeechBlocks.StatementInput.prototype.placeWithAnimation_ = function(blockId, workspace, animator) {
   var blockToMove = SpeechBlocks.BlockUtils.getBlock(blockId, workspace);
   var refBlock = SpeechBlocks.BlockUtils.getBlock(this.parentBlockId_, workspace);
-
   var refXY = refBlock.getRelativeToSurfaceXY();
-  refXY.x += refBlock.getHeightWidth().width / 3;
-  refXY.y += refBlock.getHeightWidth().height / 3;
 
   // Move the block to the middle of the parent block, and then
   // programmatically snap the block to the correct input.
   animator.animateRelativeTranslation(
       blockId,
       blockToMove.getRelativeToSurfaceXY(),
-      refXY,
+      new goog.math.Coordinate(
+          refXY.x + (refBlock.width / 4),
+          refXY.y + (refBlock.height / 4)),
       function() {
         this.placeProgrammatically_(blockId, workspace);
         blockToMove.unselect();

@@ -60,14 +60,12 @@ SpeechBlocks.Predecessor.prototype.place = function(blockId, workspace, opt_anim
  */
 SpeechBlocks.Predecessor.prototype.placeWithAnimation_ = function(blockId, workspace, animator) {
   var blockToMove = SpeechBlocks.BlockUtils.getBlock(blockId, workspace);
-  var refBlock = SpeechBlocks.BlockUtils.getBlock(this.successorBlockId_, workspace);
-  
   var blockToMoveXY = blockToMove.getRelativeToSurfaceXY();
-  blockToMoveXY.y += blockToMove.getHeightWidth().height;
-
+  var refBlock = SpeechBlocks.BlockUtils.getBlock(this.successorBlockId_, workspace);
   animator.animateRelativeTranslation(
       blockId,
-      blockToMoveXY,
+      new goog.math.Coordinate(
+          blockToMoveXY.x, blockToMoveXY.y + blockToMove.height),
       refBlock.getRelativeToSurfaceXY(),
       function() { blockToMove.unselect(); });
 };

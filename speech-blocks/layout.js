@@ -35,14 +35,15 @@ var BLOCK_MARGIN_ = 25;
  * @constructor
  */
 SpeechBlocks.Layout = function(workspace) {
+  /** @type {!Blockly.Workspace} */
   this.workspace_ = workspace;
 };
 
 /**
  * Returns the coordinates of a free position on the workspace.
  * 
- * TODO: This function should consider look for space in the x direction
- * as well, once we figure out a more sophisticated layout algorithm.
+ * TODO(ehernandez4): Find a way to retrofit getPositionForExistingBlock
+ * to this purpose as well, since the same algorithm should work for new blocks.
  * 
  * @return {!goog.math.Coordinate} The XY coordinates at which the new
  *      block should be placed, relative to the top left corner
@@ -61,3 +62,94 @@ SpeechBlocks.Layout.prototype.getPositionForNewBlock = function() {
   }
   return new goog.math.Coordinate(X_MARGIN_, BLOCK_MARGIN_ + maxy);
 };
+
+/**
+ * Finds the coordinates of an open area on the workspace for the new
+ * block to be placed.
+ * @param {string} blockId The ID of the block to reposition.
+ * @return {!goog.math.Coordinate} The new coordinates for the block.
+ * @public 
+ */
+SpeechBlocks.Layout.prototype.getPositionForExistingBlock = function(blockId) {
+  var block = SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_);
+  
+  // TODO(ehernandez4): It looks like this does not consider scaling. We need a more
+  // reliable way to get height/width of workspace.
+  var workspaceMetrics = this.workspace_.getMetrics();
+  
+  // Look for open boxes on the workspace that have the same size as the block's (chain).
+  // Do this by iterating through candidate starting points, each 20 pixels apart in the y,
+  // and then then the x, direction.
+  for (var x = X_MARGIN_; x < workspaceMetrics.viewWidth; x += BLOCK_MARGIN_) {
+    for (var y = Y_MARGIN_; y < workspaceMetrics.viewHeight; y += BLOCK_MARGIN_) {
+      var coords = new goog.math.Coordinate(x, y);
+      if (this.isBoxFree_(coords, block.getHeightWidth(), blockId)) {
+        return coords;
+      }
+    }
+  }
+  return new goog.math.Coordinate(X_MARGIN_, Y_MARGIN_);
+};
+
+/**
+ * Returns true if the box starting at (x, y) with size (height x width)
+ * contains no other blocks.
+ * @param {!goog.math.Coordinate} boxXY The top left corner of the box.
+ * @param {!{height: number, width: number}} The dimensions of the box.
+ * @return {boolean} True if the box is free, false otherwise.
+ * @private
+ */
+SpeechBlocks.Layout.prototype.isBoxFree_ = function(boxXY, boxHeightWidth, excludeBlockId) {
+  var blocks = this.workspace_.getAllBlocks();
+  for (var i = 0; i < blocks.length; i++) {
+    var block = blocks[i];
+    if (blocks[i].id == excludeBlockId) {
+      continue;
+    } else if (
+        SpeechBlocks.Layout.boxesOverlap_(
+            boxXY,
+            boxHeightWidth,
+            blocks.getRelativeToSurfaceXY(),
+            blocks.getHeightWidth())) {
+      return false;
+    }
+  }
+  return true;
+};
+
+/**
+ * Returns true if the given boxes overlap.
+ * @param {!goog.math.Coordinate} box1XY The top left corner of box 1.
+ * @param {!{height: number, width: number}} box1HeightWidth The dimensions of box 1.
+ * @param {!goog.math.Coordinate} box2XY The top left corner of box 2.
+ * @param {!{height: number, width: number}} box2HeightWidth The dimensions of box 2.
+ * @return {boolean} True if the boxes overlap, false otherwise.
+ * @private
+ */
+SpeechBlocks.Layout.boxesOverlap_ = function(
+    box1XY, box1HeightWidth, box2XY, box2HeightWidth) {
+  var doesXCollide = SpeechBlocks.Layout.intervalsOverlap_(
+      box1XY.x,
+      box1XY.x + box1HeightWidth.width,
+      box2.x,
+      box2.x + box2HeightWidth.width);
+  var doesYCollide = SpeechBlocks.Layout.intervalsOverlap_(
+      box1XY.y,
+      box1XY.y + box1HeightWidth.height,
+      box2.y,
+      box2.y + box2HeightWidth.height);
+  return doesXCollide && doesYCollide;
+};
+
+/**
+ * Returns true if the intervals [a1, b1] and [a2, b2] overlap.
+ * @param {!{start: number, end: number}} ivlA The first interval.
+ * @param {!{start: number, end: number}} ivlB The second interval.
+ * @return {boolean} True if the intervals overlap, false otherwise.
+ * @private
+ */
+SpeechBlocks.Layout.intervalsOverlap_ = function(ivlA, ivlB) {
+  return ((ivlA.start <= ivlB.start && ivlB.start <= ivlA.end)
+      || (ivlB.start <= ivlA.start && ivlA.start <= ivlB.end));
+};
+

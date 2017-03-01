@@ -113,8 +113,7 @@ SpeechBlocks.Controller = function(workspace, useAnimation) {
  * @public
  */
 SpeechBlocks.Controller.prototype.addBlock = function(type) {
-  var coordsForBlock = this.layout_.getPositionForNewBlock()
-  
+  var coordsForBlock = this.layout_.getPositionForNewBlock();
   if (!this.animator_) {
     var newBlock = Blockly.Xml.domToBlock(
         this.blockXmlMap_.get(type).cloneNode(true),
@@ -153,8 +152,15 @@ SpeechBlocks.Controller.prototype.moveBlock = function(blockId, where) {
  * @public
  */
 SpeechBlocks.Controller.prototype.disconnectBlock = function(blockId) {
+  // Do not separate blocks that are at the top of the chain.
+  if (this.hasPreviousConnection(blockId)) {
+    var conn = SpeechBlocks.BlockUtils.getPreviousConnection(blockId, this.workspace_);
+    if (!conn.isConnected()) {
+      throw 'There\'s nothing to separate block ' + blockId + ' from!';
+    }
+  }
   var block = SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_);
-  this.moveBlock(blockId, new SpeechBlocks.Translation(block.width + 20, 0));
+  this.moveBlock(blockId, new SpeechBlocks.Translation(block.width + 20, 20));
 };
 
 /**
