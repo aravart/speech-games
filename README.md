@@ -38,7 +38,7 @@ ________________________________________________________________________________
 ### ATTACH: Attach a block <br/>
 >##### "attach block {id} {where} block {id2}"  <br/>
 ##### Example:
->##### "attach block 1 away from block 2"
+>##### "attach block 1 after block 2"
 
 <br/>
 
@@ -64,7 +64,7 @@ ________________________________________________________________________________
 <br/>
 
 ### CHANGE: Change a block's properties (but not type) <br/>
->##### "change the {ordinal} {property} in block {id} to {value}" <br/>
+>##### "change the {ordinal} field in block {id} to {value}" <br/>
 ##### Examples
 >##### "change the first field in block 1 to 120" <br/>
 
@@ -78,9 +78,7 @@ ________________________________________________________________________________
 ## EXAMPLE OBJECTS
 
 These are examples of the objects passed from the parser down to the interpreter for the most
-complex (most specifications) command of each command type. When a property could have been
-specified but wasn't (simple command given), the field in the parser's utterance object is just an
-empty string.
+complex (most specifications) command of each command type.
 <br/>
 
 ### ATTACH: "attach block 1 after block 2": <br/>
