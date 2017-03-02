@@ -39,6 +39,7 @@ ________________________________________________________________________________
 >##### "attach block {id} {where} block {id2}"  <br/>
 ##### Example:
 >##### "attach block 1 after block 2"
+>##### "attach block 1 inside of block 2"
 
 <br/>
 
