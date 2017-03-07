@@ -22,30 +22,30 @@ SpeechGames.Suggestions = function() {
     [
       ['get'], // key
       ['Getting a block:'], // title
-      ['Get a <span style=font-weight:bold>move</span> block'] //text
+      ['Please get a <span style=font-weight:bold>move</span> block'] //text
     ],
     [
       ['connect'],
       ['Connect blocks:'],
-      ['Connect block <span style=font-weight:bold>2</span> under block ' + 
+      ['Please connect block <span style=font-weight:bold>2</span> under block ' + 
           '<span style=font-weight:bold>1</span>']
     ],
     [
       ['change'],
       ['Changing a block:'],
-      ['Change <span style=font-weight:bold>4</span> in ' + 
+      ['Please change <span style=font-weight:bold>4</span> in ' + 
           'block <span style=font-weight:bold>1</span> to ' + 
           '<span style=font-weight:bold>5</span>']
     ],
     [
       ['delete'],
       ['Deleting a block:'],
-      ['Delete block <span style=font-weight:bold>1</span>']
+      ['Please delete block <span style=font-weight:bold>1</span>']
     ],
     [
       ['run'],
       ['Running the program:'],
-      ['Run the program']
+      ['Please run the program']
     ]
   ];
 
