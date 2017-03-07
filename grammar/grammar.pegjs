@@ -1,10 +1,10 @@
-Start = ("please") _ command:( Attach / Get / Delete / Change / Run / Next / Stay) { return command }
+Start = ("please") _ command:( Connect / Get / Delete / Change / Run / Next / Stay) { return command }
 
 Article = "an" / "a"
-Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "attach" / "turn" / "pen" / "color" / "move"
+Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "connect" / "turn" / "pen" / "color" / "move"
 
-Attach = "attach" _ block:BlockToken _ where:BlockPosition { return {
-  "action": "attach",
+Connect = "connect" _ block:BlockToken _ where:BlockPosition { return {
+  "action": "connect",
   "blockId": block,
   "where": where
 } }

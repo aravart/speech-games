@@ -56,7 +56,7 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
     case 'get':
       return this.addBlock_(command);
 
-    case 'attach':
+    case 'connect':
       return this.moveBlock_(command);
 
     case 'modify':

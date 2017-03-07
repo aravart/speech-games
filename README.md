@@ -1,6 +1,6 @@
 ___________________________________________________________________________________________________
 # GUIDE FOR SPEECHGAMES
-#### Updated 2/27/2017
+#### Updated 3/6/2017
 
 <br/>
 ___________________________________________________________________________________________________
@@ -16,44 +16,36 @@ ________________________________________________________________________________
 
 ### The task of the user is to complete the levels through adding blocks onto the workspace and arranging them in a manner that  completes the task. Below is the basic syntax.
 
-### Commands: attach, get, delete, change, run, separate <br/> <br/>
+### Commands: get, connect, delete, change, run <br/> <br/>
 
 #### Easy command for each command type
-> ##### "attach block 1 after block 2" <br/> "separate block 1" <br/> "get a move block" <br/> "delete block 1" <br/> "change the first field in block 1 to 100" <br/> "run the program" <br/>
-
-##### \* note that when using speech, "please" before the command helps the speech-engine e.g.  "please get a move block"
+> ##### "please get a move block" <br/> "please connect block 1 under block 2"  <br/> "please delete block 1" <br/> "please change 90 in block 1  to 120" <br/> "please run the program" <br/>
 
 <br/>
 ___________________________________________________________________________________________________
 ## IN DEPTH GUIDE
 
-##### The grammar understands a little bit more than what’s above. Here are some more ways to specify each command. The portion inside (and not including) the quotation marks can be input. Note that there are sometimes a number of ways to get the same result but all such utterances have not been enumerated. Reference https://github.com/aravart/speech-games/blob/master/grammar/grammar.pegjs for grammar specifics. Additional comments are in parentheses after the quotation marks. Note that while the parser may understand some commands and report "input parsed successfully" some commands may not yet be compatible with the controller.
+##### The grammar understands a little bit more than what’s above. Here are some more ways to specify each command. The portion inside (and not including) the quotation marks can be input. Additional comments are in parentheses after the quotation marks.
 
 <br/>
 
 ### NOTATION
->#####  {type} means a block type listed in the toolbox on the left like "if," "repeat," etc. <br/> {id} means an ID such as "1," "2," etc. <br/> {value} means any one word (string ends at the first space after the string begins). <br/> {where} means before, after, or inside. <br/> {ordinal} means any of first, second, third, fourth <br/>
-<br/>
-
-### ATTACH: Attach a block <br/>
->##### "attach block {id} {where} block {id2}"  <br/>
-##### Example:
->##### "attach block 1 under block 2"
->##### "attach block 1 inside of block 2"
+>#####  {type} means a block type listed in the toolbox on the left like "if," "repeat," etc. <br/> {id} means an ID such as "1," "2," etc. <br/> {value} means any one word or number (string ends at the first space after the string begins). <br/> {where} means under or inside.
 
 <br/>
 
-### SEPARATE: Seperate a block <br/>
->##### "separate block {id}" (separates block {id} from its predecessor and successor) <br/>
-#### Example:
->##### "separate block 1"
-
-<br/>
-
-### ADD: Get a specific block type <br/>
+### GET: Get a specific block type <br/>
 >##### "get a {type} block" <br/> 
 ##### Example:
 >##### "get a move block"
+
+<br/>
+
+### CONNECT: Connect a block <br/>
+>##### "connect block {id} {where} block {id2}"  <br/>
+##### Example:
+>##### "connect block 1 under block 2"
+>##### "connect block 1 inside of block 2"
 
 <br/>
 
@@ -65,9 +57,9 @@ ________________________________________________________________________________
 <br/>
 
 ### CHANGE: Change a block's properties (but not type) <br/>
->##### "change the {ordinal} field in block {id} to {value}" <br/>
+>##### "change {value} in block {id} to {value}" <br/>
 ##### Examples
->##### "change the first field in block 1 to 120" <br/>
+>##### "change 90 in block 1 to 120" <br/>
 
  <br/>
 
@@ -82,33 +74,28 @@ These are examples of the objects passed from the parser down to the interpreter
 complex (most specifications) command of each command type.
 <br/>
 
-### ATTACH: "attach block 1 after block 2": <br/>
->##### { <br/> &ensp;&ensp;&ensp; "action": "attach", <br/> &ensp;&ensp;&ensp; "block": 1, <br/> &ensp;&ensp;&ensp; "where": { <br/>  &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; "block": 2, <br/> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; "position": "after" <br/>  &ensp;&ensp;&ensp; }, <br/> }
+### CONNECT: "connect block 1 under block 2": <br/>
+>##### { <br/> &ensp;&ensp;&ensp; "action": "connect", <br/> &ensp;&ensp;&ensp; "block": 1, <br/> &ensp;&ensp;&ensp; "where": { <br/>  &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; "blockId": 2, <br/> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; "position": "under" <br/>  &ensp;&ensp;&ensp; }, <br/> }
 
 <br/>
 
-### SEPARATE: "separate block 1 from block 2": <br/>
->##### { <br/> &ensp;&ensp;&ensp; "action": "separate",  <br/> &ensp;&ensp;&ensp; "block": 1, <br/> }
-
-<br/>
-
-### ADD: "get a move block": <br/>
+### GET: "get a move block": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "get", <br/> &ensp;&ensp;&ensp; "type": "move" <br/>}
 
 <br/>
 
 ### DELETE: "delete block 1": <br/>
->##### { <br/> &ensp;&ensp;&ensp; "action": "delete", <br/> &ensp;&ensp;&ensp; "block": 1 <br/> }
+>##### { <br/> &ensp;&ensp;&ensp; "action": "delete", <br/> &ensp;&ensp;&ensp; "blockId": 1 <br/> }
 
 <br/>
 
-### CHANGE: "change the first field in block 1 to 100": <br/>
->##### { <br/> &ensp;&ensp;&ensp; "action": "change", <br/> &ensp;&ensp;&ensp; "value": 100, <br/> &ensp;&ensp;&ensp; "block": 1, <br/> &ensp;&ensp;&ensp; "ordinal": "first" <br/> }
+### CHANGE: "change 90 in block 1 to 120": <br/>
+>##### { <br/> &ensp;&ensp;&ensp; "action": "change", <br/> &ensp;&ensp;&ensp; "orig": 90, <br/> &ensp;&ensp;&ensp; "new": 120, <br/> &ensp;&ensp;&ensp; "block": 1 <br/> }
 
 <br/>
 
 ### RUN: "run the program": <br/>
->##### { <br/> &ensp;&ensp;&ensp; "action": "run the program" <br/> }
+>##### { <br/> &ensp;&ensp;&ensp; "action": "run" <br/> }
 
 <br/>
 

@@ -20,14 +20,14 @@ SpeechGames.Suggestions = function() {
   /** @private */
   this.suggestionList_ = [
     [
-      ['add'], // key
+      ['get'], // key
       ['Getting a block:'], // title
       ['Get a <span style=font-weight:bold>move</span> block'] //text
     ],
     [
-      ['attach'],
-      ['Attaching blocks:'],
-      ['Attach block <span style=font-weight:bold>2</span> under block ' + 
+      ['connect'],
+      ['Connect blocks:'],
+      ['Connect block <span style=font-weight:bold>2</span> under block ' + 
           '<span style=font-weight:bold>1</span>']
     ],
     [
