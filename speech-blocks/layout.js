@@ -6,8 +6,12 @@
 
 goog.provide('SpeechBlocks.Layout');
 
+goog.require('Blockly.Block');
+goog.require('Blockly.Workspace');
+goog.require('SpeechBlocks.BlockUtils');
 goog.require('SpeechBlocks.Translation');
 goog.require('goog.math.Coordinate');
+goog.require('goog.structs.Set');
 
 /**
  * The minimum x margin for any block.
@@ -40,27 +44,46 @@ SpeechBlocks.Layout = function(workspace) {
 };
 
 /**
- * Returns an array of all blocks that visually overlap with the given block.
- * @param {string} blockId The ID of the block whose overlapping neighbors
- *      should be returned.
- * @return {!Array<!Blockly.Block>} The overlapping blocks. 
+ * Returns an array of all blocks that visually overlap with the given block
+ * or any block in its chain.
+ * @param {string} blockId The ID of the block in the chain whose overlapping
+ *      neighbors should be returned.
+ * @return {!goog.structs.Set<!Blockly.Block>} The overlapping blocks. 
  * @public
  */
-SpeechBlocks.Layout.prototype.getOverlappingBlocks = function(blockId) {
+SpeechBlocks.Layout.prototype.getBlocksThatOverlapChain = function(blockId) {
+  /** @type {!goog.structs.Set<!Blockly.Block>} */
+  var overlappingBlocks = new goog.structs.Set();
+  SpeechBlocks.BlockUtils.getBlocksInChain(blockId, this.workspace_).forEach(
+    function(block) {
+      overlappingBlocks.addAll(this.getBlocksThatOverlapBlock_(block.id));
+    }.bind(this));
+  return overlappingBlocks;
+};
+
+/**
+ * Returns an array of all blocks that visually overlap with just the given block.
+ * @param {string} blockId The ID of the block whose overlapping neighbors
+ *    should be returned.
+ * @return {!Array<!Blockly.Block>} The overlapping blocks.
+ * @private
+ */
+SpeechBlocks.Layout.prototype.getBlocksThatOverlapBlock_ = function(blockId) {
   var theBlock = SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_);
   var overlappingBlocks = [];
   var blocks = this.workspace_.getAllBlocks();
   for (var i = 0; i < blocks.length; i++) {
-    if (blocks[i].id == blockId) {
+    if (SpeechBlocks.BlockUtils.areBlocksConnected(
+        blockId, blocks[i].id, this.workspace_)) {
       continue;
     }
-    var doBlocksOverlap = this.boxesOverlap_(
+    var doBlocksOverlap = SpeechBlocks.Layout.boxesOverlap_(
         theBlock.getRelativeToSurfaceXY(),
         {height:theBlock.height, width:theBlock.width},
         blocks[i].getRelativeToSurfaceXY(),
         {height:blocks[i].height, width:blocks[i].width});
     if (doBlocksOverlap) {
-      overlappingBlocks.append(blocks[i]);
+      overlappingBlocks.push(blocks[i]);
     }
   }
   return overlappingBlocks;
@@ -131,8 +154,8 @@ SpeechBlocks.Layout.prototype.getPositionForExistingBlock = function(blockId) {
  * 
  * @param {!goog.math.Coordinate} boxXY The top left corner of the box.
  * @param {!{height: number, width: number}} The dimensions of the box.
- * @param {string} excludeBlockId Do not count the block with this ID as
- *      occupying the box's space.
+ * @param {string} excludeBlockId Do not count the block with this ID,
+ *      or any blocks in the same chain, as occupying the box's space.
  * @return {boolean} True if the box is free, false otherwise.
  * @private
  */
@@ -140,14 +163,16 @@ SpeechBlocks.Layout.prototype.isBoxFree_ = function(boxXY, boxHeightWidth, exclu
   var blocks = this.workspace_.getAllBlocks();
   for (var i = 0; i < blocks.length; i++) {
     var block = blocks[i];
-    if (blocks[i].id == excludeBlockId) {
+    if (blocks[i].id == excludeBlockId
+        || SpeechBlocks.BlockUtils.areBlocksConnected(
+            blocks[i].id, excludeBlockId, this.workspace_)) {
       continue;
     } else if (
         SpeechBlocks.Layout.boxesOverlap_(
             boxXY,
             boxHeightWidth,
-            blocks.getRelativeToSurfaceXY(),
-            blocks.getHeightWidth())) {
+            blocks[i].getRelativeToSurfaceXY(),
+            blocks[i].getHeightWidth())) {
       return false;
     }
   }
@@ -166,15 +191,11 @@ SpeechBlocks.Layout.prototype.isBoxFree_ = function(boxXY, boxHeightWidth, exclu
 SpeechBlocks.Layout.boxesOverlap_ = function(
     box1XY, box1HeightWidth, box2XY, box2HeightWidth) {
   var doesXCollide = SpeechBlocks.Layout.intervalsOverlap_(
-      box1XY.x,
-      box1XY.x + box1HeightWidth.width,
-      box2.x,
-      box2.x + box2HeightWidth.width);
+      {start:box1XY.x, end:box1XY.x + box1HeightWidth.width},
+      {start:box2XY.x, end:box2XY.x + box2HeightWidth.width});
   var doesYCollide = SpeechBlocks.Layout.intervalsOverlap_(
-      box1XY.y,
-      box1XY.y + box1HeightWidth.height,
-      box2.y,
-      box2.y + box2HeightWidth.height);
+      {start:box1XY.y, end:box1XY.y + box1HeightWidth.height},
+      {start:box2XY.y, end:box2XY.y + box2HeightWidth.height});
   return doesXCollide && doesYCollide;
 };
 

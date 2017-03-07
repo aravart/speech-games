@@ -14,7 +14,7 @@ goog.require('goog.asserts');
 
 /**
  * Gets the block from the workspace.
- * @param {?string} blockId
+ * @param {string} blockId
  * @param {!Blockly.Workspace} workspace
  * @return {!Blockly.Block}
  * @public
@@ -22,6 +22,42 @@ goog.require('goog.asserts');
 SpeechBlocks.BlockUtils.getBlock = function(blockId, workspace) {
   return goog.asserts.assertInstanceof(
       workspace.getBlockById(blockId), Blockly.Block);
+};
+
+/**
+ * Returns an array of all blocks in the same chain as the given block,
+ * including the block itself. No particular order.
+ * @param {string} blockId
+ * @param {!Blockly.Workspace} workspace
+ * @return {!Array<!Blockly.Block>}
+ * @public
+ */
+SpeechBlocks.BlockUtils.getBlocksInChain = function(blockId, workspace) {
+  return SpeechBlocks.BlockUtils.getSuccessorBlocks_(
+      SpeechBlocks.BlockUtils.getFirstTopBlockInChain(blockId, workspace).id,
+      workspace);
+};
+
+/**
+ * Traverses the chain of blocks and returns the first block at the highest level.
+ * @param {string} blockId
+ * @param {!Blockly.Workspace} workspace
+ * @return {!Blockly.Block}
+ * @public
+ */
+SpeechBlocks.BlockUtils.getFirstTopBlockInChain = function(blockId, workspace) {
+  // TODO(ehernandez4): Technically, this should consider output connections
+  // as part of the predecessor search. Since we don't currently use blocks
+  // with value outputs, this is omitted for now.
+  var curr = SpeechBlocks.BlockUtils.getBlock(blockId, workspace);
+  while (curr.previousConnection) {
+    var conn = SpeechBlocks.BlockUtils.asConnection_(curr.previousConnection);
+    if (!conn.isConnected()) {
+      break;
+    }
+    curr = SpeechBlocks.BlockUtils.getConnectionTarget_(conn);
+  }
+  return curr;
 };
 
 /**
@@ -55,8 +91,12 @@ SpeechBlocks.BlockUtils.getNextConnection = function(blockId, workspace) {
  * @public
  */
 SpeechBlocks.BlockUtils.getChainNextConnection = function(blockId, workspace) {
-  return SpeechBlocks.BlockUtils.asConnection_(
-      SpeechBlocks.BlockUtils.getLastTopBlockInChain_(blockId, workspace).nextConnection);
+  // Traverse to the end of the chain, then return the connection.
+  var curr = SpeechBlocks.BlockUtils.getBlock(blockId, workspace);
+  while (curr.nextConnection && curr.nextConnection.isConnected()) {
+    curr = curr.nextConnection.targetConnection.getSourceBlock();
+  }
+  return SpeechBlocks.BlockUtils.asConnection_(curr.nextConnection);
 };
 
 /**
@@ -116,28 +156,47 @@ SpeechBlocks.BlockUtils.areBlocksConnected = function(block1Id, block2Id, worksp
  * @public
  */
 SpeechBlocks.BlockUtils.areBlocksInSuccession = function(refBlockId, blockToFindId, workspace) {
-  var toCheck = [SpeechBlocks.BlockUtils.getBlock(refBlockId, workspace)];
+  var blocksAreInSuccession = false;
+  SpeechBlocks.BlockUtils.getSuccessorBlocks_(refBlockId, workspace).forEach(function(block) {
+    if (block.id == blockToFindId) {
+      blocksAreInSuccession = true;
+    }
+  });
+  return blocksAreInSuccession;
+};
+
+/**
+ * Returns all blocks that succeed this block in its chain.
+ * Includes the block itself. No particular order.
+ * @param {string} blockID
+ * @param {!Blockly.Workspace} workspace
+ * @return {!Array<!Blockly.Block>}
+ * @private
+ */
+SpeechBlocks.BlockUtils.getSuccessorBlocks_ = function(blockId, workspace) {
+  var startBlock = SpeechBlocks.BlockUtils.getBlock(blockId, workspace)
+  var toCheck = [startBlock];
+  var visited = [startBlock];
   while (toCheck.length > 0) {
     var curr = toCheck.pop();
-
-    // If we found the block, we're done.
-    if (curr.id == blockToFindId) {
-      return true;
-    }
 
     // Otherwise, add all connected blocks to the queue.
     var conn; 
     if (curr.nextConnection) {
       conn = SpeechBlocks.BlockUtils.asConnection_(curr.nextConnection);
       if (conn.isConnected()) {
-        toCheck.push(SpeechBlocks.BlockUtils.getConnectionTarget_(conn));
+        var nextBlock = SpeechBlocks.BlockUtils.getConnectionTarget_(conn);
+        toCheck.push(nextBlock);
+        visited.push(nextBlock);
       }
     }
 
     if (curr.outputConnection) {
       conn = SpeechBlocks.BlockUtils.asConnection_(curr.outputConnection);
       if (conn.isConnected()) {
-        toCheck.push(SpeechBlocks.BlockUtils.getConnectionTarget_(conn));
+        var outputTarget = SpeechBlocks.BlockUtils.getConnectionTarget_(conn);
+        toCheck.push(outputTarget);
+        visited.push(outputTarget);
       }
     }
 
@@ -147,11 +206,13 @@ SpeechBlocks.BlockUtils.areBlocksInSuccession = function(refBlockId, blockToFind
       }
       conn = SpeechBlocks.BlockUtils.asConnection_(input.connection);
       if (conn.isConnected()) {
-        toCheck.push(SpeechBlocks.BlockUtils.getConnectionTarget_(conn));
+        var inputTarget = SpeechBlocks.BlockUtils.getConnectionTarget_(conn);
+        toCheck.push(inputTarget);
+        visited.push(inputTarget);
       }
     });
   }
-  return false;
+  return visited;
 };
 
 /**
@@ -165,20 +226,6 @@ SpeechBlocks.BlockUtils.getInput_ = function(blockId, inputName, workspace) {
   return goog.asserts.assertInstanceof(
       SpeechBlocks.BlockUtils.getBlock(blockId, workspace).getInput(inputName),
       Blockly.Input);
-};
-
-/**
- * Traverses the chain of blocks and returns a reference to the last at the highest level.
- * @param {string} blockId ID of the first block in the chain.
- * @return {!Blockly.Block} ID of the last block in the chain.
- * @private
- */
-SpeechBlocks.BlockUtils.getLastTopBlockInChain_ = function(blockId, workspace) {
-  var curr = SpeechBlocks.BlockUtils.getBlock(blockId, workspace);
-  while (curr.nextConnection && curr.nextConnection.isConnected()) {
-    curr = curr.nextConnection.targetConnection.getSourceBlock();
-  }
-  return curr;
 };
 
 /**

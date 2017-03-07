@@ -75,6 +75,23 @@ SpeechBlocks.Controller = function(workspace, useAnimation) {
             'block-id-style block' + newBlock.id)); // Append block ID as CSS class.
   }.bind(this));
 
+  // Listen for move events and fix the layout if necessary.
+  this.workspace_.addChangeListener(function(event) {
+    if (event.type != Blockly.Events.MOVE || !event.blockId) {
+      return;
+    }
+    this.layout_.getBlocksThatOverlapChain(event.blockId).getValues().forEach(
+      function(overlappingBlock) {
+        var newCoords = this.layout_.getPositionForExistingBlock(overlappingBlock.id);
+        var overlappingBlockCoords = overlappingBlock.getRelativeToSurfaceXY();
+        this.moveBlock(
+            overlappingBlock.id,
+            new SpeechBlocks.Translation(
+                newCoords.x - overlappingBlockCoords.x,
+                newCoords.y - overlappingBlockCoords.y));
+      }.bind(this));
+  }.bind(this));
+
   // For any other event, update the workspace state.
   this.workspace_.addChangeListener(function(event) {
     var state = SpeechBlocks.WorkspaceState.stateOf(this.workspace_);
@@ -144,6 +161,8 @@ SpeechBlocks.Controller.prototype.addBlock = function(type) {
  */
 SpeechBlocks.Controller.prototype.moveBlock = function(blockId, where) {
   where.place(blockId, this.workspace_, this.animator_);
+  // The workspace change listener will manage the layout after
+  // the block has finished moving.
 };
 
 /**
