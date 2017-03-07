@@ -231,7 +231,6 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
   var fields = this.controller_.getFieldsForBlock(command.blockId).getKeys();
   // Otherwise we try to match by type
   var fieldValuesMap = this.controller_.getFieldValuesForBlock(command.blockId);
-  console.log(fieldValuesMap);
   var valueType = typeof (command.new);
   // var fieldIndex;
   var fieldIndex = -1;
@@ -247,21 +246,16 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
     command.new += '';
     for (var i = 0; i < fieldValuesMap.keys_.length; i++) {
       var fieldVal = fieldValuesMap.get(fieldValuesMap.keys_[i]);
-      console.log(fieldVal, command.original, fieldVal == command.original);
-      console.log(!this.controller_.isFieldValueValid(command.blockId, fieldValuesMap.keys_[i], 
           command.new), isNaN(parseInt(fieldVal)), fieldVal != command.original);
       if ((!this.controller_.isFieldValueValid(command.blockId, fieldValuesMap.keys_[i], 
           command.new) || isNaN(parseInt(fieldVal))) && fieldVal != command.original) {
-        console.log(i, " continue")
         continue;
       } else if (fieldVal == command.original) {
-        console.log(i, " set")
         fieldIndex = i;
         break;
       }
     }
   }
-  console.log("field index is " + fieldIndex);
   if (fieldIndex === -1) {
     var msg = "Sorry, block " + command.blockId + " doesn't have a field with value " + command.original + "!";
     throw new SpeechBlocks.UserError(msg);
