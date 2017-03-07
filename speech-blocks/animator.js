@@ -49,7 +49,7 @@ SpeechBlocks.Animator.prototype.animateBlockCreation = function(
   var toolboxSelector = '.blocklyFlyout';
 
   // TODO(ehernandez4): There's a small error in this calculation, causing the
-  // block to be placed ~5px off from it's destination.
+  // block to be placed ~5px off from its destination.
   var dx = workspaceXY.x + (
     $(toolboxSelector)[0].getBoundingClientRect().width - (
         $(blockSelector).position().left - $(toolboxSelector).position().left));
