@@ -3,7 +3,7 @@
  * where a block can exist as a singleton.
  * @author ehernandez4@wisc.edu (Evan Hernandez)  
  */
-'use strict'
+'use strict';
 
 goog.provide('SpeechBlocks.Translation');
 

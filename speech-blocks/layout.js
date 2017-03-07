@@ -40,6 +40,33 @@ SpeechBlocks.Layout = function(workspace) {
 };
 
 /**
+ * Returns an array of all blocks that visually overlap with the given block.
+ * @param {string} blockId The ID of the block whose overlapping neighbors
+ *      should be returned.
+ * @return {!Array<!Blockly.Block>} The overlapping blocks. 
+ * @public
+ */
+SpeechBlocks.Layout.prototype.getOverlappingBlocks = function(blockId) {
+  var theBlock = SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_);
+  var overlappingBlocks = [];
+  var blocks = this.workspace_.getAllBlocks();
+  for (var i = 0; i < blocks.length; i++) {
+    if (blocks[i].id == blockId) {
+      continue;
+    }
+    var doBlocksOverlap = this.boxesOverlap_(
+        theBlock.getRelativeToSurfaceXY(),
+        {height:theBlock.height, width:theBlock.width},
+        blocks[i].getRelativeToSurfaceXY(),
+        {height:blocks[i].height, width:blocks[i].width});
+    if (doBlocksOverlap) {
+      overlappingBlocks.append(blocks[i]);
+    }
+  }
+  return overlappingBlocks;
+};
+
+/**
  * Returns the coordinates of a free position on the workspace.
  * 
  * TODO(ehernandez4): Find a way to retrofit getPositionForExistingBlock
@@ -64,10 +91,13 @@ SpeechBlocks.Layout.prototype.getPositionForNewBlock = function() {
 };
 
 /**
- * Finds the coordinates of an open area on the workspace for the new
- * block to be placed.
+ * Finds the coordinates of an open area on the workspace.
+ * 
+ * If there are no reasonably sized positions on the workspace, the function
+ * defaults to the top left corner of the workspace.
+ * 
  * @param {string} blockId The ID of the block to reposition.
- * @return {!goog.math.Coordinate} The new coordinates for the block.
+ * @return {!goog.math.Coordinate} The new coordinates of the new position.
  * @public 
  */
 SpeechBlocks.Layout.prototype.getPositionForExistingBlock = function(blockId) {
@@ -92,10 +122,17 @@ SpeechBlocks.Layout.prototype.getPositionForExistingBlock = function(blockId) {
 };
 
 /**
- * Returns true if the box starting at (x, y) with size (height x width)
+ * Returns true if the box starting at (x, y) with size (height, width)
  * contains no other blocks.
+ * 
+ * Accepts a block ID to exclude from the search. This is useful,
+ * for example, when we don't want to consider a block's current position as
+ * occupied space.
+ * 
  * @param {!goog.math.Coordinate} boxXY The top left corner of the box.
  * @param {!{height: number, width: number}} The dimensions of the box.
+ * @param {string} excludeBlockId Do not count the block with this ID as
+ *      occupying the box's space.
  * @return {boolean} True if the box is free, false otherwise.
  * @private
  */
@@ -142,7 +179,7 @@ SpeechBlocks.Layout.boxesOverlap_ = function(
 };
 
 /**
- * Returns true if the intervals [a1, b1] and [a2, b2] overlap.
+ * Returns true if the intervals A and B overlap.
  * @param {!{start: number, end: number}} ivlA The first interval.
  * @param {!{start: number, end: number}} ivlB The second interval.
  * @return {boolean} True if the intervals overlap, false otherwise.
@@ -152,4 +189,3 @@ SpeechBlocks.Layout.intervalsOverlap_ = function(ivlA, ivlB) {
   return ((ivlA.start <= ivlB.start && ivlB.start <= ivlA.end)
       || (ivlB.start <= ivlA.start && ivlA.start <= ivlB.end));
 };
-

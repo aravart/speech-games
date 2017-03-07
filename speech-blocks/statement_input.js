@@ -2,7 +2,7 @@
  * @fileoverview Represents a block to which we want to add a child.
  * @author ehernandez4@wisc.edu (Evan Hernandez)
  */
-'use strict'
+'use strict';
 
 goog.provide('SpeechBlocks.StatementInput');
 

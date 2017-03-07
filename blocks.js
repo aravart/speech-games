@@ -1,9 +1,10 @@
-HUE = 160;
+HUE = 160
 LEFT_TURN = ' \u21BA';
 RIGHT_TURN = ' \u21BB';
 
 Blockly.Blocks['turtle_move'] = {
-  init: function () {
+  init: function ()
+  {
     this.setColour(HUE);
     this.appendDummyInput().appendField("move");
     this.setPreviousStatement(true);
@@ -12,7 +13,8 @@ Blockly.Blocks['turtle_move'] = {
   }
 };
 
-Blockly.JavaScript['turtle_move'] = function (block) {
+Blockly.JavaScript['turtle_move'] = function (block)
+{
   var value = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_NONE) || '0';
   return 'move(\'block_id_' + block.id + '\');\n';
 };
