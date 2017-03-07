@@ -53,7 +53,7 @@ SpeechBlocks.Interpreter.prototype.interpret = function(command) {
     case 'run':
       return this.run_();
 
-    case 'add':
+    case 'get':
       return this.addBlock_(command);
 
     case 'attach':
@@ -107,7 +107,7 @@ SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
 
   // TODO(ehernandez4): The controller should handle layout management.
   command.blockId = this.controller_.addBlock(this.blockTypeMap_.get(command.type));
-  return 'Added a ' + command.type + ' block!';
+  return 'Got a ' + command.type + ' block!';
 };
 
 /**
@@ -172,14 +172,13 @@ SpeechBlocks.Interpreter.prototype.getWheres_ = function(command) {
 
   var wheres = [];
   switch (command.where.position) {
-    case 'after':
+    case 'under':
       wheres.push(new SpeechBlocks.Successor(command.where.blockId));
       break;
 
-    case 'before':
-      wheres.push(new SpeechBlocks.Predecessor(command.where.blockId));
-      break;
-
+    // case 'before':
+    //   wheres.push(new SpeechBlocks.Predecessor(command.where.blockId));
+    //   break;
     // TODO: Handle this once our levels require "if" blocks.
     // case 'lhs':
     // case 'rhs':
@@ -197,7 +196,7 @@ SpeechBlocks.Interpreter.prototype.getWheres_ = function(command) {
     //   }
     //   break;
 
-    case 'inside of':
+    case 'inside':
       // TODO: We should be handling case-by-case scenarios, where we check if the
       // "where" block has value or statement inputs, as well as if the "to place" block
       // has a previous/output connections.
@@ -230,72 +229,67 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
 
   // We look for the field the user mentioned
   var fields = this.controller_.getFieldsForBlock(command.blockId).getKeys();
-  var fieldIndex;
-  if (command.ordinal) {
-    switch (command.ordinal) {
-      case 'first':
-        fieldIndex = 0;
+  // Otherwise we try to match by type
+  var fieldValuesMap = this.controller_.getFieldValuesForBlock(command.blockId);
+  console.log(fieldValuesMap);
+  var valueType = typeof (command.new);
+  // var fieldIndex;
+  var fieldIndex = -1;
+  if (valueType == 'string') {
+    for (var i = 0; i < fieldValuesMap.keys_.length; i++) {
+      if (this.controller_.isFieldValueValid(command.blockId, fieldValuesMap.keys_[i], 
+          command.new) && valueType == typeof (fieldValuesMap.get(fieldValuesMap.keys_[i]))) {
+        fieldIndex = i;
         break;
-      case 'second':
-        fieldIndex = 1;
-        break;
-      case 'third':
-        fieldIndex = 2;
-        break;
-    }
-  } else {
-    // Otherwise we try to match by type
-    var fieldValuesMap = this.controller_.getFieldValuesForBlock(command.blockId);
-    var valueType = typeof (command.value);
-    if (valueType == 'string') {
-      for (var i = 0; i < fieldValuesMap.keys_.length; i++) {
-        if (this.controller_.isFieldValueValid(command.blockId, fieldValuesMap.keys_[i], 
-            command.value) && valueType == typeof (fieldValuesMap.get(fieldValuesMap.keys_[i]))) {
-          fieldIndex = i;
-          break;
-        }
-      }
-    } else if (valueType == 'number') {
-      command.value += '';
-      for (var i = 0; i < fieldValuesMap.keys_.length; i++) {
-        if (!this.controller_.isFieldValueValid(command.blockId, fieldValuesMap.keys_[i], 
-            command.value) || isNaN(parseInt(fieldValuesMap.get(fieldValuesMap.keys_[i])))) {
-          continue;
-        } else {
-          fieldIndex = i;
-          break;
-        }
       }
     }
-    if (!fieldIndex) {
-      console.log("Couldn't determine which field to modify");
-      return;
+  } else if (valueType == 'number') {
+    command.new += '';
+    for (var i = 0; i < fieldValuesMap.keys_.length; i++) {
+      var fieldVal = fieldValuesMap.get(fieldValuesMap.keys_[i]);
+      console.log(fieldVal, command.original, fieldVal == command.original);
+      console.log(!this.controller_.isFieldValueValid(command.blockId, fieldValuesMap.keys_[i], 
+          command.new), isNaN(parseInt(fieldVal)), fieldVal != command.original);
+      if ((!this.controller_.isFieldValueValid(command.blockId, fieldValuesMap.keys_[i], 
+          command.new) || isNaN(parseInt(fieldVal))) && fieldVal != command.original) {
+        console.log(i, " continue")
+        continue;
+      } else if (fieldVal == command.original) {
+        console.log(i, " set")
+        fieldIndex = i;
+        break;
+      }
     }
+  }
+  console.log("field index is " + fieldIndex);
+  if (fieldIndex === -1) {
+    var msg = "Sorry, block " + command.blockId + " doesn't have a field with value " + command.original + "!";
+    throw new SpeechBlocks.UserError(msg);
   }
 
   var block = SpeechBlocks.BlockUtils.getBlock(command.blockId, SpeechGames.workspace);
   var value = $("#synonyms synonym[type='" + block.type + "'][field='" + fields[fieldIndex] 
-      + "'][alias='" + command.value + "']").attr("property") || command.value;
+      + "'][alias='" + command.new + "']").attr("property") || command.new;
   var dropdowns = this.getDropdownValues_(block, fields[fieldIndex]);
   if (dropdowns.length > 0) {
     var synonyms = $("#synonyms synonym[type='" + block.type + "'][field='" + fields[fieldIndex] 
         + "']").map(function () { return $(this).attr("alias") }).toArray()
     if (synonyms.length > 0) {
-      if (synonyms.indexOf(command.value) < 0) {
-        var msg = "Sorry, I didn't understand '" + command.value + "'. You can say " + 
+      if (synonyms.indexOf(command.new) < 0) {
+        var msg = "Sorry, I didn't understand '" + command.new + "'. You can say " + 
             synonyms.map(function (x) { return "'" + x + "'" }).join(" or ") + " here.";
         throw new SpeechBlocks.UserError(msg);
       }
     } else {
       if (dropdowns.indexOf(String(value)) < 0) {
-        var msg = "Sorry, I didn't understand '" + command.value + "'. You can say " 
+        var msg = "Sorry, I didn't understand '" + command.new + "'. You can say " 
             + dropdowns.map(function (x) { return "'" + x + "'" }).join(" or ") + " here.";
         throw new SpeechBlocks.UserError(msg);
       }
     }
   }
   this.controller_.setBlockField(command.blockId, fields[fieldIndex], value);
-  return 'Changed the ' + command.ordinal + ' field to ' + value + '!';
+  return 'Changed ' + command.original + ' to ' + command.new + ' in block ' + command.blockId + '!';
 };
 
 SpeechBlocks.Interpreter.prototype.getDropdownValues_ = function(block, field) {

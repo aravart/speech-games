@@ -16,12 +16,12 @@ ________________________________________________________________________________
 
 ### The task of the user is to complete the levels through adding blocks onto the workspace and arranging them in a manner that  completes the task. Below is the basic syntax.
 
-### Commands: attach, add, delete, change, run, separate <br/> <br/>
+### Commands: attach, get, delete, change, run, separate <br/> <br/>
 
 #### Easy command for each command type
-> ##### "attach block 1 after block 2" <br/> "separate block 1" <br/> "add a move block" <br/> "delete block 1" <br/> "change the first field in block 1 to 100" <br/> "run the program" <br/>
+> ##### "attach block 1 after block 2" <br/> "separate block 1" <br/> "get a move block" <br/> "delete block 1" <br/> "change the first field in block 1 to 100" <br/> "run the program" <br/>
 
-##### \* note that when using speech, "please" before the command helps the speech-engine e.g.  "please add a move block"
+##### \* note that when using speech, "please" before the command helps the speech-engine e.g.  "please get a move block"
 
 <br/>
 ___________________________________________________________________________________________________
@@ -38,7 +38,7 @@ ________________________________________________________________________________
 ### ATTACH: Attach a block <br/>
 >##### "attach block {id} {where} block {id2}"  <br/>
 ##### Example:
->##### "attach block 1 after block 2"
+>##### "attach block 1 under block 2"
 >##### "attach block 1 inside of block 2"
 
 <br/>
@@ -50,10 +50,10 @@ ________________________________________________________________________________
 
 <br/>
 
-### ADD: Add a specific block type <br/>
->##### "add a {type} block" <br/> 
+### ADD: Get a specific block type <br/>
+>##### "get a {type} block" <br/> 
 ##### Example:
->##### "add a move block"
+>##### "get a move block"
 
 <br/>
 
@@ -92,8 +92,8 @@ complex (most specifications) command of each command type.
 
 <br/>
 
-### ADD: "add a move block": <br/>
->##### { <br/> &ensp;&ensp;&ensp; "action": "add", <br/> &ensp;&ensp;&ensp; "type": "move" <br/>}
+### ADD: "get a move block": <br/>
+>##### { <br/> &ensp;&ensp;&ensp; "action": "get", <br/> &ensp;&ensp;&ensp; "type": "move" <br/>}
 
 <br/>
 

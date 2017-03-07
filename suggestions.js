@@ -21,21 +21,21 @@ SpeechGames.Suggestions = function() {
   this.suggestionList_ = [
     [
       ['add'], // key
-      ['Adding a block:'], // title
-      ['Add a <span style=font-weight:bold>move</span> block'] //text
+      ['Getting a block:'], // title
+      ['Get a <span style=font-weight:bold>move</span> block'] //text
     ],
     [
       ['attach'],
       ['Attaching blocks:'],
-      ['Attach block <span style=font-weight:bold>2</span> after block ' + 
+      ['Attach block <span style=font-weight:bold>2</span> under block ' + 
           '<span style=font-weight:bold>1</span>']
     ],
     [
       ['change'],
       ['Changing a block:'],
-      ['Change the <span style=font-weight:bold>first</span> field in ' + 
+      ['Change <span style=font-weight:bold>4</span> in ' + 
           'block <span style=font-weight:bold>1</span> to ' + 
-          '<span style=font-weight:bold>left</span>']
+          '<span style=font-weight:bold>5</span>']
     ],
     [
       ['delete'],
