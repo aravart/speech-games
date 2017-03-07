@@ -235,7 +235,7 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
   $('#parse-message').attr('class', 'message progress').text('Parsing the input...');
   $('#output').addClass('disabled').text('Output not available.');
   var result = false;
-  this.speech = "";
+  // this.speech = "";
   try {
     this.speech = $('#q').val().toLowerCase();
     console.log(this.speech);

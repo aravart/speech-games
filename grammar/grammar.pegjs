@@ -1,4 +1,4 @@
-Start = "please" _ command:( Connect / Get / Delete / Change / Run / Next / Stay) { return command }
+Start = command:( Connect / Get / Delete / Change / Run / Next / Stay) { return command }
 
 Article = "an" / "a"
 Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "connect" / "turn" / "pen" / "color" / "move"
