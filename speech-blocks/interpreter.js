@@ -246,7 +246,6 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
     command.new += '';
     for (var i = 0; i < fieldValuesMap.keys_.length; i++) {
       var fieldVal = fieldValuesMap.get(fieldValuesMap.keys_[i]);
-          command.new), isNaN(parseInt(fieldVal)), fieldVal != command.original);
       if ((!this.controller_.isFieldValueValid(command.blockId, fieldValuesMap.keys_[i], 
           command.new) || isNaN(parseInt(fieldVal))) && fieldVal != command.original) {
         continue;
