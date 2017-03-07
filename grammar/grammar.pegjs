@@ -1,4 +1,4 @@
-Start = ("please") _ command:( Connect / Get / Delete / Change / Run / Next / Stay) { return command }
+Start = "please" _ command:( Connect / Get / Delete / Change / Run / Next / Stay) { return command }
 
 Article = "an" / "a"
 Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "connect" / "turn" / "pen" / "color" / "move"
@@ -30,7 +30,7 @@ Get = "get" _ Article _ type:BlockType { return {
   "type": type,
 } }
 
-Delete = "delete" _ block:(BlockToken / "all") { return {
+Delete = "delete" _ block:BlockToken { return {
   "action": "delete",
   "blockId": block
 } }
@@ -44,11 +44,11 @@ Change = "change" _ originalValue:Value _ "in" _ block:BlockToken _ "to" _ newVa
 
 ChangeVerb = "change" / "set" / "modify"
 
-Run = ("run the program") { return {
+Run = "run the program" { return {
   "action": "run"
 } }
 
-Next = ("go to the")? _ "next level" { return {
+Next = "go to the next level" { return {
   "action": "next"
 } }
 

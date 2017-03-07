@@ -35,36 +35,36 @@ ________________________________________________________________________________
 <br/>
 
 ### GET: Get a specific block type <br/>
->##### "get a {type} block" <br/> 
+>##### "please get a {type} block" <br/> 
 ##### Example:
->##### "get a move block"
+>##### "please get a move block"
 
 <br/>
 
 ### CONNECT: Connect a block <br/>
->##### "connect block {id} {where} block {id2}"  <br/>
+>##### "please connect block {id} {where} block {id2}"  <br/>
 ##### Example:
->##### "connect block 1 under block 2"
->##### "connect block 1 inside of block 2"
+>##### "please connect block 1 under block 2"
+>##### "please connect block 1 inside of block 2"
 
 <br/>
 
 ### DELETE: Delete a block <br/>
->##### "delete block {id}" <br/>
+>##### "please delete block {id}" <br/>
 ##### Example:
->##### "delete block 1"
+>##### "please delete block 1"
 
 <br/>
 
 ### CHANGE: Change a block's properties (but not type) <br/>
->##### "change {value} in block {id} to {value}" <br/>
+>##### "please change {value} in block {id} to {value}" <br/>
 ##### Examples
->##### "change 90 in block 1 to 120" <br/>
+>##### "please change 90 in block 1 to 120" <br/>
 
  <br/>
 
 ### RUN: Run the program defined by the blocks in the canvas
->##### "run the program" <br/>
+>##### "please run the program" <br/>
 
 <br/> <br/>
 ___________________________________________________________________________________________________
@@ -74,27 +74,27 @@ These are examples of the objects passed from the parser down to the interpreter
 complex (most specifications) command of each command type.
 <br/>
 
-### CONNECT: "connect block 1 under block 2": <br/>
+### CONNECT: "please connect block 1 under block 2": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "connect", <br/> &ensp;&ensp;&ensp; "block": 1, <br/> &ensp;&ensp;&ensp; "where": { <br/>  &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; "blockId": 2, <br/> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; "position": "under" <br/>  &ensp;&ensp;&ensp; }, <br/> }
 
 <br/>
 
-### GET: "get a move block": <br/>
+### GET: "please get a move block": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "get", <br/> &ensp;&ensp;&ensp; "type": "move" <br/>}
 
 <br/>
 
-### DELETE: "delete block 1": <br/>
+### DELETE: "please delete block 1": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "delete", <br/> &ensp;&ensp;&ensp; "blockId": 1 <br/> }
 
 <br/>
 
-### CHANGE: "change 90 in block 1 to 120": <br/>
+### CHANGE: "please change 90 in block 1 to 120": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "change", <br/> &ensp;&ensp;&ensp; "orig": 90, <br/> &ensp;&ensp;&ensp; "new": 120, <br/> &ensp;&ensp;&ensp; "block": 1 <br/> }
 
 <br/>
 
-### RUN: "run the program": <br/>
+### RUN: "please run the program": <br/>
 >##### { <br/> &ensp;&ensp;&ensp; "action": "run" <br/> }
 
 <br/>
