@@ -20,16 +20,16 @@ for (var i = 0; i < SpeechGames.MAX_LEVEL; i++) {
 }
 
 var sug = new SpeechGames.Suggestions();
-sug.setSuggestions(['add']); // Initially, suggest adding a block.
+sug.setSuggestions(['get']); // Initially, suggest adding a block.
 SpeechGames.controller.addStateChangeListener(function(state) {
-  var sugs = ['add']; // We always suggest adding blocks.
+  var sugs = ['get']; // We always suggest adding blocks.
   if (state.empty) {
     sug.setSuggestions(sugs); 
     return;
   }
   
   if (!state.allBlocksConnected) {
-    sugs.push('attach');
+    sugs.push('connect');
   }
 
   if (state.blocksAreModifiable) {

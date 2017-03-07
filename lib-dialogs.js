@@ -414,8 +414,8 @@ BlocklyDialogs.congratulations = function() {
 
   document.getElementById('dialogDoneText').textContent = text;
 
-  var continuationText = "Say \"Stay on this level\"  or \"Go to the next level\" to continue.";
-  $('</br></br><span>' + continuationText + '</span>').appendTo('#dialogDoneText');
+  // var continuationText = "Say \"Stay on this level\"  or \"Go to the next level\" to continue.";
+  // $('</br></br><span>' + continuationText + '</span>').appendTo('#dialogDoneText');
 };
 
 /**

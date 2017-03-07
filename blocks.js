@@ -228,6 +228,7 @@ Blockly.Blocks['turtle_repeat_internal'] = {
         "type": "field_dropdown",
         "name": "TIMES",
         "options": [
+          ["2", "2"],
           ["3", "3"],
           ["4", "4"],
           ["5", "5"],

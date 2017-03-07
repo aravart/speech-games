@@ -20,32 +20,32 @@ SpeechGames.Suggestions = function() {
   /** @private */
   this.suggestionList_ = [
     [
-      ['add'], // key
-      ['Adding a block:'], // title
-      ['Add a <span style=font-weight:bold>move</span> block'] //text
+      ['get'], // key
+      ['Getting a block:'], // title
+      ['Please get a <span style=font-weight:bold>move</span> block'] //text
     ],
     [
-      ['attach'],
-      ['Attaching blocks:'],
-      ['Attach block <span style=font-weight:bold>2</span> after block ' + 
+      ['connect'],
+      ['Connect blocks:'],
+      ['Please connect block <span style=font-weight:bold>2</span> under block ' + 
           '<span style=font-weight:bold>1</span>']
     ],
     [
       ['change'],
       ['Changing a block:'],
-      ['Change the <span style=font-weight:bold>first</span> field in ' + 
+      ['Please change <span style=font-weight:bold>4</span> in ' + 
           'block <span style=font-weight:bold>1</span> to ' + 
-          '<span style=font-weight:bold>left</span>']
+          '<span style=font-weight:bold>5</span>']
     ],
     [
       ['delete'],
       ['Deleting a block:'],
-      ['Delete block <span style=font-weight:bold>1</span>']
+      ['Please delete block <span style=font-weight:bold>1</span>']
     ],
     [
       ['run'],
       ['Running the program:'],
-      ['Run the program']
+      ['Please run the program']
     ]
   ];
 

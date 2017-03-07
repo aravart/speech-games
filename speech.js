@@ -161,7 +161,7 @@ SpeechGames.Speech.prototype.startDictation_ = function() {
     this.recognition.lang = 'en-US';
 
     this.recognition.onstart = function() {
-      console.log("started");
+      console.log("recognition started");
       this.listening = true;
       if (!this.animating) {
         this.animating = true;
