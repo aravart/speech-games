@@ -106,43 +106,43 @@ SpeechGames.Speech.prototype.setMicInterval_ = function() {
 SpeechGames.Speech.prototype.speechCorrections_ = function(speech) {
   //TODO: Perhaps replace this with a better system, possibly by finding nearest neighbor?
   speech = speech.toLowerCase();
-  speech = speech.replace(/\bqueens\b/, 'please');
-  speech = speech.replace(/\bfreeze out\b/, 'please add');
-  speech = speech.replace(/\bhave\b/, 'add');
-  speech = speech.replace(/\bhad\b/, 'add');
-  speech = speech.replace(/\batom\b/, 'add a');
-  speech = speech.replace(/\bad a\b/, 'add a');
-  speech = speech.replace(/\badam\b/, 'add a');
-  speech = speech.replace(/\badam's\b/, 'add a');
-  speech = speech.replace(/\bcut\b/, 'put');
-  speech = speech.replace(/\bport\b/, 'put');
-  speech = speech.replace(/\bfoot\b/, 'put');
-  speech = speech.replace(/\bfort\b/, 'put');
-  speech = speech.replace(/\bwalk\b/, 'block');
-  speech = speech.replace(/\bblack\b/, 'block');
-  speech = speech.replace(/\block\b/, 'block');
-  speech = speech.replace(/\badd remove\b/, 'add a move');
-  speech = speech.replace(/\badam block\b/, 'add a move block');
-  speech = speech.replace(/\bnew block\b/, 'move block');
-  speech = speech.replace(/\broof\b/, 'move');
-  speech = speech.replace(/\broom\b/, 'move')
-  speech = speech.replace(/\bflu\b/, 'move');;
-  speech = speech.replace(/\bnerve\b/, 'move');
-  speech = speech.replace(/\bfuse block\b/, 'move block');
-  speech = speech.replace(/\bbroccoli\b/, 'block 3');
-  speech = speech.replace(/\bnumber to\b/, 'number 2');
   speech = speech.replace(/\bone\b/, '1');
   speech = speech.replace(/\btwo\b/, '2');
   speech = speech.replace(/\bthree\b/, '3');
   speech = speech.replace(/\bfor\b/, '4');
   speech = speech.replace(/\b425\b/, '4 to 5');
-  speech = speech.replace(/\bblock to\b/, 'block 2');
+  speech = speech.replace(/\bhad\b/, 'add');
+  speech = speech.replace(/\bhave\b/, 'add');
+  speech = speech.replace(/\bad a\b/, 'add a');
+  speech = speech.replace(/\badam\b/, 'add a');
+  speech = speech.replace(/\badam's\b/, 'add a');
+  speech = speech.replace(/\batom\b/, 'add a');
+  speech = speech.replace(/\badd remove\b/, 'add a move');
+  speech = speech.replace(/\badam block\b/, 'add a move block');
+  speech = speech.replace(/\bcut\b/, 'put');
+  speech = speech.replace(/\bport\b/, 'put');
+  speech = speech.replace(/\bfoot\b/, 'put');
+  speech = speech.replace(/\bfort\b/, 'put');
+  speech = speech.replace(/\bblack\b/, 'block');
+  speech = speech.replace(/\block\b/, 'block');
+  speech = speech.replace(/\bwalk\b/, 'block');
   speech = speech.replace(/\bblock what\b/, 'block 1');
   speech = speech.replace(/\bblock won\b/, 'block 1');
+  speech = speech.replace(/\bblock to\b/, 'block 2');
+  speech = speech.replace(/\bbroccoli\b/, 'block 3');
   speech = speech.replace(/\bunblock\b/, 'in block');
-  speech = speech.replace(/\bterm\b/, 'turn');
+  speech = speech.replace(/\bnew block\b/, 'move block');
+  speech = speech.replace(/\bflu\b/, 'move');;
+  speech = speech.replace(/\bnerve\b/, 'move');
+  speech = speech.replace(/\broof\b/, 'move');
+  speech = speech.replace(/\broom\b/, 'move')
+  speech = speech.replace(/\bfuse block\b/, 'move block');
+  speech = speech.replace(/\bnumber to\b/, 'number 2');
+  speech = speech.replace(/\bqueens\b/, 'please');
+  speech = speech.replace(/\bfreeze out\b/, 'please add');
   speech = speech.replace(/\b - \b/, ' to ');
   speech = speech.replace(/\b272\b/, 'to 72');
+  speech = speech.replace(/\bterm\b/, 'turn');
   return speech;
 };
 
@@ -161,7 +161,6 @@ SpeechGames.Speech.prototype.startDictation_ = function() {
     this.recognition.lang = 'en-US';
 
     this.recognition.onstart = function() {
-      console.log("recognition started");
       this.listening = true;
       if (!this.animating) {
         this.animating = true;
@@ -178,12 +177,10 @@ SpeechGames.Speech.prototype.startDictation_ = function() {
     }.bind(this);
     
     this.recognition.onerror = function(e) {
-      console.log('error');
       this.listening = false;
      }.bind(this);
 
     this.recognition.onend = function(e)  {
-      console.log('end');
       this.listening = false;
     }.bind(this);
 
@@ -235,7 +232,7 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
   $('#parse-message').attr('class', 'message progress').text('Parsing the input...');
   $('#output').addClass('disabled').text('Output not available.');
   var result = false;
-  // this.speech = "";
+  this.speech = "";
   try {
     this.speech = $('#q').val().toLowerCase();
     console.log(this.speech);
@@ -243,11 +240,9 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
       this.checkHeyJerry_();
       if (this.awake) {
         $('#user-message').hide().text("Awaiting your command!").fadeIn(200);
-        $("#q").val("");
         return;
       } else {
         $("#user-message").hide().text("Say 'Hey Jerry' to wake me up.").fadeIn(500);
-        $("#q").val("");
         return;
       }
     }
@@ -261,7 +256,6 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
     clearTimeout(this.timeout);
     this.result = true;
     $("#user-message").hide().text(this.response).fadeIn(200);
-    $("#q").val("");
   } catch (e) {
     console.log(e);
     if(e instanceof SpeechBlocks.UserError) {
@@ -270,7 +264,6 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
       $('#parse-message').attr('class', 'message error').text(this.buildErrorMessage_(e));
       if(this.speech !== '') {
         $('#user-message').hide().text('Sorry, I didn\'t understand \"' + this.speech + '\"').fadeIn(200);
-        $("#q").val("");
         clearTimeout(this.timeout);
         this.timeout = setTimeout(function(){
           $('#user-message').hide().text("Awaiting your command!").fadeIn(200);
