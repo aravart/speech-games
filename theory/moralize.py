@@ -4,14 +4,14 @@ from collections import deque
 
 def bfs(source, neighbors):
     res = []
-    visited = set()
+    visited = set([source])
     queue = deque([source])
     while queue:
         v = queue.popleft()
-        visited.add(v)
         res.append(v)
         for n in neighbors(v):
             if n not in visited:
+                visited.add(n)
                 queue.append(n)
     return res
 
@@ -28,9 +28,9 @@ def moralize(vertices, parents, adjacent, addedge):
 def triangulate(vertices, neighbors, addedge, reorder=True):
     if reorder:
         vertices = bfs(vertices[0], neighbors)
-    seen = []
+    seen = set()
     for v in vertices:
-        seen.append(v)
+        seen.add(v)
         v_neighbors = neighbors(v)
         for i in range(len(v_neighbors)):
             neighbor_i = v_neighbors[i]
@@ -39,6 +39,58 @@ def triangulate(vertices, neighbors, addedge, reorder=True):
                     neighbor_j = v_neighbors[j]
                     if neighbor_j not in seen and neighbor_j not in neighbors(neighbor_i):
                         addedge(neighbor_i, neighbor_j)
+
+
+def cliquegraphvertices(vertices, neighbors, reorder=True):
+    if reorder:
+        vertices = bfs(vertices[0], neighbors)
+    cliques = set()
+    for v in vertices:
+        clique = [v]
+        v_neighbors = neighbors(v)
+        for n in v_neighbors:
+            viable = True
+            for c in clique:
+                if n not in neighbors(c):
+                    viable = False
+                    break
+            if viable:
+                clique.append(n)
+        cliques.add(tuple(sorted(clique)))
+    return cliques
+
+
+def kruskal(vertices, edges, weight):
+    parents = {}
+
+    for v in vertices:
+        parents[v] = v
+
+    def find(u):
+        while parents[u] != u:
+            u = parents[u]
+        return u
+
+    def union(u, v):
+        parents[find(v)] = find(u)
+
+    mst = []
+    edges = sorted(edges, key=lambda x: weight(x))
+    for e in edges:
+        if find(e[0]) != find(e[1]):
+            mst.append(e)
+            union(e[0], e[1])
+    return mst
+
+
+def cliquegraph(vertices, neighbors, reorder=True):
+    v = list(cliquegraphvertices(vertices, neighbors, reorder))
+    ug = UndirectedGraph(v, [])
+    for i in range(len(v)):
+        for j in range(i+1, len(v)):
+            if len(set(v[i]).intersection(set(v[j]))) > 0:
+                ug.add_edge(v[i], v[j])
+    return ug
 
 
 class Graph:
@@ -60,8 +112,8 @@ class Graph:
 
 class DirectedGraph(Graph):
     def __init__(self, v, e):
-        self.v = v
-        self.e = e
+        self.v = list(v)
+        self.e = list(e)
 
         # Compute parents
         self.parents = {}
@@ -89,14 +141,15 @@ class DirectedGraph(Graph):
 
 class UndirectedGraph(Graph):
     def __init__(self, v, e):
-        self.v = v
-        self.e = e
+        self.v = list(v)
+        self.e = list(e)
         self.edges = {}
         for v in v:
             self.edges[v] = []
         for e in e:
             self.edges[e[0]].append(e[1])
             self.edges[e[1]].append(e[0])
+        self.triangulated = False
 
     def has_edge(self, u, v):
         return v in self.edges[u]
@@ -108,6 +161,25 @@ class UndirectedGraph(Graph):
         self.edges[u].append(v)
         self.edges[v].append(u)
         self.e.append((u, v))
+
+    def triangulate(self, reorder=False):
+        if reorder:
+            self.v = bfs(self.v[0], self.neighbors)
+        triangulate(self.v, self.neighbors, self.add_edge, False)
+        self.triangulated = True
+
+    def to_cliquegraph(self):
+        if not self.triangulated:
+            self.triangulate()
+        return cliquegraph(self.v, self.neighbors, False)
+
+    def to_junctiontree(self):
+        cg = self.to_cliquegraph()
+        weights = {}
+        for e in cg.e:
+            weights[e] = -len(set(e[0]).intersection(set(e[1])))
+        mst = kruskal(cg.v, cg.e, lambda x: weights[x])
+        return UndirectedGraph(cg.v, mst)
 
 
 class Tests(unittest.TestCase):
@@ -162,6 +234,55 @@ class Tests(unittest.TestCase):
         self.assertTrue(ug.has_edge(2, 6))  # for [2,4,6,3,2]
         self.assertTrue(ug.has_edge(3, 4))  # for [1,4,5,3,1]
         self.assertEqual(14, len(ug.e))
+
+    def test_cliquegraphvertices(self):
+        v = [1, 2, 3, 4, 5, 6]
+        e = [(1, 2),
+             (1, 3),
+             (2, 3),
+             (3, 4),
+             (4, 5),
+             (4, 6),
+             (5, 6)]
+        ug = UndirectedGraph(v, e)
+        ug.triangulate()
+        cliques = cliquegraphvertices(ug.v, ug.neighbors, False)
+        self.assertTrue((4, 5, 6) in cliques)
+        self.assertTrue((3, 4) in cliques)
+        self.assertTrue((1, 2, 3) in cliques)
+        self.assertEquals(3, len(cliques))
+
+    def test_kruskal(self):
+        v = ['a', 'b', 'c', 'd', 'e', 'f']
+        e = {('a', 'b'): 5,
+             ('a', 'c'): 6,
+             ('a', 'd'): 4,
+             ('b', 'c'): 1,
+             ('b', 'd'): 2,
+             ('c', 'd'): 2,
+             ('c', 'e'): 5,
+             ('c', 'f'): 3,
+             ('d', 'f'): 4,
+             ('e', 'f'): 4}
+        ans = [('a', 'd'), ('b', 'c'), ('c', 'd'), ('c', 'f'), ('e', 'f')]
+        self.assertEquals(ans, sorted(kruskal(v, e.keys(), lambda x: e[x])))
+
+    def test_junctiontree(self):
+        v = ['a', 'b', 'c', 'd', 'e']
+        e = [('a', 'b'),
+             ('a', 'd'),
+             ('b', 'c'),
+             ('b', 'd'),
+             ('c', 'd'),
+             ('c', 'e'),
+             ('d', 'e')]
+        ug = UndirectedGraph(v, e)
+        jt = ug.to_junctiontree()
+        self.assertEqual(jt.v,
+                         [('b', 'c', 'd'), ('a', 'b', 'd'), ('c', 'd', 'e')])
+        self.assertEqual(jt.e,
+                         [(('b', 'c', 'd'), ('a', 'b', 'd')),
+                          (('b', 'c', 'd'), ('c', 'd', 'e'))])
 
 # if __name__ == '__main__':
 #     unittest.main()

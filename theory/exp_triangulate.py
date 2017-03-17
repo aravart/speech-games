@@ -1,7 +1,7 @@
 from moralize import *
 from simulate2 import *
 
-g = construct(3, 3, 3)
+g = construct(3, 3, 1)
 dg = DirectedGraph(g.keys(), [])
 for u in g.values():
     for v in u.edges:
@@ -24,12 +24,22 @@ def pos(g):
     return res
 
 dg.moralize()
-dg.show(pos(g))
+# dg.show(pos(g))
 
 ug = dg.to_undirected()
-triangulate(ug.v, ug.neighbors, ug.add_edge)
+ug.triangulate(True)
 
-ug.show(pos(g))
+# ug.show(pos(g))
 
 print len(ug.v)
 print len(ug.e)
+
+cg = ug.to_cliquegraph()
+print map(len, cg.v)
+
+# Write maximal cliques by checking elimination ordering neighbors
+    # def maximal_cliques(self):
+    #     if not self.triangulated:
+    #         raise Exception('Graph must be first triangulated')
+
+# And then MST for a clique tree!
