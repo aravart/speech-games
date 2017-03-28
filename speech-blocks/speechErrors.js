@@ -70,6 +70,8 @@ var corrections = {
     '700': '7 under',
     '800': '8 under',
     '900': '9 under',
+    '1:20': '120',
+    '1:44': '144',
     'black tooth': 'block 2',
     'clock': 'block',
     'on': 'block',
@@ -93,9 +95,62 @@ function correct(speech) {
 
     var possibleCommands = [];
     var words = speech.split(" ");
-    for (word in words) {
-        if (!(word in allowedWords)) {
-            // TODO (sahibgoa): Get all possible corrections and return those
+    // Stores the corrected command
+    var command = '';
+    // Stores whether all given words in the command are valid
+    var invalid = false;
+
+    // Convert each invalid word to a allowed word without searching for wrong pairs of words
+    for (i = 0; i < words.length; i++) {
+        // Check for individual invalid words if pairs aren't found
+        if (!(words[i] in allowedWords)) {
+            if (words[i] in corrections) {
+                command += corrections[words[i]] + ' ';
+            } else {
+                invalid = true;
+            }
+        }
+        // Add the word to the command as it's an allowed word
+        else {
+            command += words[i] + ' ';
+        }
+    }
+
+    // If all words in the command were valid, then add it as a possible corrected command
+    if (!invalid) {
+        possibleCommands.add(command.trim());
+    }
+
+    invalid = false;
+    command = '';
+
+    // Search for any pairs of invalid words and replace them with valid ones (if not search for invalid individual words)
+    for (i = 0; i < words.length - 1; i++) {
+        // Check for a pair of invalid words
+        if (!(words[i] in allowedWords) && !(words[i+1] in allowedWords)) {
+            if ((words[i] + ' ' + words[i+1]) in corrections) {
+                command += words[i] + ' ' + words[i+1] + ' ';
+            }
+        }
+        // Check for individual invalid words if pairs aren't found
+        else if (!(words[i] in allowedWords)) {
+            if (words[i] in corrections) {
+                command += corrections[words[i]] + ' ';
+            } else {
+                invalid = true;
+            }
+        }
+        // Add the word to the command as it's an allowed word
+        else {
+            command += words[i] + ' ';
+        }
+    }
+
+    // If all words in the command are valid and it's not the same as the previous value (if there is one), then add
+    // it as a possible corrected command
+    if (!invalid) {
+        if ((possibleCommands.length > 0 && command != possibleCommands[0]) || possibleCommands.length == 0) {
+            possibleCommands.add(command.trim());
         }
     }
 
