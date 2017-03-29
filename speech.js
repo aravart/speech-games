@@ -246,7 +246,21 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
         return;
       }
     }
-    this.output = parser.parse(this.speech);
+
+    var possibleCommands = [this.speech];
+    possibleCommands.push.apply(possibleCommands, correct(this.speech));
+    console.log(possibleCommands);
+    for (var i = 0; i < possibleCommands.length; i++) {
+      try {
+        this.output = parser.parse(possibleCommands[i]);
+        break;
+      } catch (e) {
+        if (i == possibleCommands.length - 1) {
+          throw e;
+        }
+      }
+    }
+
     console.log(this.output);
     $('#parse-message')
           .attr('class', 'message info')

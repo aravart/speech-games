@@ -10,6 +10,7 @@ var allowedWords = [
     'connect',
     'get',
     'delete',
+    'move',
     'under',
     'right',
     'left',
@@ -101,13 +102,18 @@ function correct(speech) {
     var invalid = false;
 
     // Convert each invalid word to a allowed word without searching for wrong pairs of words
-    for (i = 0; i < words.length; i++) {
+    for (var i = 0; i < words.length; i++) {
         // Check for individual invalid words if pairs aren't found
-        if (!(words[i] in allowedWords)) {
+        if (!allowedWords.includes(words[i])) {
             if (words[i] in corrections) {
                 command += corrections[words[i]] + ' ';
             } else {
+                if (!isNaN(words[i])) {
+                    command += words[i] + ' ';
+                    continue;
+                }
                 invalid = true;
+                break;
             }
         }
         // Add the word to the command as it's an allowed word
@@ -118,7 +124,7 @@ function correct(speech) {
 
     // If all words in the command were valid, then add it as a possible corrected command
     if (!invalid) {
-        possibleCommands.add(command.trim());
+        possibleCommands.push(command.trim());
     }
 
     invalid = false;
@@ -127,17 +133,22 @@ function correct(speech) {
     // Search for any pairs of invalid words and replace them with valid ones (if not search for invalid individual words)
     for (i = 0; i < words.length - 1; i++) {
         // Check for a pair of invalid words
-        if (!(words[i] in allowedWords) && !(words[i+1] in allowedWords)) {
+        if (!allowedWords.includes(words[i]) && !allowedWords.includes(words[i+1])) {
             if ((words[i] + ' ' + words[i+1]) in corrections) {
                 command += words[i] + ' ' + words[i+1] + ' ';
             }
         }
         // Check for individual invalid words if pairs aren't found
-        else if (!(words[i] in allowedWords)) {
+        else if (!allowedWords.includes(words[i])) {
             if (words[i] in corrections) {
                 command += corrections[words[i]] + ' ';
             } else {
+                if (!isNaN(words[i])) {
+                    command += words[i] + ' ';
+                    continue;
+                }
                 invalid = true;
+                break;
             }
         }
         // Add the word to the command as it's an allowed word
@@ -150,8 +161,9 @@ function correct(speech) {
     // it as a possible corrected command
     if (!invalid) {
         if ((possibleCommands.length > 0 && command != possibleCommands[0]) || possibleCommands.length == 0) {
-            possibleCommands.add(command.trim());
+            possibleCommands.push(command.trim());
         }
     }
 
+    return possibleCommands;
 }
