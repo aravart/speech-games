@@ -36,7 +36,7 @@ var corrections = {
 
     'pattern': 'get a turn',
     'kinect': 'connect',
-    '2': 'to',
+    'to': '2',
     'white': 'right',
     'write': 'right',
     'up and': 'a pen',
@@ -97,7 +97,9 @@ var corrections = {
     'tone': 'turn',
     'corn': 'turn',
     'the next': 'connect',
-    'it': '8'
+    'it': '8',
+    'phone': 'turn',
+    'connector': 'connect'
 };
 
 /**
