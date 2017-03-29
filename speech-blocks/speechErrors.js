@@ -99,12 +99,22 @@ var corrections = {
     'the next': 'connect',
     'it': '8',
     'phone': 'turn',
-    'connector': 'connect'
+    'connector': 'connect',
+    'cinder': 'under',
+    'wall': '1',
+    'loc': 'block',
+    'lock': 'block',
+    'drop': 'block',
+    '245': 'to 45',
+    '2:45': 'to 45',
+    '272': 'to 72',
+    '290': 'to 90'
 };
 
 /**
  * Return all possible corrections using only the allowed words (and numbers)
  * @param speech The speech command that isn't recognized
+ * @return The possible commands that were misrecognized as 'speech'
  */
 function correct(speech) {
 
@@ -122,6 +132,7 @@ function correct(speech) {
             if (words[i] in corrections) {
                 command += corrections[words[i]] + ' ';
             } else {
+                // Check if it's a number (that doesn't need to be corrected)
                 if (!isNaN(words[i])) {
                     command += words[i] + ' ';
                     continue;
@@ -157,6 +168,7 @@ function correct(speech) {
             if (words[i] in corrections) {
                 command += corrections[words[i]] + ' ';
             } else {
+                // Check if it's a number (that doesn't need to be corrected)
                 if (!isNaN(words[i])) {
                     command += words[i] + ' ';
                     continue;
