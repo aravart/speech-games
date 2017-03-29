@@ -57,11 +57,11 @@ var corrections = {
     'today': 'get',
     'can you': 'get a',
     'sex': '6',
-    'free': 'delete',
+    'free': '3',
     'tube': '2',
     'walkthrough': 'block 3',
     'force': '4',
-    'netflix free': 'connect block 3',
+    'netflix': 'connect block',
     '100': '1 under',
     '200': '2 under',
     '300': '3 under',
@@ -85,7 +85,19 @@ var corrections = {
     'got': 'get',
     'death': 'get',
     'ken': 'pen',
-    'tutuapp': 'to up'
+    'tutuapp': 'to up',
+    'moon': 'move',
+    'ghetto': 'get a',
+    'keratin': 'get a turn',
+    'garrett on': 'get a turn',
+    'torn': 'turn',
+    'elite': 'delete',
+    'better': 'get a',
+    'guitar': 'get a',
+    'tone': 'turn',
+    'corn': 'turn',
+    'the next': 'connect',
+    'it': '8'
 };
 
 /**
