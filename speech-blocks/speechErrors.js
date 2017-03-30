@@ -114,7 +114,7 @@ var corrections = {
 /**
  * Return all possible corrections using only the allowed words (and numbers)
  * @param speech The speech command that isn't recognized
- * @return The possible commands that were misrecognized as 'speech'
+ * @return Array possible commands that were misrecognized as 'speech'
  */
 function correct(speech) {
 
@@ -134,7 +134,11 @@ function correct(speech) {
             } else {
                 // Check if it's a number (that doesn't need to be corrected)
                 if (!isNaN(words[i])) {
-                    command += words[i] + ' ';
+                    if (words[0] == 'change' && words[i] == '2' && i == words.length - 2) {
+                        command += 'to ';
+                    } else {
+                        command += words[i] + ' ';
+                    }
                     continue;
                 }
                 invalid = true;
@@ -143,7 +147,11 @@ function correct(speech) {
         }
         // Add the word to the command as it's an allowed word
         else {
-            command += words[i] + ' ';
+            if (words[i] == 'to' && ((words[0] != 'change') || (words[0] == 'change' && i != words.length - 2))) {
+                command += corrections[words[i]] + ' ';
+            } else {
+                command += words[i] + ' ';
+            }
         }
     }
 
