@@ -109,7 +109,8 @@ var corrections = {
     '2:45': 'to 45',
     '272': 'to 72',
     '290': 'to 90',
-    'remove': 'get a move'
+    'remove': 'get a move',
+    'gotta': 'get a'
 };
 
 /**
@@ -165,12 +166,11 @@ function correct(speech) {
     command = '';
 
     // Search for any pairs of invalid words and replace them with valid ones (if not search for invalid individual words)
-    for (i = 0; i < words.length - 1; i++) {
+    for (i = 0; i < words.length; i++) {
         // Check for a pair of invalid words
-        if (!allowedWords.includes(words[i]) && !allowedWords.includes(words[i+1])) {
-            if ((words[i] + ' ' + words[i+1]) in corrections) {
-                command += words[i] + ' ' + words[i+1] + ' ';
-            }
+        if ((i != words.length - 1) && (words[i] + ' ' + words[i+1]) in corrections) {
+            command += corrections[words[i] + ' ' + words[i+1]] + ' ';
+            i++;
         }
         // Check for individual invalid words if pairs aren't found
         else if (!allowedWords.includes(words[i])) {
