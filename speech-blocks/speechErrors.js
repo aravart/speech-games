@@ -108,7 +108,8 @@ var corrections = {
     '245': 'to 45',
     '2:45': 'to 45',
     '272': 'to 72',
-    '290': 'to 90'
+    '290': 'to 90',
+    'remove': 'get a move'
 };
 
 /**
