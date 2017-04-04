@@ -110,7 +110,9 @@ var corrections = {
     '272': 'to 72',
     '290': 'to 90',
     'remove': 'get a move',
-    'gotta': 'get a'
+    'gotta': 'get a',
+    'tree': '3',
+    'and': 'in'
 };
 
 /**
@@ -119,7 +121,7 @@ var corrections = {
  * @return Array possible commands that were misrecognized as 'speech'
  */
 function correct(speech) {
-
+    // TODO (sahibgoa): Too much duplicate code in the 2 for loops below, fix it
     var possibleCommands = [];
     var words = speech.split(" ");
     // Stores the corrected command
@@ -136,6 +138,7 @@ function correct(speech) {
             } else {
                 // Check if it's a number (that doesn't need to be corrected)
                 if (!isNaN(words[i])) {
+                    // The second last word in change is supposed to be 'to' and is sometimes mistaken as '2'
                     if (words[0] == 'change' && words[i] == '2' && i == words.length - 2) {
                         command += 'to ';
                     } else {
@@ -149,6 +152,8 @@ function correct(speech) {
         }
         // Add the word to the command as it's an allowed word
         else {
+            // Check if the word we're correcting is '2' and it's not the second last word of a change command because
+            // there's a special case for that inside the above for loop
             if (words[i] == 'to' && ((words[0] != 'change') || (words[0] == 'change' && i != words.length - 2))) {
                 command += corrections[words[i]] + ' ';
             } else {
@@ -179,8 +184,12 @@ function correct(speech) {
             } else {
                 // Check if it's a number (that doesn't need to be corrected)
                 if (!isNaN(words[i])) {
-                    command += words[i] + ' ';
-                    continue;
+                    // The second last word in change is supposed to be 'to' and is sometimes mistaken as '2'
+                    if (words[0] == 'change' && words[i] == '2' && i == words.length - 2) {
+                        command += 'to ';
+                    } else {
+                        command += words[i] + ' ';
+                    }
                 }
                 invalid = true;
                 break;
@@ -188,7 +197,13 @@ function correct(speech) {
         }
         // Add the word to the command as it's an allowed word
         else {
-            command += words[i] + ' ';
+            // Check if the word we're correcting is '2' and it's not the second last word of a change command because
+            // there's a special case for that inside the above for loop
+            if (words[i] == 'to' && ((words[0] != 'change') || (words[0] == 'change' && i != words.length - 2))) {
+                command += corrections[words[i]] + ' ';
+            } else {
+                command += words[i] + ' ';
+            }
         }
     }
 
