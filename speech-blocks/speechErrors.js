@@ -112,7 +112,17 @@ var corrections = {
     'remove': 'get a move',
     'gotta': 'get a',
     'tree': '3',
-    'and': 'in'
+    'and': 'in',
+    'the town': 'to down',
+    '1-2': '1 to',
+    '2-2': '2 to',
+    '3-2': '3 to',
+    '4-2': '4 to',
+    '5-2': '5 to',
+    '6-2': '6 to',
+    '7-2': '7 to',
+    '8-2': '8 to',
+    '9-2': '9 to'
 };
 
 /**
