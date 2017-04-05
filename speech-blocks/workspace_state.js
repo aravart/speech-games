@@ -43,7 +43,7 @@ SpeechBlocks.WorkspaceState = function() {
  * for this use case because state fields will be no more complicated than
  * booleans and integers.
  * 
- * @param {!SpeechBLocks.WorkspaceState} state The state to check for equality
+ * @param {!SpeechBlocks.WorkspaceState} state The state to check for equality
  * @return {boolean} True if given state matches this state, false otherwise.
  */
 SpeechBlocks.WorkspaceState.prototype.equals = function(state) {

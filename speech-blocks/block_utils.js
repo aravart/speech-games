@@ -85,6 +85,7 @@ SpeechBlocks.BlockUtils.getNextConnection = function(blockId, workspace) {
 };
 
 /**
+ * Gets the next connection of the last block in the chain.
  * @param {string} blockId
  * @param {!Blockly.Workspace} workspace
  * @return {!Blockly.Connection}
@@ -122,6 +123,27 @@ SpeechBlocks.BlockUtils.getOutputConnection = function(blockId, workspace) {
 SpeechBlocks.BlockUtils.getInputConnection = function(blockId, inputName, workspace) {
   return SpeechBlocks.BlockUtils.asConnection_(
       SpeechBlocks.BlockUtils.getInput_(blockId, inputName, workspace).connection);
+};
+
+/**
+ * Disconnects the block from all its neighbors, if any.
+ * @param {string} blockId
+ * @param {!Blockly.Workspace} workspace
+ * @public
+ */
+SpeechBlocks.BlockUtils.isolateBlock = function(blockId, workspace) {
+  var block = SpeechBlocks.BlockUtils.getBlock(blockId, workspace);
+  
+  // Unplug the block from its predecessor and successor, healing the stack.
+  block.unplug(true /* Heal the stack! */);
+
+  // Then unplug the block's statement/value inputs.
+  block.inputList.forEach(function(input) {
+    if (input.connection) {
+      var conn = SpeechBlocks.BlockUtils.asConnection_(input.connection);
+      conn.disconnect();
+    }
+  });
 };
 
 /**
@@ -229,20 +251,20 @@ SpeechBlocks.BlockUtils.getInput_ = function(blockId, inputName, workspace) {
 };
 
 /**
+ * Returns the target of the given connection.
  * @param {!Blockly.Connection} connection
- * @return {!Blockly.Block} The connection target.
+ * @return {!Blockly.Block}
  * @private
  */
 SpeechBlocks.BlockUtils.getConnectionTarget_= function(connection) {
   return goog.asserts.assertInstanceof(
-      goog.asserts.assertInstanceof(
-          connection.targetConnection, Blockly.Connection).getSourceBlock(),
+      SpeechBlocks.BlockUtils.asConnection_(connection.targetConnection).getSourceBlock(),
       Blockly.Block);
 }
 
 /**
  * Asserts that the connection is not null.
- * @param {?Blockly.Connection}
+ * @param {?Blockly.Connection} connection
  * @return {!Blockly.Connection}
  * @private
  */

@@ -28,11 +28,19 @@ var X_MARGIN_ = 20;
 var Y_MARGIN_ = 10;
 
 /**
- * The minimum xy margin between two blocks.
+ * The xy margin to maintain between two blocks.
  * 
  * @private @const {number}
  */
 var BLOCK_MARGIN_ = 25;
+
+/**
+ * The tolerance for determing whether or not two blocks are close enough
+ * that one of them must be moved.
+ * 
+ * @private @const {number}
+ */
+var OVERLAP_TOLERANCE_ = 10;
 
 /**
  * @param {!Blockly.Workspace} workspace The current workspace.
@@ -41,17 +49,50 @@ var BLOCK_MARGIN_ = 25;
 SpeechBlocks.Layout = function(workspace) {
   /** @type {!Blockly.Workspace} */
   this.workspace_ = workspace;
+
+  /** 
+   * Layout manager can take a disabled state, where it always excepts
+   * instead of returning new block positions.
+   * 
+   * @private
+   */
+  this.enabled_ = true;
 };
+
+/**
+ * Enables the layout manager.
+ * @public
+ */
+SpeechBlocks.Layout.prototype.enable = function() { this.enabled_ = true; };
+
+/**
+ * Disables the layout manager.
+ * @public
+ */
+SpeechBlocks.Layout.prototype.disable = function() { this.enabled_ = false; };
+
+/**
+ * Gets whether or not the layout manager is enabled.
+ * 
+ * @return {boolean} True if layout management is enabled, false otherwise.
+ * @public
+ */
+SpeechBlocks.Layout.prototype.isEnabled = function() { return this.enabled_; };
 
 /**
  * Returns an array of all blocks that visually overlap with the given block
  * or any block in its chain.
+ * 
  * @param {string} blockId The ID of the block in the chain whose overlapping
  *      neighbors should be returned.
  * @return {!goog.structs.Set<!Blockly.Block>} The overlapping blocks. 
  * @public
  */
 SpeechBlocks.Layout.prototype.getBlocksThatOverlapChain = function(blockId) {
+  if (!this.enabled_) {
+    throw 'Layout manager not enabled!';
+  }
+
   /** @type {!goog.structs.Set<!Blockly.Block>} */
   var overlappingBlocks = new goog.structs.Set();
   SpeechBlocks.BlockUtils.getBlocksInChain(blockId, this.workspace_).forEach(
@@ -63,6 +104,8 @@ SpeechBlocks.Layout.prototype.getBlocksThatOverlapChain = function(blockId) {
 
 /**
  * Returns an array of all blocks that visually overlap with just the given block.
+ * Two blocks "overlap" if they fall within half the block margin of each other.
+ * 
  * @param {string} blockId The ID of the block whose overlapping neighbors
  *    should be returned.
  * @return {!Array<!Blockly.Block>} The overlapping blocks.
@@ -81,7 +124,8 @@ SpeechBlocks.Layout.prototype.getBlocksThatOverlapBlock_ = function(blockId) {
         theBlock.getRelativeToSurfaceXY(),
         {height:theBlock.height, width:theBlock.width},
         blocks[i].getRelativeToSurfaceXY(),
-        {height:blocks[i].height, width:blocks[i].width});
+        {height:blocks[i].height, width:blocks[i].width},
+        OVERLAP_TOLERANCE_);
     if (doBlocksOverlap) {
       overlappingBlocks.push(blocks[i]);
     }
@@ -101,6 +145,10 @@ SpeechBlocks.Layout.prototype.getBlocksThatOverlapBlock_ = function(blockId) {
  * @public
  */
 SpeechBlocks.Layout.prototype.getPositionForNewBlock = function() {
+  if (!this.enabled_) {
+    throw 'Layout manager not enabled!';
+  }
+
   var blocks = this.workspace_.getAllBlocks();
   if (!blocks.length) {
     return new goog.math.Coordinate(X_MARGIN_, Y_MARGIN_);
@@ -124,8 +172,12 @@ SpeechBlocks.Layout.prototype.getPositionForNewBlock = function() {
  * @public 
  */
 SpeechBlocks.Layout.prototype.getPositionForExistingBlock = function(blockId) {
+  if (!this.enabled_) {
+    throw 'Layout manager not enabled!';
+  }
+
   var block = SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_);
-  
+
   // TODO(ehernandez4): It looks like this does not consider scaling. We need a more
   // reliable way to get height/width of workspace.
   var workspaceMetrics = this.workspace_.getMetrics();
@@ -162,7 +214,6 @@ SpeechBlocks.Layout.prototype.getPositionForExistingBlock = function(blockId) {
 SpeechBlocks.Layout.prototype.isBoxFree_ = function(boxXY, boxHeightWidth, excludeBlockId) {
   var blocks = this.workspace_.getAllBlocks();
   for (var i = 0; i < blocks.length; i++) {
-    var block = blocks[i];
     if (blocks[i].id == excludeBlockId
         || SpeechBlocks.BlockUtils.areBlocksConnected(
             blocks[i].id, excludeBlockId, this.workspace_)) {
@@ -172,7 +223,8 @@ SpeechBlocks.Layout.prototype.isBoxFree_ = function(boxXY, boxHeightWidth, exclu
             boxXY,
             boxHeightWidth,
             blocks[i].getRelativeToSurfaceXY(),
-            blocks[i].getHeightWidth())) {
+            blocks[i].getHeightWidth(),
+            OVERLAP_TOLERANCE_)) {
       return false;
     }
   }
@@ -180,22 +232,23 @@ SpeechBlocks.Layout.prototype.isBoxFree_ = function(boxXY, boxHeightWidth, exclu
 };
 
 /**
- * Returns true if the given boxes overlap.
+ * Returns true if the given boxes overlap, within the given tolerance.
  * @param {!goog.math.Coordinate} box1XY The top left corner of box 1.
  * @param {!{height: number, width: number}} box1HeightWidth The dimensions of box 1.
  * @param {!goog.math.Coordinate} box2XY The top left corner of box 2.
  * @param {!{height: number, width: number}} box2HeightWidth The dimensions of box 2.
+ * @param {number} tolerance The "margin" required for boxes to not overlap.
  * @return {boolean} True if the boxes overlap, false otherwise.
  * @private
  */
 SpeechBlocks.Layout.boxesOverlap_ = function(
-    box1XY, box1HeightWidth, box2XY, box2HeightWidth) {
+    box1XY, box1HeightWidth, box2XY, box2HeightWidth, tolerance) {
   var doesXCollide = SpeechBlocks.Layout.intervalsOverlap_(
-      {start:box1XY.x, end:box1XY.x + box1HeightWidth.width},
-      {start:box2XY.x, end:box2XY.x + box2HeightWidth.width});
+      {start:box1XY.x - tolerance/2, end:box1XY.x + box1HeightWidth.width + tolerance/2},
+      {start:box2XY.x - tolerance/2, end:box2XY.x + box2HeightWidth.width + tolerance/2});
   var doesYCollide = SpeechBlocks.Layout.intervalsOverlap_(
-      {start:box1XY.y, end:box1XY.y + box1HeightWidth.height},
-      {start:box2XY.y, end:box2XY.y + box2HeightWidth.height});
+      {start:box1XY.y - tolerance/2, end:box1XY.y + box1HeightWidth.height + tolerance/2},
+      {start:box2XY.y - tolerance/2, end:box2XY.y + box2HeightWidth.height + tolerance/2});
   return doesXCollide && doesYCollide;
 };
 
