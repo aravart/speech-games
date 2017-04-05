@@ -253,6 +253,7 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
     for (var i = 0; i < possibleCommands.length; i++) {
       try {
         this.output = parser.parse(possibleCommands[i]);
+        this.speech = possibleCommands[i];
         break;
       } catch (e) {
         if (i == possibleCommands.length - 1) {
