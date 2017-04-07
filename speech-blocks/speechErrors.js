@@ -33,7 +33,6 @@ var allowedWords = [
  * Contains common mistakes made by the speech recognizer and their actual (probably) values
  */
 var corrections = {
-
     'pattern': 'get a turn',
     'kinect': 'connect',
     'to': '2',
@@ -122,7 +121,10 @@ var corrections = {
     '6-2': '6 to',
     '7-2': '7 to',
     '8-2': '8 to',
-    '9-2': '9 to'
+    '9-2': '9 to',
+    '3+1': 'delete block 1',
+    '+': 'in',
+    'can i': ''
 };
 
 /**
