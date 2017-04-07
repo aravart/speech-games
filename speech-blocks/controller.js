@@ -77,18 +77,20 @@ SpeechBlocks.Controller = function(workspace, useAnimation) {
 
   // Listen for move events and fix the layout if necessary.
   this.workspace_.addChangeListener(function(event) {
-    if (event.type != Blockly.Events.MOVE || !event.blockId) {
+    if (event.type != Blockly.Events.MOVE
+        || !this.getAllBlockIds().contains(event.blockId)
+        || !this.layout_.isEnabled()) {
       return;
     }
     this.layout_.getBlocksThatOverlapChain(event.blockId).getValues().forEach(
       function(overlappingBlock) {
         var newCoords = this.layout_.getPositionForExistingBlock(overlappingBlock.id);
         var overlappingBlockCoords = overlappingBlock.getRelativeToSurfaceXY();
-        this.moveBlock(
+        this.animator_.animateTranslation(
             overlappingBlock.id,
-            new SpeechBlocks.Translation(
-                newCoords.x - overlappingBlockCoords.x,
-                newCoords.y - overlappingBlockCoords.y));
+            /* dx */ newCoords.x - overlappingBlockCoords.x,
+            /* dy */ newCoords.y - overlappingBlockCoords.y,
+            /* callback */ function() { overlappingBlock.unselect(); });
       }.bind(this));
   }.bind(this));
 
@@ -140,7 +142,7 @@ SpeechBlocks.Controller.prototype.addBlock = function(type) {
         new SpeechBlocks.Translation(coordsForBlock.x, coordsForBlock.y));
     return newBlock.id;
   }
-  
+
   var newBlockId;
   this.animator_.animateBlockCreation(
       type,
@@ -193,8 +195,13 @@ SpeechBlocks.Controller.prototype.removeBlock = function(blockId) {
     block.dispose();
     return;
   }
+  this.layout_.disable();
+  SpeechBlocks.BlockUtils.isolateBlock(blockId, this.workspace_);
   this.animator_.animateTranslation(
-      blockId, /* dx */ -block.getRelativeToSurfaceXY().x - 100, /* dy */ 0);
+      blockId,
+      /* dx */ -block.getRelativeToSurfaceXY().x - 100,
+      /* dy */ 0,
+      /* callback */ function() { this.layout_.enable(); }.bind(this));
 };
 
 /**

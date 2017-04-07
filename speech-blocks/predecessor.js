@@ -38,6 +38,10 @@ SpeechBlocks.Predecessor.prototype.place = function(blockId, workspace, opt_anim
     return;
   }
 
+  this.placeProgrammatically_(blockId, workspace);
+}
+
+SpeechBlocks.Predecessor.prototype.placeProgrammatically_ = function(blockId, workspace) {
   var successorPrevConnection =
       SpeechBlocks.BlockUtils.getPreviousConnection(this.successorBlockId_, workspace);
   if (successorPrevConnection.isConnected()) {
@@ -48,7 +52,7 @@ SpeechBlocks.Predecessor.prototype.place = function(blockId, workspace, opt_anim
   var chainNextConnection =
       SpeechBlocks.BlockUtils.getChainNextConnection(blockId, workspace);
   successorPrevConnection.connect(chainNextConnection); 
-}
+};
 
 /**
  * Connects the given block to the "previous connection" of the successor block,
@@ -67,5 +71,8 @@ SpeechBlocks.Predecessor.prototype.placeWithAnimation_ = function(blockId, works
       new goog.math.Coordinate(
           blockToMoveXY.x, blockToMoveXY.y + blockToMove.height),
       refBlock.getRelativeToSurfaceXY(),
-      function() { blockToMove.unselect(); });
+      function() {
+        this.placeProgrammatically_(blockId, workspace);
+        blockToMove.unselect();
+      }.bind(this));
 };
