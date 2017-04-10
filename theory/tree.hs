@@ -402,3 +402,8 @@ collapse = reverse . r . foldl f [] . r
                        Nothing -> (x,y) : xs
          
 -- We should take this and plot it as a function of p
+-- Then ask: how much function do you need to approximate the function? Can we evaluate and fit to a simpler polynomial?
+
+main = do
+  putStrLn $ show $ bigPoly [0,1,0,1]
+  putStrLn $ show $ bigPoly [0,1,0,1,0]
