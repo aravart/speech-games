@@ -214,7 +214,7 @@ SpeechGames.Speech.prototype.toggleDictation_ = function() {
  * @private
  */
 SpeechGames.Speech.prototype.checkHeyJerry_ = function() {
-  if (this.awake || this.speech === "hey jerry" || (this.speech.includes("h") || this.speech.includes("j") || this.speech.includes("a"))) {
+  if (this.awake || this.speech === "hey jerry") {
     this.awake = true;
     return true;
   } else {
@@ -235,8 +235,11 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
   var result = false;
   this.speech = "";
   try {
+    // set utterance to lowercase
     this.speech = $('#q').val().toLowerCase();
     console.log(this.speech);
+
+    // if demoing, check to see if 'hey jerry' was said
     if (!this.awake && this.demoMode) {
       this.checkHeyJerry_();
       if (this.awake) {
@@ -248,6 +251,7 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
       }
     }
 
+    // generate a list of possible commands
     var possibleCommands = [this.speech];
     possibleCommands.push.apply(possibleCommands, correct(this.speech));
     console.log(possibleCommands);
@@ -263,20 +267,27 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
       }
     }
 
+    // change message displayed to user
     console.log(this.output);
     $('#parse-message')
           .attr('class', 'message info')
           .text('Input parsed successfully.');
     $('#output').removeClass('disabled').text(jsDump.parse(this.output));
+
+    // interpret and perform action
     this.response = this.interpretSpeech_();
     clearTimeout(this.timeout);
     this.result = true;
     $("#user-message").hide().text(this.response).fadeIn(200);
 
-    proposeCorrection(this.misrecognized, this.speech);
+    // submit proposed corrections
+    this.proposeCorrections(this.misrecognized, this.speech);
+    console.log("Proposed corrections for " + this.speech + ": " + this.misrecognized);
     this.misrecognized = [];
+
   } catch (e) {
     console.log(e);
+    
     if(e instanceof SpeechBlocks.UserError) {
       $('#user-message').text(e.message);
     } else {
@@ -291,7 +302,6 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
       }
     }
   }
-  console.log(this.misrecognized);
   return result;
 };
 
@@ -434,7 +444,15 @@ $(document).ready(function() {
     SpeechGames.speech.awake = true;
   }
 
+  if (window.location.href.includes('firebase') || window.location.href.includes('localhost'))  {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        SpeechGames.speech.loadCorrections();
+      } 
+    });
+  } 
 
+  // listen for mouse clicks, key presses
   $('#q')
     .change(SpeechGames.speech.scheduleParse_.bind(SpeechGames.speech))
     .mousedown(SpeechGames.speech.scheduleParse_.bind(SpeechGames.speech))
@@ -444,6 +462,7 @@ $(document).ready(function() {
     .keyup(SpeechGames.speech.scheduleParse_.bind(SpeechGames.speech))
     .keypress(SpeechGames.speech.scheduleParse_.bind(SpeechGames.speech));
 
+  // if microphone icon clicked
   $('#microphone')
     .click(SpeechGames.speech.toggleDictation_.bind(SpeechGames.speech));
   if (SpeechGames.speech.demoMode && !SpeechGames.speech.awake) {

@@ -1,7 +1,7 @@
 var database = firebase.database();
 
 
-function addCorrection(recognized, intended) {
+SpeechGames.Speech.prototype.addCorrection = function(recognized, intended) {
   database.ref('/corrections/' + intended).transaction(function (corrections) {
     if (corrections === null) {
       return [recognized];
@@ -14,7 +14,7 @@ function addCorrection(recognized, intended) {
   });
 }
 
-function read(callback, keyword) {
+SpeechGames.Speech.prototype.read = function(callback, keyword) {
   if (!callback) {
     return;
   }
@@ -32,21 +32,34 @@ function read(callback, keyword) {
   }
 }
 
-function proposeCorrection(misrecognized, intended) {
+SpeechGames.Speech.prototype.proposeCorrections = function(misrecognized, intended) {
   var arr = {};
   arr[intended] = misrecognized;
   console.log(arr);
   database.ref('/proposed/').push().set(arr);
 }
 
-function pushCorrections() {
+SpeechGames.Speech.prototype.reviewProposedCorrections = function() {
+  //TODO: dliangsta
+}
+
+SpeechGames.Speech.prototype.deleteCorrection = function() {
+  //TODO: dliangsta
+}
+
+
+SpeechGames.Speech.prototype.pushCorrection = function() {
+  //TODO: dliangsta
+}
+
+SpeechGames.Speech.prototype.pushCorrections = function() {
   database.ref('/proposed/').once('value').then(function (snapshot) {
     snapshot = snapshot.val();
     for (var key in snapshot) {
       for (var key2 in snapshot[key]) {
         for (var key3 in snapshot[key][key2]) {
           console.log(key2 + ": " + snapshot[key][key2][key3])
-          addCorrection(snapshot[key][key2][key3], key2)
+          this.addCorrection(snapshot[key][key2][key3], key2)
         }
       }
     }
@@ -55,8 +68,8 @@ function pushCorrections() {
 }
 
 // reads corrections from firebase and puts them in "corrections"
-function load() {
-  read(function (snapshot) {
+SpeechGames.Speech.prototype.loadCorrections = function() {
+  this.read(function (snapshot) {
     corrections = {};
     for (var key in snapshot) {
       corrections[snapshot[key]] = key;
@@ -65,7 +78,7 @@ function load() {
 }
 
 // used to recreate the database, if wiping it
-function generate() {
+SpeechGames.Speech.prototype.generate = function() {
   var corrections = {
     'pattern': 'get a turn',
     'kinect': 'connect',
@@ -161,6 +174,6 @@ function generate() {
     'can i': ''
   };
   for (var key in corrections) {
-    addCorrection(key, corrections[key]);
+    this.addCorrection(key, corrections[key]);
   }
 }
