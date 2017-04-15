@@ -146,8 +146,8 @@ SpeechGames.Speech.prototype.correct = function(speech) {
     for (var i = 0; i < words.length; i++) {
         // Check for individual invalid words if pairs aren't found
         if (!SpeechGames.Speech.allowedWords.includes(words[i])) {
-            if (words[i] in corrections) {
-                command += corrections[words[i]] + ' ';
+            if (words[i] in SpeechGames.Speech.corrections) {
+                command += SpeechGames.Speech.corrections[words[i]] + ' ';
             } else {
                 // Check if it's a number (that doesn't need to be corrected)
                 if (!isNaN(words[i])) {
@@ -231,7 +231,7 @@ SpeechGames.Speech.prototype.correct = function(speech) {
     return possibleCommands;
 }
 
-SpeechGames.Speech.prototype.addCorrection = function(recognized, intended) {
+SpeechGames.Speech.prototype.pushCorrection = function(recognized, intended) {
   firebase.database().ref('/corrections/' + intended).transaction(function (corrections) {
     if (corrections === null) {
       return [recognized];
@@ -248,28 +248,27 @@ SpeechGames.Speech.prototype.read = function(callback, keyword) {
   if (!callback) {
     return;
   }
-
+  
+  var path = '/corrections/';
+  
   if (keyword) {
-    firebase.database().ref('/corrections/' + keyword).once('value').then(function (snapshot) {
-      snapshot = snapshot.val();
-      callback(snapshot);
-    });
-  } else {
-    firebase.database().ref('/corrections/').once('value').then(function (snapshot) {
-      snapshot = snapshot.val();
-      callback(snapshot);
-    });
-  }
+    path += keyword + '/'
+  } 
+
+  firebase.database().ref(path).once('value').then(function (snapshot) {
+    snapshot = snapshot.val();
+    callback(snapshot);
+  });
 }
 
 SpeechGames.Speech.prototype.proposeCorrections = function(misrecognized, intended) {
   if (intended.length <= 0)  {
     return;
   }
+
   console.log("Proposed corrections for " + intended+ ": " + misrecognized);
   var arr = {};
   arr[intended] = misrecognized;
-  console.log(arr);
   firebase.database().ref('/proposed/').push().set(arr);
 }
 
@@ -277,28 +276,30 @@ SpeechGames.Speech.prototype.reviewProposedCorrections = function() {
   //TODO: dliangsta
 }
 
-SpeechGames.Speech.prototype.deleteCorrection = function() {
+// will delete a single proposed correction
+SpeechGames.Speech.prototype.deleteProposedCorrection = function() {
   //TODO: dliangsta
 }
 
-
-SpeechGames.Speech.prototype.pushCorrection = function() {
+// will push a single proposed correction
+SpeechGames.Speech.prototype.pushProposedCorrection = function() {
   //TODO: dliangsta
 }
 
-SpeechGames.Speech.prototype.pushCorrections = function() {
+// pushes everything under '/proposed/' to '/corrections/' in the database
+SpeechGames.Speech.prototype.pushAllProposedCorrections = function() {
   firebase.database().ref('/proposed/').once('value').then(function (snapshot) {
     snapshot = snapshot.val();
     for (var key in snapshot) {
       for (var key2 in snapshot[key]) {
         for (var key3 in snapshot[key][key2]) {
-          console.log(key2 + ": " + snapshot[key][key2][key3])
-          this.addCorrection(snapshot[key][key2][key3], key2)
+          this.pushCorrection(snapshot[key][key2][key3], key2)
         }
       }
     }
   });
   firebase.database().ref('/proposed/').remove();
+  console.log("Proposed corrections have been pushed.");
 }
 
 // reads corrections from firebase and puts them in "corrections"
