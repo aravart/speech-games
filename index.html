@@ -28,7 +28,6 @@
   <script src="speech-blocks/controller.js"></script>
   <script src="speech-blocks/interpreter.js"></script>
 
-
   <script src="lib/js-interpreter/acorn_interpreter.js"></script>
 
   <script src="lib/jsDump.js"></script>
@@ -165,6 +164,22 @@
 <script src="turtle.js"></script>
 <script src="suggestions.js"></script>
 <script src="ui.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/3.7.8/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDXd6CVw16A-ZNUxKOLCWMXuU5vPY8fuJU",
+    authDomain: "speechgames-60eb5.firebaseapp.com",
+    databaseURL: "https://speechgames-60eb5.firebaseio.com",
+    projectId: "speechgames-60eb5",
+    storageBucket: "speechgames-60eb5.appspot.com",
+    messagingSenderId: "100106301481"
+  };
+  firebase.initializeApp(config);
+</script>
+<script src="backend.js"></script>
+
 </body>
 
 </html>

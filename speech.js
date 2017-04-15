@@ -1,6 +1,6 @@
 /**
  * @fileoverview Driver script for speech processing.
- * @author aravart@cs.wisc.edu (Ara Vartanian), dliang@wisc.edu (David Liang)
+ * @author aravart@cs.wisc.edu (Ara Vartanian), dliang@cs.wisc.edu (David Liang)
  */
 goog.provide('SpeechGames');
 goog.provide('SpeechGames.Speech');
@@ -75,6 +75,7 @@ SpeechGames.Speech = function() {
     this.mic_animate = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic-animate.gif';
     this.mic = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
     this.parseTimer = null;
+    this.misrecognized = [];
 };
 
 /**
@@ -271,6 +272,13 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
     clearTimeout(this.timeout);
     this.result = true;
     $("#user-message").hide().text(this.response).fadeIn(200);
+
+    for (var i = 0; i < this.misrecognized.length; i++)
+    {
+      proposeCorrection(this.misrecognized[i], this.speech);
+    }
+    
+    this.misrecognized = [];
   } catch (e) {
     console.log(e);
     if(e instanceof SpeechBlocks.UserError) {
@@ -278,6 +286,7 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
     } else {
       $('#parse-message').attr('class', 'message error').text(this.buildErrorMessage_(e));
       if(this.speech !== '') {
+        this.misrecognized.push(this.speech);
         $('#user-message').hide().text('Sorry, I didn\'t understand \"' + this.speech + '\"').fadeIn(200);
         clearTimeout(this.timeout);
         this.timeout = setTimeout(function(){
@@ -286,6 +295,7 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
       }
     }
   }
+  console.log(this.misrecognized);
   return result;
 };
 
@@ -425,6 +435,22 @@ $(document).ready(function() {
   if (SpeechGames.getParameterByName_('level')) {
     SpeechGames.speech.awake = true;
   }
+
+  // when logging, data is sent to database
+  if (!window.location.href.includes("github"))  {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // User is signed in.
+        console.log("LOGGING!");
+        SpeechGames.logging = true;
+      } else {
+        // No user is signed in.
+        console.log("REDIRECTING!");
+        window.location='auth.html';
+      }
+    });
+  } 
+  
 
   $('#q')
     .change(SpeechGames.speech.scheduleParse_.bind(SpeechGames.speech))

@@ -1,0 +1,26 @@
+[debug] ----------------------------------------------------------------------
+[debug] Command:      /usr/local/bin/node /usr/local/bin/firebase serve
+[debug] CLI Version:  3.6.1
+[debug] Platform:     linux
+[debug] Node Version: v7.6.0
+[debug] Time:         Sat Apr 15 2017 02:01:33 GMT-0500 (DST)
+[debug] ----------------------------------------------------------------------
+[debug] 
+[debug] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/speechgames-60eb5  
+ Sat Apr 15 2017 02:01:33 GMT-0500 (DST)
+[debug] <<< HTTP RESPONSE 200
+[debug] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/speechgames-60eb5/tokens  
+ Sat Apr 15 2017 02:01:33 GMT-0500 (DST)
+[debug] <<< HTTP RESPONSE 200
+[info] Starting Firebase development server...
+[info] 
+[info] Project Directory: /mnt/c/Users/David/Drive/Main/workspace/speech-games
+[debug] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/speechgames-60eb5  
+ Sat Apr 15 2017 02:01:33 GMT-0500 (DST)
+[debug] <<< HTTP RESPONSE 200
+[debug] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/100106301481/clients/_:getWebAppConfig  
+ Sat Apr 15 2017 02:01:34 GMT-0500 (DST)
+[debug] <<< HTTP RESPONSE 200
+[info] 
+[info] Server listening at: http://localhost:5000
