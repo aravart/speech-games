@@ -1,17 +1,5 @@
 var database = firebase.database();
 
-function proposeCorrection(recognized, intended) {
-  database.ref('/proposed/' + intended).transaction(function (corrections) {
-    if (corrections === null) {
-      return [recognized];
-    } else {
-      if (corrections.indexOf(recognized) == -1) {
-        corrections.push(recognized);
-      }
-      return corrections;
-    }
-  });
-}
 
 function addCorrection(recognized, intended) {
   database.ref('/corrections/' + intended).transaction(function (corrections) {
@@ -42,6 +30,28 @@ function read(callback, keyword) {
       callback(snapshot);
     });
   }
+}
+
+function proposeCorrection(misrecognized, intended) {
+  var arr = {};
+  arr[intended] = misrecognized;
+  console.log(arr);
+  database.ref('/proposed/').push().set(arr);
+}
+
+function pushCorrections() {
+  database.ref('/proposed/').once('value').then(function (snapshot) {
+    snapshot = snapshot.val();
+    for (var key in snapshot) {
+      for (var key2 in snapshot[key]) {
+        for (var key3 in snapshot[key][key2]) {
+          console.log(key2 + ": " + snapshot[key][key2][key3])
+          addCorrection(snapshot[key][key2][key3], key2)
+        }
+      }
+    }
+  });
+  database.ref('/proposed/').remove();
 }
 
 // reads corrections from firebase and puts them in "corrections"

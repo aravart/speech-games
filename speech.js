@@ -273,11 +273,7 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
     this.result = true;
     $("#user-message").hide().text(this.response).fadeIn(200);
 
-    for (var i = 0; i < this.misrecognized.length; i++)
-    {
-      proposeCorrection(this.misrecognized[i], this.speech);
-    }
-    
+    proposeCorrection(this.misrecognized, this.speech);
     this.misrecognized = [];
   } catch (e) {
     console.log(e);
