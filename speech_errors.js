@@ -1,5 +1,6 @@
 /**
  * Created by Sahib Pandori on 3/28/2017.
+ * @author dliang@cs.wisc.edu (David Liang), pandori@wisc.edu (Sahib Pandori)
  */
 
 /**
@@ -61,15 +62,15 @@ var corrections = {
     'walkthrough': 'block 3',
     'force': '4',
     'netflix': 'connect block',
-    '100': '1 under',
-    '200': '2 under',
-    '300': '3 under',
-    '400': '4 under',
-    '500': '5 under',
-    '600': '6 under',
-    '700': '7 under',
-    '800': '8 under',
-    '900': '9 under',
+    '1 under': '100',
+    '2 under': '200',
+    '3 under': '300',
+    '4 under': '400',
+    '5 under': '500',
+    '6 under': '600',
+    '7 under': '700',
+    '8 under': '800',
+    '9 under': '900',
     '1:20': '120',
     '1:44': '144',
     'black tooth': 'block 2',
@@ -125,7 +126,7 @@ var corrections = {
     '3+1': 'delete block 1',
     '+': 'in',
     'can i': ''
-};
+  };
 
 /**
  * Return all possible corrections using only the allowed words (and numbers)
