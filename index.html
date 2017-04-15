@@ -44,7 +44,7 @@
   <link href="https://cdn.muicss.com/mui-0.9.4/css/mui.min.css" rel="stylesheet" type="text/css" />
   <script src="https://cdn.muicss.com/mui-0.9.4/js/mui.min.js"></script>
 
-  <link href="common.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/common.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -178,7 +178,7 @@
   };
   firebase.initializeApp(config);
     // when logging, data is sent to database
-  if (!window.location.href.includes('github'))  {
+  if (window.location.href.includes('firebase') || window.location.href.includes('localhost'))  {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // require logging and demo mode
