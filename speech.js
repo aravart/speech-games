@@ -240,20 +240,20 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
     console.log(this.speech);
 
     // if demoing, check to see if 'hey jerry' was said
-    if (!this.awake && this.demoMode) {
-      this.checkHeyJerry_();
-      if (this.awake) {
-        $('#user-message').hide().text("Awaiting your command!").fadeIn(200);
-        return;
-      } else {
-        $("#user-message").hide().text("Say 'Hey Jerry' to wake me up.").fadeIn(500);
-        return;
-      }
-    }
+    // if (!this.awake && this.demoMode) {
+    //   this.checkHeyJerry_();
+    //   if (this.awake) {
+    //     $('#user-message').hide().text("Awaiting your command!").fadeIn(200);
+    //     return;
+    //   } else {
+    //     $("#user-message").hide().text("Say 'Hey Jerry' to wake me up.").fadeIn(500);
+    //     return;
+    //   }
+    // }
 
     // generate a list of possible commands
     var possibleCommands = [this.speech];
-    possibleCommands.push.apply(possibleCommands, correct(this.speech));
+    possibleCommands.push.apply(possibleCommands, this.correct(this.speech));
     console.log(possibleCommands);
     for (var i = 0; i < possibleCommands.length; i++) {
       try {
@@ -282,7 +282,6 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
 
     // submit proposed corrections
     this.proposeCorrections(this.misrecognized, this.speech);
-    console.log("Proposed corrections for " + this.speech + ": " + this.misrecognized);
     this.misrecognized = [];
 
   } catch (e) {
@@ -293,7 +292,9 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
     } else {
       $('#parse-message').attr('class', 'message error').text(this.buildErrorMessage_(e));
       if(this.speech !== '') {
-        this.misrecognized.push(this.speech);
+        if (this.speech.length > 0) {
+          this.misrecognized.push(this.speech);
+        }
         $('#user-message').hide().text('Sorry, I didn\'t understand \"' + this.speech + '\"').fadeIn(200);
         clearTimeout(this.timeout);
         this.timeout = setTimeout(function(){
@@ -465,11 +466,11 @@ $(document).ready(function() {
   // if microphone icon clicked
   $('#microphone')
     .click(SpeechGames.speech.toggleDictation_.bind(SpeechGames.speech));
-  if (SpeechGames.speech.demoMode && !SpeechGames.speech.awake) {
-    $("#user-message").hide().text("Say 'Hey Jerry' to wake me up.").fadeIn(500);
-  } else {
-    $("#user-message").hide().text("Awaiting your command!").fadeIn(500);
-  }
+  // if (SpeechGames.speech.demoMode && !SpeechGames.speech.awake) {
+  // $("#user-message").hide().text("Say 'Hey Jerry' to wake me up.").fadeIn(500);
+  // } else {
+  $("#user-message").hide().text("Awaiting your command!").fadeIn(500);
+  // }
 
   // $('#runButton').on('click', run);
   // $('#showButton').on('click', showCode_);

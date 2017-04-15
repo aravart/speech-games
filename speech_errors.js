@@ -6,7 +6,7 @@
 /**
  * Contains a list of words used in the speech commands
  */
-var allowedWords = [
+SpeechGames.Speech.allowedWords = [
     'block',
     'connect',
     'get',
@@ -33,7 +33,7 @@ var allowedWords = [
 /**
  * Contains common mistakes made by the speech recognizer and their actual (probably) values
  */
-var corrections = {
+SpeechGames.Speech.corrections = {
     'pattern': 'get a turn',
     'kinect': 'connect',
     'to': '2',
@@ -133,7 +133,7 @@ var corrections = {
  * @param speech The speech command that isn't recognized
  * @return Array possible commands that were misrecognized as 'speech'
  */
-function correct(speech) {
+SpeechGames.Speech.prototype.correct = function(speech) {
     // TODO (sahibgoa): Too much duplicate code in the 2 for loops below, fix it
     var possibleCommands = [];
     var words = speech.split(" ");
@@ -145,7 +145,7 @@ function correct(speech) {
     // Convert each invalid word to a allowed word without searching for wrong pairs of words
     for (var i = 0; i < words.length; i++) {
         // Check for individual invalid words if pairs aren't found
-        if (!allowedWords.includes(words[i])) {
+        if (!SpeechGames.Speech.allowedWords.includes(words[i])) {
             if (words[i] in corrections) {
                 command += corrections[words[i]] + ' ';
             } else {
@@ -168,7 +168,7 @@ function correct(speech) {
             // Check if the word we're correcting is '2' and it's not the second last word of a change command because
             // there's a special case for that inside the above for loop
             if (words[i] == 'to' && ((words[0] != 'change') || (words[0] == 'change' && i != words.length - 2))) {
-                command += corrections[words[i]] + ' ';
+                command += SpeechGames.Speech.corrections[words[i]] + ' ';
             } else {
                 command += words[i] + ' ';
             }
@@ -186,14 +186,14 @@ function correct(speech) {
     // Search for any pairs of invalid words and replace them with valid ones (if not search for invalid individual words)
     for (i = 0; i < words.length; i++) {
         // Check for a pair of invalid words
-        if ((i != words.length - 1) && (words[i] + ' ' + words[i+1]) in corrections) {
-            command += corrections[words[i] + ' ' + words[i+1]] + ' ';
+        if ((i != words.length - 1) && (words[i] + ' ' + words[i+1]) in SpeechGames.Speech.corrections) {
+            command += SpeechGames.Speech.corrections[words[i] + ' ' + words[i+1]] + ' ';
             i++;
         }
         // Check for individual invalid words if pairs aren't found
-        else if (!allowedWords.includes(words[i])) {
-            if (words[i] in corrections) {
-                command += corrections[words[i]] + ' ';
+        else if (!SpeechGames.Speech.allowedWords.includes(words[i])) {
+            if (words[i] in SpeechGames.Speech.corrections) {
+                command += SpeechGames.Speech.corrections[words[i]] + ' ';
             } else {
                 // Check if it's a number (that doesn't need to be corrected)
                 if (!isNaN(words[i])) {
@@ -213,7 +213,7 @@ function correct(speech) {
             // Check if the word we're correcting is '2' and it's not the second last word of a change command because
             // there's a special case for that inside the above for loop
             if (words[i] == 'to' && ((words[0] != 'change') || (words[0] == 'change' && i != words.length - 2))) {
-                command += corrections[words[i]] + ' ';
+                command += SpeechGames.Speech.corrections[words[i]] + ' ';
             } else {
                 command += words[i] + ' ';
             }
@@ -229,4 +229,92 @@ function correct(speech) {
     }
 
     return possibleCommands;
+}
+
+SpeechGames.Speech.prototype.addCorrection = function(recognized, intended) {
+  firebase.database().ref('/corrections/' + intended).transaction(function (corrections) {
+    if (corrections === null) {
+      return [recognized];
+    } else {
+      if (corrections.indexOf(recognized) == -1) {
+        corrections.push(recognized);
+      }
+      return corrections;
+    }
+  });
+}
+
+SpeechGames.Speech.prototype.read = function(callback, keyword) {
+  if (!callback) {
+    return;
+  }
+
+  if (keyword) {
+    firebase.database().ref('/corrections/' + keyword).once('value').then(function (snapshot) {
+      snapshot = snapshot.val();
+      callback(snapshot);
+    });
+  } else {
+    firebase.database().ref('/corrections/').once('value').then(function (snapshot) {
+      snapshot = snapshot.val();
+      callback(snapshot);
+    });
+  }
+}
+
+SpeechGames.Speech.prototype.proposeCorrections = function(misrecognized, intended) {
+  if (intended.length <= 0)  {
+    return;
+  }
+  console.log("Proposed corrections for " + intended+ ": " + misrecognized);
+  var arr = {};
+  arr[intended] = misrecognized;
+  console.log(arr);
+  firebase.database().ref('/proposed/').push().set(arr);
+}
+
+SpeechGames.Speech.prototype.reviewProposedCorrections = function() {
+  //TODO: dliangsta
+}
+
+SpeechGames.Speech.prototype.deleteCorrection = function() {
+  //TODO: dliangsta
+}
+
+
+SpeechGames.Speech.prototype.pushCorrection = function() {
+  //TODO: dliangsta
+}
+
+SpeechGames.Speech.prototype.pushCorrections = function() {
+  firebase.database().ref('/proposed/').once('value').then(function (snapshot) {
+    snapshot = snapshot.val();
+    for (var key in snapshot) {
+      for (var key2 in snapshot[key]) {
+        for (var key3 in snapshot[key][key2]) {
+          console.log(key2 + ": " + snapshot[key][key2][key3])
+          this.addCorrection(snapshot[key][key2][key3], key2)
+        }
+      }
+    }
+  });
+  firebase.database().ref('/proposed/').remove();
+}
+
+// reads corrections from firebase and puts them in "corrections"
+SpeechGames.Speech.prototype.loadCorrections = function() {
+  this.read(function (snapshot) {
+    SpeechGames.Speech.corrections = {};
+    for (var key in snapshot) {
+      SpeechGames.Speech.corrections[snapshot[key]] = key;
+    }
+  });
+  console.log("Corrections loaded from firebase.");
+}
+
+// used to recreate the database, if wiping it
+SpeechGames.Speech.prototype.generate = function() {
+  for (var key in SpeechGames.Speech.corrections) {
+    this.addCorrection(key, SpeechGames.Speech.corrections[key]);
+  }
 }
