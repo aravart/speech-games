@@ -177,6 +177,23 @@
     messagingSenderId: "100106301481"
   };
   firebase.initializeApp(config);
+    // when logging, data is sent to database
+  if (!window.location.href.includes('github'))  {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // require logging and demo mode
+        if (!window.location.href.includes('logging')) {
+          window.location='index.html?logging=true&demo=true';
+        } else {
+          SpeechGames.logging = true;
+          console.log("LOGGING!");
+        }
+      } else {
+        console.log("REDIRECTING!");
+        window.location='auth.html';
+      }
+    });
+  } 
 </script>
 <script src="backend.js"></script>
 

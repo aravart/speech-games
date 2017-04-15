@@ -417,6 +417,8 @@ $(document).ready(function() {
 
   if(!SpeechGames.getParameterByName_('debug')) {
     $('#debug').hide();
+  } else {
+    console.log("DEBUGGING");
   }
 
   if(!SpeechGames.getParameterByName_('demo')) {
@@ -425,28 +427,13 @@ $(document).ready(function() {
     SpeechGames.speech.demoMode = true;
     SpeechGames.speech.awake = false;
     SpeechGames.speech.setMicInterval_();
-    console.log("demo mode");
+    console.log("DEMOING");
   }
 
   if (SpeechGames.getParameterByName_('level')) {
     SpeechGames.speech.awake = true;
   }
 
-  // when logging, data is sent to database
-  if (!window.location.href.includes("github"))  {
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        // User is signed in.
-        console.log("LOGGING!");
-        SpeechGames.logging = true;
-      } else {
-        // No user is signed in.
-        console.log("REDIRECTING!");
-        window.location='auth.html';
-      }
-    });
-  } 
-  
 
   $('#q')
     .change(SpeechGames.speech.scheduleParse_.bind(SpeechGames.speech))
