@@ -4,7 +4,7 @@
 <head>
   <script>
     if (window.location.href.includes("github.io")) {
-      window.location.assign("https://speechgames-60eb5.firebaseapp.com/index.html?logging=true&demo=true");
+      window.location.assign("https://speechgames-60eb5.firebaseapp.com/index.html");
     }
   </script>
   <script src="lib/closure-library/closure/goog/base.js"></script>
@@ -54,7 +54,7 @@
 <body>
 
   <div class="full-container">
-    
+
     <table width="100%">
       <tbody>
         <tr>
@@ -69,8 +69,8 @@
 
     <div class="row form-inline">
       <div class="col-md-12 no-margin">
-        <img id="microphone" style="width: 5.5%;" src="https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif" />
-        <input id="q" autocomplete="off" style="width: 94%;" class="form-control" type="text" name="q" id="transcript" placeholder="Speak" />
+        <img id="microphone" style="width: 5.5%;" src="https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif"/>
+        <input id="q" autocomplete="off" style="width: 94%;" class="form-control" type="text" name="q" id="transcript" placeholder="Speak"/>
       </div>
     </div>
 
@@ -96,7 +96,9 @@
       </div>
     </div>
 
-    <div class="space"><p></p></div>
+    <div class="space">
+      <p></p>
+    </div>
 
     <div class="mui-row">
       <div class="mui-col-md-4 relative no-margin">
@@ -150,56 +152,51 @@
       <pre id="containerCode"></pre>
       <div id="dialogDoneText" style="font-size: large; margin: 1em;"></div>
       <div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0">
-      <button id="doneCancel" class="secondary">
+        <button id="doneCancel" class="secondary">
           Say "Stay on this level"
-      </button>
-      or
-      <button id="doneOk" class="secondary">
+        </button> or
+        <button id="doneOk" class="secondary">
           Say "Go to the next level"
       </button>
       </div>
     </div>
   </div>
 
-<script src="lib-interface.js"></script>
-<script src="lib-dialogs.js"></script>
-<script src="answers.js"></script>
-<script src="speech.js"></script>
-<script src="turtle.js"></script>
-<script src="suggestions.js"></script>
-<script src="ui.js"></script>
+  <script src="lib-interface.js"></script>
+  <script src="lib-dialogs.js"></script>
+  <script src="answers.js"></script>
+  <script src="speech.js"></script>
+  <script src="turtle.js"></script>
+  <script src="suggestions.js"></script>
+  <script src="ui.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/3.7.8/firebase.js"></script>
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyDXd6CVw16A-ZNUxKOLCWMXuU5vPY8fuJU",
-    authDomain: "speechgames-60eb5.firebaseapp.com",
-    databaseURL: "https://speechgames-60eb5.firebaseio.com",
-    projectId: "speechgames-60eb5",
-    storageBucket: "speechgames-60eb5.appspot.com",
-    messagingSenderId: "100106301481"
-  };
-  firebase.initializeApp(config);
+  <script src="https://www.gstatic.com/firebasejs/3.7.8/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDXd6CVw16A-ZNUxKOLCWMXuU5vPY8fuJU",
+      authDomain: "speechgames-60eb5.firebaseapp.com",
+      databaseURL: "https://speechgames-60eb5.firebaseio.com",
+      projectId: "speechgames-60eb5",
+      storageBucket: "speechgames-60eb5.appspot.com",
+      messagingSenderId: "100106301481"
+    };
+    firebase.initializeApp(config);
     // when logging, data is sent to database
-  if (window.location.href.includes('firebase') || window.location.href.includes('localhost'))  {
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        // require logging and demo mode
-        if (!window.location.href.includes('logging')) {
-          window.location='index.html?logging=true&demo=true';
-        } else {
+    if (window.location.href.includes('firebase') || window.location.href.includes('localhost')) {
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          // require logging and demo mode
           SpeechGames.logging = true;
           console.log("LOGGING");
+        } else {
+          console.log("REDIRECTING");
+          window.location = 'auth.html';
         }
-      } else {
-        console.log("REDIRECTING");
-        window.location='auth.html';
-      }
-    });
-  } 
-</script>
-<script src="speech_errors.js"></script>
+      });
+    }
+  </script>
+  <script src="speech_errors.js"></script>
 
 </body>
 

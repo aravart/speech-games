@@ -432,17 +432,11 @@ $(document).ready(function() {
     console.log("DEBUGGING");
   }
 
-  if(!SpeechGames.getParameterByName_('demo')) {
-    SpeechGames.speech.awake = true;
-  } else {
+  if(SpeechGames.getParameterByName_('demo') || window.location.href.includes('firebase') || window.location.href.includes('localhost')) {
     SpeechGames.speech.demoMode = true;
     SpeechGames.speech.awake = false;
     SpeechGames.speech.setMicInterval_();
     console.log("DEMOING");
-  }
-
-  if (SpeechGames.getParameterByName_('level')) {
-    SpeechGames.speech.awake = true;
   }
 
   if (window.location.href.includes('firebase') || window.location.href.includes('localhost'))  {
