@@ -1,0 +1,13 @@
+{
+  "database": {
+    "rules": "firebase/database.rules.json"
+  },
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "theory/*",
+      "README.md",
+      "Makefile"
+    ]
+  }
+}
