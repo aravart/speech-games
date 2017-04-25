@@ -6,6 +6,7 @@
 
 goog.provide('SpeechBlocks.WorkspaceState');
 
+goog.require('goog.structs.Set');
 goog.require('SpeechBlocks.BlockUtils');
 goog.require('SpeechBlocks.FieldTypes');
 
@@ -15,9 +16,38 @@ goog.require('SpeechBlocks.FieldTypes');
  * @private
  */
 SpeechBlocks.WorkspaceState = function() {
-  /** 
-   * True if the workspace is empty, false otherwise.
-   * @public 
+  /**
+   * The IDs of blocks on the workspace with no fields or inputs (e.g., move blocks.)
+   * By convention, these blocks are assumed to have predecessor and successor connections.
+   * @public
+   */
+  this.ordinaryBlockIds = new goog.structs.Set();
+
+  /**
+   * The IDs of blocks on the workspace with statement inputs.
+   * @public
+   */
+  this.statementInputBlockIds = new goog.structs.Set();
+
+  /**
+   * The IDs of blocks on the workspace with value inputs.
+   * @public
+   */
+  this.valueInputBlockIds = new goog.structs.Set();
+
+  /**
+   * The IDs of blocks on the workspace with modifiable fields.
+   * @public
+   */
+  this.modifiableBlockIds = new goog.structs.Set();
+
+  /**
+   * True if the workspace is empty.
+   * 
+   * Although this information is in part obtainable by checking whether or not
+   * each ID set is empty, there might be blocks that do not fall into any
+   * of the above categories.
+   * @public
    */
   this.empty = false;
 
@@ -27,34 +57,24 @@ SpeechBlocks.WorkspaceState = function() {
    * @public
    */
   this.allBlocksConnected = false;
-
-  /**
-   * True if at least one block in the workspace contains
-   * a modifiable field, false otherwise.
-   * @public
-   */
-  this.blocksAreModifiable = false;
 };
 
 /**
  * Checks whether this state and the state of the provided workspace are the same.
  * 
- * This is implemented as a hyper-simplified object-equals function. Should work
- * for this use case because state fields will be no more complicated than
- * booleans and integers.
- * 
  * @param {!SpeechBlocks.WorkspaceState} state The state to check for equality
  * @return {boolean} True if given state matches this state, false otherwise.
  */
 SpeechBlocks.WorkspaceState.prototype.equals = function(state) {
-  var same = true;
-  for (var property in state) {
-    same = same && state[property] == this[property];
-  }
-  return same;
+  return this.ordinaryBlockIds.equals(state.ordinaryBlockIds)
+      && this.statementInputBlockIds.equals(state.statementInputBlockIds)
+      && this.valueInputBlockIds.equals(state.valueInputBlockIds)
+      && this.modifiableBlockIds.equals(state.modifiableBlockIds)
+      && this.allBlocksConnected == state.allBlocksConnected;
 };
 
 /**
+ * Returns the WorkspaceState corresponding to the given workspace object.
  * @param {!Blockly.Workspace} workspace The workspace whose state we must determine.
  * @return {!SpeechBlocks.WorkspaceState} The current state of the workspace.
  */
@@ -75,14 +95,30 @@ SpeechBlocks.WorkspaceState.stateOf = function(workspace) {
       state.allBlocksConnected = false;
     }
 
-    // Check for blocks with fields.
+    // Check for blocks with statement inputs, value inputs, and fields.
+    // Also keep track of whether or not the block is ordinary.
+    var ordinary = true;
     block.inputList.forEach(function(input) {
+      if (input.type == Blockly.NEXT_STATEMENT) {
+        state.statementInputBlockIds.add(block.id);
+        ordinary = false;
+      } else if (input.type == Blockly.INPUT_VALUE) {
+        state.valueInputBlockIds.add(block.id);
+        ordinary = false;
+      }
+
       input.fieldRow.forEach(function(field) {
         if (SpeechBlocks.FieldTypes.typeOf(field) != SpeechBlocks.FieldTypes.IRRELEVANT) {
-          state.blocksAreModifiable = true;
+          state.modifiableBlockIds.add(block.id);
+          ordinary = false;
         }
       });
     });
+
+    // Handle case where block is ordinary.
+    if (block.previousConnection && block.nextConnection && ordinary) {
+      state.ordinaryBlockIds.add(block.id);
+    }
   });
   return state;
 };

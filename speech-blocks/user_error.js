@@ -6,6 +6,11 @@
 
 goog.provide('SpeechBlocks.UserError');
 
+/**
+ * Constructs the error.
+ * @param {string} message The error message to propagate.
+ * @constructor
+ */
 SpeechBlocks.UserError = function(message) {
   this.name = 'UserError';
   this.stack = (new Error()).stack;

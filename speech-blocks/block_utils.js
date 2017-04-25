@@ -141,7 +141,9 @@ SpeechBlocks.BlockUtils.isolateBlock = function(blockId, workspace) {
   block.inputList.forEach(function(input) {
     if (input.connection) {
       var conn = SpeechBlocks.BlockUtils.asConnection_(input.connection);
-      conn.disconnect();
+      if (conn.isConnected()) {
+        conn.disconnect();
+      }
     }
   });
 };

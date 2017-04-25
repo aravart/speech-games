@@ -32,7 +32,7 @@ SpeechGames.controller.addStateChangeListener(function(state) {
     sugs.push('connect');
   }
 
-  if (state.blocksAreModifiable) {
+  if (!state.modifiableBlockIds.isEmpty()) {
     sugs.push('change');
   }
 
