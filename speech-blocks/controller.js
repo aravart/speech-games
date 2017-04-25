@@ -86,11 +86,17 @@ SpeechBlocks.Controller = function(workspace, useAnimation) {
       function(overlappingBlock) {
         var newCoords = this.layout_.getPositionForExistingBlock(overlappingBlock.id);
         var overlappingBlockCoords = overlappingBlock.getRelativeToSurfaceXY();
-        this.animator_.animateTranslation(
-            overlappingBlock.id,
-            /* dx */ newCoords.x - overlappingBlockCoords.x,
-            /* dy */ newCoords.y - overlappingBlockCoords.y,
-            /* callback */ function() { overlappingBlock.unselect(); });
+        if (this.animator_) {
+          this.animator_.animateTranslation(
+              overlappingBlock.id,
+              /* dx */ newCoords.x - overlappingBlockCoords.x,
+              /* dy */ newCoords.y - overlappingBlockCoords.y,
+              /* callback */ function() { overlappingBlock.unselect(); });
+        } else {
+          new SpeechBlocks.Translation(
+              newCoords.x - overlappingBlockCoords.x,
+              newCoords.y - overlappingBlockCoords.y).place(overlappingBlock.id, this.workspace_);
+        }
       }.bind(this));
   }.bind(this));
 
