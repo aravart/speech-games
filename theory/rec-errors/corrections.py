@@ -87,16 +87,16 @@ def gen_move(block_ids):
         List of all valid MOVE commands.
     """
     # Useful lambdas.
-    move_after = lambda bid1, bid2: 'move block ' + bid1 + ' after block ' + bid2
-    move_inside = lambda bid1, bid2: 'move block ' + bid1 + ' inside block ' + bid2
+    connect_under = lambda bid1, bid2: 'connect block ' + bid1 + ' under block ' + bid2
+    connect_inside = lambda bid1, bid2: 'connect block ' + bid1 + ' inside block ' + bid2
 
     # Do the generating.
     coms = []
     for (bid1, bid2) in itertools.combinations(block_ids, 2):
-        coms.append(move_after(bid1, bid2))
-        coms.append(move_after(bid2, bid1))
-        coms.append(move_inside(bid1, bid2))
-        coms.append(move_inside(bid2, bid1))
+        coms.append(connect_under(bid1, bid2))
+        coms.append(connect_under(bid2, bid1))
+        coms.append(connect_inside(bid1, bid2))
+        coms.append(connect_inside(bid2, bid1))
     return coms
 
 def gen_change(block_ids, value_sets):
