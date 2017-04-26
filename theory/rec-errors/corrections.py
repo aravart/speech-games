@@ -13,7 +13,8 @@ VALUE_SETS = [
     ['up', 'down'],
     ['left', 'right'],
     ['45', '72', '90', '120', '144'],
-    ['2', '3', '4', '5']]
+    ['2', '3', '4', '5'],
+    ['red', 'orange', 'blue', 'green', 'yellow', 'purple', 'brown', 'black', 'white']]
 BLOCK_TYPES = ['move', 'turn', 'pen', 'color', 'repeat']
 
 # Various corrections that are necessary to obtain a phonetic
@@ -147,6 +148,7 @@ def gen_commands(block_ids, block_types, value_sets):
     coms.extend(gen_move(block_ids))
     coms.extend(gen_change(block_ids, value_sets))
     coms.extend(gen_delete(block_ids))
+    coms.append('go to the next level')
     coms.append('run the program')
     return coms
 
