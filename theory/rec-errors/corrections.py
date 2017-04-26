@@ -30,6 +30,7 @@ SYM_MAP = {
     '8': 'eight',
     '9': 'nine',
     '10': 'ten',
+    '24': 'twenty four',
     '45': 'forty five',
     '52': 'fifty two',
     '72': 'seventy two',
@@ -38,6 +39,7 @@ SYM_MAP = {
     '100': 'one hundred',
     '120': 'one twenty',
     '124': 'one twenty four',
+    '125': 'one twenty five',
     '144': 'one forty four',
     '245': 'two forty five',
     '290': 'two ninety',
@@ -46,6 +48,7 @@ SYM_MAP = {
     '400': 'four hundred',
     '500': 'five hundred',
     '700': 'seven hundred',
+    '9400': 'ninety four hundred',
     '+': 'plus',
     'k\'nex': 'connects',
     '6-2': 'six two',
@@ -63,7 +66,14 @@ SYM_MAP = {
     '5-under': 'five under',
     'loc': 'lock',
     'kinect': 'connect',
-    'tutuapp': 'two to'
+    'tutuapp': 'two to',
+    'connectbot': 'connect pot',
+    'block1': 'block one',
+    'pokemon': 'poke man',
+    'farquad': 'far quad',
+    '24125': 'twenty four one twenty five',
+    'miquelon': 'nickel on',
+    'pop3': 'pop three'
 }
 
 def gen_get(block_types):
@@ -211,6 +221,25 @@ def correct(rec, coms):
     dists = {com:levenshtein(rec, com) for com in coms}
     return min(dists.keys(), key=dists.get)
 
+def load_data(filename):
+    """Loads the correction data from the CSV file. File must at least have two
+    columns, namely a 'Recognition' column and an 'Utterance' column.
+
+    Args:
+        filename: Name of the csv file from which to load the data.
+
+    Returns:
+        List of dicts representing recognitions and the corresponding intended command.
+    """
+    data = []
+    with open(filename) as csvfile:
+        for row in csv.DictReader(csvfile):
+            data.append({
+                'rec':row['Recognition'].lower(),
+                'com':row['Utterance'].lower()
+            })
+    return data
+
 def print_example(ex):
     """Pretty prints the example after it has been corrected."""
     if ex['rec'] == ex['com']:
@@ -228,9 +257,8 @@ def print_example(ex):
 def main():
     """Tests the edit-distance method of speech correction."""
     data = []
-    with open('data.csv', 'r') as csvfile:
-        for row in csv.DictReader(csvfile):
-            data.append({'rec':row['Recognition'], 'com':row['Utterance']})
+    data.extend(load_data('no_corrections_data.csv'))
+    data.extend(load_data('hash_corrections_data.csv'))
     commands = gen_commands(BLOCK_IDS, BLOCK_TYPES, VALUE_SETS)
 
     num_corrections = 0
@@ -240,7 +268,7 @@ def main():
         # Uncomment the lines below to determine which words are not properly
         # accounted for in the symbol map defined at the top of this file.
         # for word in ex['rec'].split():
-        #     if not word in ARPABET.keys() and not word in SYM_MAP.keys():
+        #     if not word.lower() in ARPABET.keys() and not word.lower() in SYM_MAP.keys():
         #         print word
         ex['cor'] = correct(ex['rec'], commands)
         print_example(ex)
