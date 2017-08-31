@@ -1,15 +1,7 @@
-# Arpabet 
-
-## Introduction
-
-> This library takes a sentence and translates it into the closest command in our perceived state
-
-> Take file folder and put into whatever project you are working on and use it as a normal library
-
-## Code Samples
+##### Code Samples
 
 >How to include in html index 
-```
+
 <head>
     <script src="LevensteinDistance.js"></script>
     <script src="Map.js"></script>
