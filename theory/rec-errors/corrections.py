@@ -279,5 +279,12 @@ def main():
     print 'Original accuracy was', float(original_correct) / len(data)
     print num_corrections, 'corrections were made.'
 
+    print 'Writing the results to file...'
+    with open('levenshtein_corrections.csv', 'w') as csv_out:
+        corr_writer = csv.writer(csv_out)
+        corr_writer.writerow(['utterance', 'recognition', 'correction'])
+        for ex in data:
+            corr_writer.writerow([ex['com'], ex['rec'], ex['cor']])
+
 if __name__ == '__main__':
     main()
