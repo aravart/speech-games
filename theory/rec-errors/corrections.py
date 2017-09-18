@@ -159,6 +159,7 @@ def gen_commands(block_ids, block_types, value_sets):
     coms.extend(gen_change(block_ids, value_sets))
     coms.extend(gen_delete(block_ids))
     coms.append('go to the next level')
+    coms.append('stay on this level')
     coms.append('run the program')
     return coms
 
