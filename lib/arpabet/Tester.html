@@ -1,0 +1,129 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+    <script src="Arpabet.js"></script>
+    <script src="CommandGeneration.js"></script>
+    <script src="LevensteinDistance.js"></script>
+    <script src="Map.js"></script>
+
+
+</head>
+
+<body>
+    <script>
+        window.onload = function () {
+            var fileInput = document.getElementById('fileInput');
+            var fileDisplayArea = document.getElementById('fileDisplayArea');
+
+            fileInput.addEventListener('change', function (e) {
+                var file = fileInput.files[0];
+                var textType = /text.*/;
+
+                if (file.type.match(textType)) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        var newFile = "";
+                        var arpa = new Arpabet();
+                        var file = reader.result.split('\n');
+                        for (var i = 0; i < file.length; i++) {
+                            var row = file[i].split(',');
+                            var u = row[0];
+                            var r = row[1];
+                            var evan = row[2];
+                            var cr = arpa.Correct(u);
+                            newFile += cr + ",\n";
+                        }
+                        fileDisplayArea.innerText = newFile;
+                    }
+
+                    reader.readAsText(file);
+                } else {
+                    fileDisplayArea.innerText = "File not supported!"
+                }
+            });
+        }
+
+        function getCommandInfo() {
+            var commandDisplayArea = document.getElementById('commandInfo');
+            var arpa = new Arpabet();
+            var commands = arpa.GetCommands();
+            commandDisplayArea.innerText = "Command Count:" + commands.length + '\n';
+            commands.forEach(function (command) {
+                commandDisplayArea.innerText += command + '\n';
+            });
+        }
+
+        function clearCommandInfo() {
+            var commandDisplayArea = document.getElementById('commandInfo');
+            commandDisplayArea.innerText = "";
+
+        }
+
+        function getPhonemeInfo() {
+            var commandDisplayArea = document.getElementById('levensteinInfo');
+            var utterance = document.getElementById('utteranceText').value;
+            var recognition = document.getElementById('recognitionText').value;
+            var arpa = new Arpabet();
+            commandDisplayArea.innerText = "";
+            if (utterance !== '')
+                commandDisplayArea.innerText += "\nUtterance to Phoneme:\n" + arpa.ToPhoneme(utterance) + "\n";
+            if (recognition !== '')
+                commandDisplayArea.innerText += "\nRecognition to Phoneme:\n" + arpa.ToPhoneme(recognition) + "\n";
+
+        }
+
+        function convertSingle() {
+            var commandDisplayArea = document.getElementById('singleConvertedCommand');
+            var utterance = document.getElementById('singleCommand').value;
+            var arpa = new Arpabet();
+            commandDisplayArea.innerText = "\n" + arpa.Correct(utterance) + "\n";
+        }
+    </script>
+    <div id="page-wrapper">
+        <h1>Information</h1>
+        <h3>Commands</h3>
+        <button id="commands" onclick="getCommandInfo()">Get Commands</button>
+        <button id="clear" onclick="clearCommandInfo()">Clear Commands</button>
+        <div id="commandInfo">
+
+        </div>
+        <br><br>
+
+        <h3>Levenstein Distance</h3>
+        <button id="getLev" onclick="getPhonemeInfo()">Get Phoneme Info</button>
+        <br><br> Utterance: <input type="text" id="utteranceText"> Recognition: <input type="text" id="recognitionText">
+
+
+        <div id="levensteinInfo">
+
+        </div>
+
+        <br><br>
+        <h1>Arpabet Converter</h1>
+        <div>
+            <h3>Single Converter</h3>   
+            <button id="converSingle" onclick="convertSingle()">Convert Utterance</button>
+            <br><br>
+            Utterance: <input type="text" id="singleCommand"> 
+            <div id="singleConvertedCommand">
+
+            </div>
+            <br><br>
+            <h3>Mass Reader</h3>
+            <input type="file" id="fileInput">
+            <br>
+            Must be in .txt form with new lines between each command            
+            <div id="fileDisplayArea">
+
+            </div>
+
+
+        </div>
+
+</body>
+
+</html>
