@@ -183,16 +183,7 @@ def phon_seq(phrase):
             seq.extend(ARPABET[word][0])
     return seq
 
-def levenshtein(rec, com):
-    """Computes the Levenshtein (edit) distance between the recognition and command.
-
-    Args:
-        rec: The recognition.
-        com: The command.
-
-    Returns:
-        The edit distance between the recognition and command (an integer).
-    """
+def levenshtein_table(rec, com):
     rseq = phon_seq(rec)
     cseq = phon_seq(com)
     dists = np.zeros((len(rseq), len(cseq)))
@@ -207,7 +198,19 @@ def levenshtein(rec, com):
                     dists[i-1, j] + 1,
                     dists[i, j-1] + 1,
                     dists[i-1, j-1] + (1 if rphon != cphon else 0))
-    return dists[-1, -1]
+    return dists
+
+def levenshtein(rec, com):
+    """Computes the Levenshtein (edit) distance between the recognition and command.
+
+    Args:
+        rec: The recognition.
+        com: The command.
+
+    Returns:
+        The edit distance between the recognition and command (an integer).
+    """
+    return levenshtein_table(rec, com)[-1, -1]
 
 def correct(rec, coms):
     """Given the command set, corrects the recognition.
