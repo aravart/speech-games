@@ -92,7 +92,7 @@ SpeechGames.Suggestions.prototype.setSuggestions = function(suggestions) {
 }
 
 /** @public */
-SpeechGames.Suggestions.prototype.updateSuggestions = async function() {
+SpeechGames.Suggestions.prototype.updateSuggestions = async function updateSuggestions() {
   this.stopBlinkingSuggestions();
   var suggestionDiv = $('#suggestionDiv');
   for (var i = this.suggestions_.length - 1; i >= 0; i--) {
