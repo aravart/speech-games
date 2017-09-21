@@ -18,15 +18,23 @@ def main():
     else:
         print 'I said (y/n). Can you read? Anyway, not printing...'
 
-    next_command = lambda: raw_input('\nGive me an utterance to correct or \'q\' to exit: ')
+    next_command = lambda: raw_input('\nGive me an utterance to correct or "quit" to exit: ')
+    next_table = lambda: raw_input(
+        '\nWould you like to see the levenshtein table for another command? (enter command or "no"): ')
     command = next_command()
-    while command != 'q':
+    while command.lower() != 'quit':
         correction = correct(command, commands)
         print ('Command \033[94m "%s" \033[0m was corrected to \033[94m "%s" \033[0m'
                % (command.upper(), correction.upper()))
         print 'In phonemes: %s was corrected to %s' % (phon_seq(command), phon_seq(correction))
         print 'Winning Levenshtein table was:'
         print levenshtein_table(command, correction)
+
+        other_command = next_table()
+        while other_command.lower() != 'no':
+            print levenshtein_table(command, other_command)
+            other_command = next_table()
+
         command = next_command()
     print 'Bye!'
 
