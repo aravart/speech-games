@@ -29,14 +29,20 @@
                         var newFile = "";
                         var arpa = new Arpabet();
                         var file = reader.result.split('\n');
+                        var start = new Date().getTime();
                         for (var i = 0; i < file.length; i++) {
                             var row = file[i].split(',');
-                            var u = row[0];
+                            // remove newline character
+                            var u = row[0].replace(/(\r\n|\n|\r)/gm,"");
                             var r = row[1];
                             var evan = row[2];
                             var cr = arpa.Correct(u);
-                            newFile += cr + ",\n";
+                            newFile += cr + "\n";
+                            console.log(i);
                         }
+                        end = new Date().getTime();
+                        console.log("total time: ",(end - start)/1000);
+                        console.log("avg time per utterance: ", (end - start)/1000/file.length);
                         fileDisplayArea.innerText = newFile;
                     }
 
