@@ -3,6 +3,7 @@ import csv
 import itertools
 from nltk.corpus import cmudict
 import numpy as np
+from time import time
 
 # The magical arpabet.
 ARPABET = cmudict.dict()
@@ -260,6 +261,7 @@ def print_example(ex):
 
 def main():
     """Tests the edit-distance method of speech correction."""
+    start = time()
     data = []
     data.extend(load_data('no_corrections_data.csv'))
     data.extend(load_data('hash_corrections_data.csv'))
@@ -282,6 +284,9 @@ def main():
     print 'Final accuracy was', float(new_correct) / len(data)
     print 'Original accuracy was', float(original_correct) / len(data)
     print num_corrections, 'corrections were made.'
+    timeDiff = time() - start
+    print 'Elapsed time: ', timeDiff
+    print 'Average time per correction: ', timeDiff / len(data)
 
     print 'Writing the results to file...'
     with open('levenshtein_corrections.csv', 'w') as csv_out:

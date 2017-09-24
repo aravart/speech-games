@@ -7,9 +7,6 @@
     <script src="Arpabet.js"></script>
     <script src="CommandGeneration.js"></script>
     <script src="LevensteinDistance.js"></script>
-    <script src="Map.js"></script>
-
-
 </head>
 
 <body>
@@ -36,7 +33,7 @@
                             var u = row[0].replace(/(\r\n|\n|\r)/gm,"");
                             var r = row[1];
                             var evan = row[2];
-                            var cr = arpa.Correct(u);
+                            var cr = arpa.correct(u);
                             newFile += cr + "\n";
                             console.log(i);
                         }
@@ -56,7 +53,7 @@
         function getCommandInfo() {
             var commandDisplayArea = document.getElementById('commandInfo');
             var arpa = new Arpabet();
-            var commands = arpa.GetCommands();
+            var commands = arpa.getCommands();
             commandDisplayArea.innerText = "Command Count:" + commands.length + '\n';
             commands.forEach(function (command) {
                 commandDisplayArea.innerText += command + '\n';
@@ -71,22 +68,25 @@
 
         function getPhonemeInfo() {
             var commandDisplayArea = document.getElementById('levensteinInfo');
-            var utterance = document.getElementById('utteranceText').value;
-            var recognition = document.getElementById('recognitionText').value;
+            var utterance = document.getElementById('utteranceText').value.toLowerCase();
+            var recognition = document.getElementById('recognitionText').value.toLowerCase();
             var arpa = new Arpabet();
+            var utterancePhoneme = arpa.toPhoneme(utterance);
+            var recognitionPhoneme = arpa.toPhoneme(recognition);
             commandDisplayArea.innerText = "";
             if (utterance !== '')
-                commandDisplayArea.innerText += "\nUtterance to Phoneme:\n" + arpa.ToPhoneme(utterance) + "\n";
+                commandDisplayArea.innerText += "\nUtterance to Phoneme:\n" + utterancePhoneme + "\n";
             if (recognition !== '')
-                commandDisplayArea.innerText += "\nRecognition to Phoneme:\n" + arpa.ToPhoneme(recognition) + "\n";
+                commandDisplayArea.innerText += "\nRecognition to Phoneme:\n" + recognitionPhoneme + "\n";
 
+            commandDisplayArea.innerText += "\nDistance: " + arpa.levensteinDistance_.findLevensteinDistance(utterancePhoneme, recognitionPhoneme) + "\n"
         }
 
         function convertSingle() {
             var commandDisplayArea = document.getElementById('singleConvertedCommand');
             var utterance = document.getElementById('singleCommand').value;
             var arpa = new Arpabet();
-            commandDisplayArea.innerText = "\n" + arpa.Correct(utterance) + "\n";
+            commandDisplayArea.innerText = "\n" + arpa.correct(utterance) + "\n";
         }
     </script>
     <div id="page-wrapper">
