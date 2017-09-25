@@ -5,26 +5,35 @@
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="http://code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
     <script src="Arpabet.js"></script>
-    <script src="CommandGeneration.js"></script>
-    <script src="LevensteinDistance.js"></script>
+    <script src="Correction.js"></script>
 </head>
 
 <body>
     <script>
+        this.BLOCK_IDS = [1,2,3,4,5,6,7,8,9,10];
+        this.VALUE_SETS = [
+            ['up', 'down'],
+            ['left', 'right'],
+            ['45', '72', '90', '120', '144'],
+            ['2', '3', '4', '5'],
+            ['red', 'orange', 'blue', 'green', 'yellow', 'purple', 'brown', 'black', 'white']];
+        this.BLOCK_TYPES = ['move', 'turn', 'pen', 'color', 'repeat'];
         window.onload = function () {
             var fileInput = document.getElementById('fileInput');
             var fileDisplayArea = document.getElementById('fileDisplayArea');
+            
 
             fileInput.addEventListener('change', function (e) {
                 var file = fileInput.files[0];
                 var textType = /text.*/;
 
                 if (file.type.match(textType)) {
+                    
                     var reader = new FileReader();
 
                     reader.onload = function (e) {
                         var newFile = "";
-                        var arpa = new Arpabet();
+                        var arpa = new Correction();
                         var file = reader.result.split('\n');
                         var start = new Date().getTime();
                         for (var i = 0; i < file.length; i++) {
@@ -33,7 +42,7 @@
                             var u = row[0].replace(/(\r\n|\n|\r)/gm,"");
                             var r = row[1];
                             var evan = row[2];
-                            var cr = arpa.correct(u);
+                            var cr = arpa.correct(u,this.BLOCK_IDS, this.VALUE_SETS, this.BLOCK_TYPES);
                             newFile += cr + "\n";
                             console.log(i);
                         }
@@ -85,8 +94,8 @@
         function convertSingle() {
             var commandDisplayArea = document.getElementById('singleConvertedCommand');
             var utterance = document.getElementById('singleCommand').value;
-            var arpa = new Arpabet();
-            commandDisplayArea.innerText = "\n" + arpa.correct(utterance) + "\n";
+            var arpa = new Correction();
+            commandDisplayArea.innerText = "\n" + arpa.correct(utterance, this.BLOCK_IDS, this.VALUE_SETS, this.BLOCK_TYPES) + "\n";
         }
     </script>
     <div id="page-wrapper">
