@@ -42,7 +42,7 @@
                             var u = row[0].replace(/(\r\n|\n|\r)/gm,"");
                             var r = row[1];
                             var evan = row[2];
-                            var cr = arpa.correct(u,this.BLOCK_IDS, this.VALUE_SETS, this.BLOCK_TYPES);
+                            var cr = arpa.orrect(u,this.BLOCK_IDS, this.VALUE_SETS, this.BLOCK_TYPES);
                             newFile += cr + "\n";
                             console.log(i);
                         }
