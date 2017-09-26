@@ -60,9 +60,10 @@
         }
 
         function getCommandInfo() {
+            
             var commandDisplayArea = document.getElementById('commandInfo');
-            var arpa = new Arpabet();
-            var commands = arpa.getCommands();
+            var commandGenerator = new Corrector().commandGenerator_;
+            var commands = commandGenerator.generateCommands(BLOCK_IDS, VALUE_SETS, BLOCK_TYPES);
             commandDisplayArea.innerText = "Command Count:" + commands.length + '\n';
             commands.forEach(function (command) {
                 commandDisplayArea.innerText += command + '\n';
