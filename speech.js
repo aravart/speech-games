@@ -107,14 +107,10 @@ SpeechGames.Speech.prototype.setMicInterval_ = function() {
  */
 SpeechGames.Speech.prototype.correctSpeech_ = function(speech) {
   var workspaceState = SpeechGames.controller.workspaceState_;
-  var blockIds = Object.values(workspaceState.ordinaryBlockIds.map_.map_)
-  var valueSets = [
-    ['up', 'down'],
-    ['left', 'right'],
-    ['45', '72', '90', '120', '144'],
-    ['2', '3', '4', '5'],
-    ['red', 'orange', 'blue', 'green', 'yellow', 'purple', 'brown', 'black', 'white']];
+  var blockIds = Object.values(workspaceState.blockIds.map_.map_);
+  var valueSets = Object.values(workspaceState.valueSets.map_.map_);
   var blockTypes = ['move', 'turn', 'pen', 'color', 'repeat'];
+  // var blockTypes = Object.values(workspaceState.blockTypes.map_.map_);
   return this.corrector_.correct(speech, blockIds, valueSets, blockTypes);
 };
 

@@ -42,6 +42,18 @@ SpeechBlocks.WorkspaceState = function() {
   this.modifiableBlockIds = new goog.structs.Set();
 
   /**
+   * The IDs of all blocks on the workspace.
+   * @public
+   */
+  this.blockIds = new goog.structs.Set();
+
+  /**
+   * The set of value sets for blocks with drop downs.
+   * @public
+   */
+  this.valueSets = new goog.structs.Set();
+
+  /**
    * True if the workspace is empty.
    * 
    * Although this information is in part obtainable by checking whether or not
@@ -70,6 +82,7 @@ SpeechBlocks.WorkspaceState.prototype.equals = function(state) {
       && this.statementInputBlockIds.equals(state.statementInputBlockIds)
       && this.valueInputBlockIds.equals(state.valueInputBlockIds)
       && this.modifiableBlockIds.equals(state.modifiableBlockIds)
+      && this.valueSets.equals(state.valueSets)
       && this.allBlocksConnected == state.allBlocksConnected;
 };
 
@@ -80,7 +93,6 @@ SpeechBlocks.WorkspaceState.prototype.equals = function(state) {
  */
 SpeechBlocks.WorkspaceState.stateOf = function(workspace) {
   var state = new SpeechBlocks.WorkspaceState();
-
   var blocks = workspace.getAllBlocks();
   if (!blocks.length) {
     state.empty = true;
@@ -90,6 +102,8 @@ SpeechBlocks.WorkspaceState.stateOf = function(workspace) {
   state.allBlocksConnected = true;
   var refBlock = blocks[0];
   blocks.forEach(function(block) {
+    state.blockIds.add(block.id);
+
     // Check for unconnected blocks.
     if (!SpeechBlocks.BlockUtils.areBlocksConnected(refBlock.id, block.id, workspace)) {
       state.allBlocksConnected = false;
@@ -112,9 +126,18 @@ SpeechBlocks.WorkspaceState.stateOf = function(workspace) {
           state.modifiableBlockIds.add(block.id);
           ordinary = false;
         }
+
+        if (field instanceof Blockly.FieldDropdown) {
+          var valueSet = [];
+          field.menuGenerator_.forEach(function(value) {
+            valueSet.push(value[1]);
+          });
+          // because the closure uids are unique, this allows 'duplicate' value sets
+          // TODO: fix
+          state.valueSets.add(valueSet);
+        }
       });
     });
-
     // Handle case where block is ordinary.
     if (block.previousConnection && block.nextConnection && ordinary) {
       state.ordinaryBlockIds.add(block.id);
