@@ -5,8 +5,14 @@ function Assert() {
 
 }
 
-Assert.assertNotUndefined = function (obj) {
+Assert.assertNotUndefined = function (obj, name) {
     if (obj === undefined) {
-        throw 'Not undefined assertion failed. ' + obj;
+        var errorMessage;
+        if (name !== undefined) {
+            errorMessage = 'Not undefined assertion failed for ' + name + ' object.';
+        } else {
+            errorMessage = 'Not undefined assertion failed. ';
+        }
+        throw errorMessage;
     }
 }
