@@ -109,7 +109,18 @@ SpeechGames.Speech.prototype.correctSpeech_ = function(speech) {
   var workspaceState = SpeechGames.controller.workspaceState_;
   var blockIds = Object.values(workspaceState.blockIds.map_.map_);
   var valueSets = Object.values(workspaceState.valueSets.map_.map_);
+  // convert the values to english words
+  for (var i = 0; i < valueSets.length; i++) {
+    var valueSet = valueSets[i];
+    for (var j = 0; j < valueSet.length; j++) {
+      // the turn values are turnUp and turnDown so removing 'turn' and lowercasing the word suffices
+      // likewise with pen values
+      valueSet[j] = valueSet[j].toLowerCase().replace("turn","").replace("pen",""); 
+    }
+    valueSets[i] = valueSet;
+  }
   var blockTypes = ['move', 'turn', 'pen', 'color', 'repeat'];
+  console.log(valueSets);
   // var blockTypes = Object.values(workspaceState.blockTypes.map_.map_);
   return this.corrector_.correct(speech, blockIds, valueSets, blockTypes);
 };
