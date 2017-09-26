@@ -4,20 +4,22 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="http://code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
-    <script src="Arpabet.js"></script>
-    <script src="Correction.js"></script>
 </head>
 
 <body>
+    <script src="../../asserts.js"></script>
+    <script src="CommandGenerator.js"></script>
+    <script src="Arpabet.js"></script>
+    <script src="Corrector.js"></script>
     <script>
-        this.BLOCK_IDS = [1,2,3,4,5,6,7,8,9,10];
-        this.VALUE_SETS = [
+        var BLOCK_IDS = [1,2,3,4,5,6,7,8,9,10];
+        var VALUE_SETS = [
             ['up', 'down'],
             ['left', 'right'],
             ['45', '72', '90', '120', '144'],
             ['2', '3', '4', '5'],
             ['red', 'orange', 'blue', 'green', 'yellow', 'purple', 'brown', 'black', 'white']];
-        this.BLOCK_TYPES = ['move', 'turn', 'pen', 'color', 'repeat'];
+        var BLOCK_TYPES = ['move', 'turn', 'pen', 'color', 'repeat'];
         window.onload = function () {
             var fileInput = document.getElementById('fileInput');
             var fileDisplayArea = document.getElementById('fileDisplayArea');
@@ -33,16 +35,14 @@
 
                     reader.onload = function (e) {
                         var newFile = "";
-                        var arpa = new Correction();
+                        var corrector = new Corrector();
                         var file = reader.result.split('\n');
                         var start = new Date().getTime();
                         for (var i = 0; i < file.length; i++) {
                             var row = file[i].split(',');
                             // remove newline character
                             var u = row[0].replace(/(\r\n|\n|\r)/gm,"");
-                            var r = row[1];
-                            var evan = row[2];
-                            var cr = arpa.orrect(u,this.BLOCK_IDS, this.VALUE_SETS, this.BLOCK_TYPES);
+                            var cr = corrector.correct(u, BLOCK_IDS, VALUE_SETS, BLOCK_TYPES);
                             newFile += cr + "\n";
                             console.log(i);
                         }
@@ -79,23 +79,23 @@
             var commandDisplayArea = document.getElementById('levensteinInfo');
             var utterance = document.getElementById('utteranceText').value.toLowerCase();
             var recognition = document.getElementById('recognitionText').value.toLowerCase();
-            var arpa = new Arpabet();
-            var utterancePhoneme = arpa.toPhoneme(utterance);
-            var recognitionPhoneme = arpa.toPhoneme(recognition);
+            var corrector = new Corrector();
+            var utterancePhoneme = corrector.toPhoneme_(utterance);
+            var recognitionPhoneme = corrector.toPhoneme_(recognition);
             commandDisplayArea.innerText = "";
             if (utterance !== '')
                 commandDisplayArea.innerText += "\nUtterance to Phoneme:\n" + utterancePhoneme + "\n";
             if (recognition !== '')
                 commandDisplayArea.innerText += "\nRecognition to Phoneme:\n" + recognitionPhoneme + "\n";
 
-            commandDisplayArea.innerText += "\nDistance: " + arpa.levensteinDistance_.findLevensteinDistance(utterancePhoneme, recognitionPhoneme) + "\n"
+            commandDisplayArea.innerText += "\nDistance: " + corrector.findLevensteinDistance_(utterancePhoneme, recognitionPhoneme) + "\n"
         }
 
         function convertSingle() {
             var commandDisplayArea = document.getElementById('singleConvertedCommand');
             var utterance = document.getElementById('singleCommand').value;
-            var arpa = new Correction();
-            commandDisplayArea.innerText = "\n" + arpa.correct(utterance, this.BLOCK_IDS, this.VALUE_SETS, this.BLOCK_TYPES) + "\n";
+            var corrector = new Corrector();
+            commandDisplayArea.innerText = "\n" + corrector.correct(utterance, this.BLOCK_IDS, this.VALUE_SETS, this.BLOCK_TYPES) + "\n";
         }
     </script>
     <div id="page-wrapper">
