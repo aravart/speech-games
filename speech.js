@@ -75,7 +75,7 @@ SpeechGames.Speech = function() {
     this.mic_animate = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic-animate.gif';
     this.mic = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
     this.parseTimer = null;
-    this.misrecognized = [];
+    // this.misrecognized = [];
     this.corrector_ = new Corrector();
 };
 
@@ -149,6 +149,7 @@ SpeechGames.Speech.prototype.startDictation_ = function() {
 
     this.recognition.onresult = function(e) {
       this.recognition.stop();
+      this.rawSpeech = e.results[0][0].transcript.toLowerCase();
       this.parseSpeech_();
     }.bind(this);
     
@@ -189,7 +190,7 @@ SpeechGames.Speech.prototype.toggleDictation_ = function() {
  * @private
  */
 SpeechGames.Speech.prototype.checkHeyJerry_ = function() {
-  if (this.awake || this.speech === "hey jerry") {
+  if (this.awake || this.rawSpeech === "hey jerry") {
     this.awake = true;
     return true;
   } else {
@@ -208,11 +209,7 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
   $('#parse-message').attr('class', 'message progress').text('Parsing the input...');
   $('#output').addClass('disabled').text('Output not available.');
   var result = false;
-  this.speech = "";
   try {
-    // set utterance to lowercase
-    this.speech = $('#q').val().toLowerCase();
-
     // if demoing, check to see if 'hey jerry' was said
     // if (!this.awake && this.demoMode) {
     //   this.checkHeyJerry_();
@@ -225,7 +222,8 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
     //   }
     // }
 
-    this.correctedSpeech = this.correctSpeech_(this.speech);
+    this.correctedSpeech = this.correctSpeech_(this.rawSpeech);
+    $('#q').val(this.correctedSpeech);
     this.output = parser.parse(this.correctedSpeech);
 
     // change message displayed to user
@@ -241,8 +239,8 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
     $("#user-message").hide().text(this.response).fadeIn(200);
 
     // submit proposed corrections
-    // this.proposeCorrections(this.misrecognized, this.speech);
-    this.misrecognized = [];
+    // this.proposeCorrections(this.misrecognized, this.rawSpeech);
+    // this.misrecognized = [];
 
   } catch (e) {
     console.log(e);
@@ -251,11 +249,11 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
       $('#user-message').text(e.message);
     } else {
       $('#parse-message').attr('class', 'message error').text(this.buildErrorMessage_(e));
-      if(this.speech !== '') {
-        if (this.speech.length > 0) {
-          this.misrecognized.push(this.speech);
-        }
-        $('#user-message').hide().text('Sorry, I didn\'t understand \"' + this.speech + '\"').fadeIn(200);
+      if(this.rawSpeech !== '') {
+        // if (this.rawSpeech.length > 0) {
+        //   this.misrecognized.push(this.rawSpeech);
+        // }
+        $('#user-message').hide().text('Sorry, I didn\'t understand \"' + this.rawSpeech + '\"').fadeIn(200);
         clearTimeout(this.timeout);
         this.timeout = setTimeout(function(){
           $('#user-message').hide().text("Awaiting your command!").fadeIn(200);
@@ -399,13 +397,13 @@ $(document).ready(function() {
     console.log("DEMOING");
   }
 
-  if (window.location.href.includes('firebase') || window.location.href.includes('localhost'))  {
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        SpeechGames.speech.loadCorrections();
-      } 
-    });
-  } 
+  // if (window.location.href.includes('firebase') || window.location.href.includes('localhost'))  {
+  //   firebase.auth().onAuthStateChanged(function(user) {
+  //     if (user) {
+  //       SpeechGames.speech.loadCorrections();
+  //     } 
+  //   });
+  // } 
 
   // listen for mouse clicks, key presses
   $('#q')
