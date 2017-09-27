@@ -72,8 +72,8 @@ SpeechGames.Speech = function() {
     this.awake = false;
     this.listening = false;
     this.recognition = null;
-    this.mic_animate = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic-animate.gif';
-    this.mic = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
+    this.mic_animate = 'assets/img/mic-animate.gif';
+    this.mic = 'assets/img/mic.gif';
     this.parseTimer = null;
     // this.misrecognized = [];
     this.corrector_ = new Corrector();
@@ -120,7 +120,6 @@ SpeechGames.Speech.prototype.correctSpeech_ = function(speech) {
     valueSets[i] = valueSet;
   }
   var blockTypes = ['move', 'turn', 'pen', 'color', 'repeat'];
-  console.log(valueSets);
   // var blockTypes = Object.values(workspaceState.blockTypes.map_.map_);
   return this.corrector_.correct(speech, blockIds, valueSets, blockTypes);
 };
