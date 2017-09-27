@@ -12,7 +12,7 @@
     <script src="Arpabet.js"></script>
     <script src="Corrector.js"></script>
     <script>
-        var BLOCK_IDS = [1,2,3,4,5,6,7,8,9,10];
+        var BLOCK_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         var VALUE_SETS = [
             ['up', 'down'],
             ['left', 'right'],
@@ -23,14 +23,14 @@
         window.onload = function () {
             var fileInput = document.getElementById('fileInput');
             var fileDisplayArea = document.getElementById('fileDisplayArea');
-            
+
 
             fileInput.addEventListener('change', function (e) {
                 var file = fileInput.files[0];
                 var textType = /text.*/;
 
                 if (file.type.match(textType)) {
-                    
+
                     var reader = new FileReader();
 
                     reader.onload = function (e) {
@@ -41,14 +41,14 @@
                         for (var i = 0; i < file.length; i++) {
                             var row = file[i].split(',');
                             // remove newline character
-                            var u = row[0].replace(/(\r\n|\n|\r)/gm,"");
+                            var u = row[0].replace(/(\r\n|\n|\r)/gm, "");
                             var cr = corrector.correct(u, BLOCK_IDS, VALUE_SETS, BLOCK_TYPES);
                             newFile += cr + "\n";
                             console.log(i);
                         }
                         end = new Date().getTime();
-                        console.log("total time: ",(end - start)/1000);
-                        console.log("avg time per utterance: ", (end - start)/1000/file.length);
+                        console.log("total time: ", (end - start) / 1000);
+                        console.log("avg time per utterance: ", (end - start) / 1000 / file.length);
                         fileDisplayArea.innerText = newFile;
                     }
 
@@ -56,17 +56,6 @@
                 } else {
                     fileDisplayArea.innerText = "File not supported!"
                 }
-            });
-        }
-
-        function getCommandInfo() {
-            
-            var commandDisplayArea = document.getElementById('commandInfo');
-            var commandGenerator = new Corrector().commandGenerator_;
-            var commands = commandGenerator.generateCommands(BLOCK_IDS, VALUE_SETS, BLOCK_TYPES);
-            commandDisplayArea.innerText = "Command Count:" + commands.length + '\n';
-            commands.forEach(function (command) {
-                commandDisplayArea.innerText += command + '\n';
             });
         }
 
@@ -98,16 +87,80 @@
             var corrector = new Corrector();
             commandDisplayArea.innerText = "\n" + corrector.correct(utterance, this.BLOCK_IDS, this.VALUE_SETS, this.BLOCK_TYPES) + "\n";
         }
+        function getCommandInfo() {
+            var blockIds = [];
+            var valueSet = [
+                ['up', 'down'],
+                ['left', 'right'],
+                ['45', '72', '90', '120', '144'],
+                ['2', '3', '4', '5', '360'],
+                ['red', 'orange', 'blue', 'green', 'yellow', 'purple', 'brown', 'black', 'white']];
+            var blockTypes = ['move', 'turn', 'pen', 'color', 'repeat'];
+
+            var commandDisplayArea = document.getElementById('commandInfo');
+            var commandNumInput = document.getElementById('commandNumber');
+            var numIds = commandNumInput.value;
+
+            for (var i = 0; i < numIds; i++) {
+                blockIds.push(i);
+            }
+
+            var checkedBlocks = [];
+
+            $('#blocks input:checked').each(function () {
+                checkedBlocks.push($(this).attr('name'));
+            });
+
+            var values = [];
+            checkedBlocks.forEach(function (type) {
+                if (type == 'turn') {
+                    values.push(valueSet[1]);
+                    values.push(valueSet[2]);
+                }
+                if (type == 'pen'){
+                    values.push(valueSet[0]);
+                }
+                if (type == 'color'){
+                    values.push(valueSet[4]);                
+                }
+                if (type == 'repeat'){
+                    values.push(valueSet[3]);                
+                }
+            });
+
+            var commandGenerator = new Corrector().commandGenerator_;
+
+            var commands = commandGenerator.generateCommands(blockIds, values, checkedBlocks);
+            commandDisplayArea.innerText = "Command Count:" + commands.length + '\n\n';
+            // Sorting alpha-numerically
+            commnads = commands.sort();
+            commands.forEach(function (command) {
+                commandDisplayArea.innerText += command + '\n';
+            });
+        }
     </script>
     <div id="page-wrapper">
         <h1>Information</h1>
         <h3>Commands</h3>
-        <button id="commands" onclick="getCommandInfo()">Get Commands</button>
+        Number Of Commands: <input type="text" id="commandNumber"> <br><br> Block Types: <br>
+        <div id="blocks">
+            <form>
+                &emsp;<input type="checkbox" name="move" checked> Move <br> 
+                &emsp;<input type="checkbox" name="turn" checked> Turn <br> 
+                &emsp;<input type="checkbox" name="pen" checked> Pen <br> 
+                &emsp;<input type="checkbox" name="color" checked> Color <br> 
+                &emsp;<input type="checkbox" name="repeat" checked> Repeat <br>
+            </form>
+        </div>
+
         <button id="clear" onclick="clearCommandInfo()">Clear Commands</button>
+        <button id="commands" onclick="getCommandInfo()">Get Commands</button>
         <div id="commandInfo">
 
         </div>
         <br><br>
+
+
 
         <h3>Levenstein Distance</h3>
         <button id="getLev" onclick="getPhonemeInfo()">Get Phoneme Info</button>
@@ -121,18 +174,16 @@
         <br><br>
         <h1>Arpabet Converter</h1>
         <div>
-            <h3>Single Converter</h3>   
+            <h3>Single Converter</h3>
             <button id="converSingle" onclick="convertSingle()">Convert Utterance</button>
-            <br><br>
-            Utterance: <input type="text" id="singleCommand"> 
+            <br><br> Utterance: <input type="text" id="singleCommand">
             <div id="singleConvertedCommand">
 
             </div>
             <br><br>
             <h3>Mass Reader</h3>
             <input type="file" id="fileInput">
-            <br>
-            Must be in .txt form with new lines between each command            
+            <br> Must be in .txt form with new lines between each command
             <div id="fileDisplayArea">
 
             </div>
