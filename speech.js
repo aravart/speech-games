@@ -149,6 +149,7 @@ SpeechGames.Speech.prototype.startDictation_ = function() {
     this.recognition.onresult = function(e) {
       this.recognition.stop();
       this.rawSpeech = e.results[0][0].transcript.toLowerCase();
+      $('#q').val(this.rawSpeech);
       this.parseSpeech_();
     }.bind(this);
 
@@ -208,6 +209,7 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
   $('#parse-message').attr('class', 'message progress').text('Parsing the input...');
   $('#output').addClass('disabled').text('Output not available.');
   var result = false;
+  this.rawSpeech = $('#q').val();
   try {
     // if demoing, check to see if 'hey jerry' was said
     // if (!this.awake && this.demoMode) {
