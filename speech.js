@@ -91,8 +91,8 @@ SpeechGames.Speech.prototype.setMicInterval_ = function() {
     this.interval = setInterval(function() {
       if (!this.listening) {
         this.listening = true;
-        this.startDictation_(); 
-      } 
+        this.startDictation_();
+      }
     }.bind(this), 100);
   } else {
     console.log("Cannot use speech from local files!");
@@ -100,7 +100,7 @@ SpeechGames.Speech.prototype.setMicInterval_ = function() {
 };
 
 /**
- * Hard replacements for certain phrases. 
+ * Hard replacements for certain phrases.
  * @param {string} speech Utterance to be corrected.
  * @return {string} The corrected utterance.
  * @private
@@ -115,7 +115,7 @@ SpeechGames.Speech.prototype.correctSpeech_ = function(speech) {
     for (var j = 0; j < valueSet.length; j++) {
       // the turn values are turnUp and turnDown so removing 'turn' and lowercasing the word suffices
       // likewise with pen values
-      valueSet[j] = valueSet[j].toLowerCase().replace("turn","").replace("pen",""); 
+      valueSet[j] = valueSet[j].toLowerCase().replace("turn","").replace("pen","");
     }
     valueSets[i] = valueSet;
   }
@@ -151,7 +151,7 @@ SpeechGames.Speech.prototype.startDictation_ = function() {
       this.rawSpeech = e.results[0][0].transcript.toLowerCase();
       this.parseSpeech_();
     }.bind(this);
-    
+
     this.recognition.onerror = function(e) {
       this.listening = false;
      }.bind(this);
@@ -243,7 +243,7 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
 
   } catch (e) {
     console.log(e);
-    
+
     if(e instanceof SpeechBlocks.UserError) {
       $('#user-message').text(e.message);
     } else {
@@ -400,9 +400,9 @@ $(document).ready(function() {
   //   firebase.auth().onAuthStateChanged(function(user) {
   //     if (user) {
   //       SpeechGames.speech.loadCorrections();
-  //     } 
+  //     }
   //   });
-  // } 
+  // }
 
   // listen for mouse clicks, key presses
   $('#q')
@@ -426,7 +426,7 @@ $(document).ready(function() {
   // $('#runButton').on('click', run);
   // $('#showButton').on('click', showCode_);
 
-  $('#debugButton').on('click', function() { 
+  $('#debugButton').on('click', function() {
     $('#debug').toggle();
   });
   $('#buttonRow').hide();
