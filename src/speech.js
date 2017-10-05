@@ -206,8 +206,7 @@ SpeechGames.Speech.prototype.checkHeyJerry_ = function() {
 SpeechGames.Speech.prototype.parseSpeech_ = function() {
   this.previousRecognitionTime = Date.now();
   this.oldQ = $('#q').val();
-  $('#parse-message').attr('class', 'message progress').text('Parsing the input...');
-  $('#output').addClass('disabled').text('Output not available.');
+  // $('#output').addClass('disabled').text('Output not available.');
   var result = false;
   this.rawSpeech = $('#q').val();
   try {
@@ -228,17 +227,17 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
     this.output = parser.parse(this.correctedSpeech);
 
     // change message displayed to user
-    $('#parse-messasge')
-          .attr('class', 'message info')
-          .text('Input parsed successfully.');
-    $('#output').removeClass('disabled').text(jsDump.parse(this.output));
+    // $('#parse-messasge')
+    //       .attr('class', 'message info')
+    //       .text('Input parsed successfully.');
+    // $('#output').removeClass('disabled').text(jsDump.parse(this.output));
 
     // interpret and perform action
     this.response = this.interpretSpeech_(this.output);
     clearTimeout(this.timeout);
     this.result = true;
     $("#user-message").hide().text(this.response).fadeIn(200);
-
+    
     // submit proposed corrections
     // this.proposeCorrections(this.misrecognized, this.rawSpeech);
     // this.misrecognized = [];
@@ -385,17 +384,17 @@ $(document).ready(function() {
       SpeechGames.getParameterByName_('animate'));
   SpeechGames.interpreter = new SpeechBlocks.Interpreter(SpeechGames.controller);
 
-  if(!SpeechGames.getParameterByName_('debug')) {
-    $('#debug').hide();
-  } else {
-    console.log("DEBUGGING");
-  }
-
   if(SpeechGames.getParameterByName_('demo') || window.location.href.includes('firebase') || window.location.href.includes('localhost')) {
     SpeechGames.speech.demoMode = true;
     SpeechGames.speech.awake = false;
     SpeechGames.speech.setMicInterval_();
     console.log("DEMOING");
+  }
+
+  if(SpeechGames.getParameterByName_('debug')) {
+    $('#q').css('visibility','visible');
+  } else {
+    $('#debug').hide();
   }
 
   // if (window.location.href.includes('firebase') || window.location.href.includes('localhost'))  {
@@ -428,10 +427,10 @@ $(document).ready(function() {
   // $('#runButton').on('click', run);
   // $('#showButton').on('click', showCode_);
 
-  $('#debugButton').on('click', function() {
-    $('#debug').toggle();
-  });
-  $('#buttonRow').hide();
+  // $('#debugButton').on('click', function() {
+  //   $('#debug').toggle();
+  // });
+  // $('#buttonRow').hide();
 
   SpeechGames.LEVEL = SpeechGames.getNumberParamFromURL_('level', 1, SpeechGames.MAX_LEVEL);
   $('#levelDescription').text(Turtle.descriptions[SpeechGames.LEVEL]);
