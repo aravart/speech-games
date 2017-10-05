@@ -236,7 +236,7 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
     this.response = this.interpretSpeech_(this.output);
     clearTimeout(this.timeout);
     this.result = true;
-    $("#user-message").hide().text(this.response).fadeIn(200);
+    $("#user-message").hide().text('I heard "' + this.correctedSpeech + '"').fadeIn(200);
     
     // submit proposed corrections
     // this.proposeCorrections(this.misrecognized, this.rawSpeech);
