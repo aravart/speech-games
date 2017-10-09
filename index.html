@@ -7,6 +7,7 @@
       window.location.assign("https://speechgames-60eb5.firebaseapp.com/index.html");
     }
   </script>-->
+  <link rel="shortcut icon" href="">
   <script src="lib/closure-library/closure/goog/base.js"></script>
   <script src="lib/jquery-2.1.4.min.js"></script>
   <script src="lib/jquery-simulate-ext/libs/jquery.simulate.js"></script>
@@ -117,10 +118,10 @@
     </div>
 
     <div id="buttonRow" class="row">
-      <button id="runButton" type="button" class="mui-btn mui-btn--primary mui-btn--raised">Run</button>
-      <button id="resetButton" type="button" class="mui-btn mui-btn--primary mui-btn--raised">Reset</button>
+      <button id="runButton" type="button" class="mui-btn mui-btn--primary mui-btn--raised" style="visibility: hidden;">Run</button>
+      <button id="resetButton" type="button" class="mui-btn mui-btn--primary mui-btn--raised" style="visibility: hidden;">Reset</button>
       <!-- <button id="showButton" type="button" class="mui-btn mui-btn--accent">Show Code</button> -->
-      <button id="debugButton" type="button" class="mui-btn mui-btn--danger">Debug</button>
+      <button id="debugButton" type="button" class="mui-btn mui-btn--danger" style="visibility: hidden;">Debug</button>
     </div>
 
     <xml id="toolbox" style="display: none">

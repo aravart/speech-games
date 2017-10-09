@@ -23,7 +23,7 @@ Corrector.MAX_MODIFICATION = 0.75;
 Corrector.prototype.correct = function(recognition, blockIds, valueSets, blockTypes) {
 	if (recognition === "") {
 		return "";
-  }
+  	}
 
 	// generate all commands given the block ids, block types, and value sets
 	var commands = this.commandGenerator_.generateCommands(blockIds, valueSets, blockTypes);
@@ -44,19 +44,19 @@ Corrector.prototype.correct = function(recognition, blockIds, valueSets, blockTy
 			minDistanceCommand = command;
 		} else if (distance == minDistance) {
 			// inserting first elements into saved ties
-			if(tie.length === 0) {
+			if (tie.length === 0) {
 				tie.push({
 					c : command,
 					d : distance
-				})
+				});
 				tie.push({
 					c : minDistanceCommand,
 					d : minDistance
-				})
+				});
 			}
-			else if(tie.length > 0) {
+			else if (tie.length > 0) {
 				// seeing if we have a new minDistance from the previous tie
-				if(tie[0].distance > distance) {
+				if (tie[0].distance > distance) {
 					tie = [];
 				}
 				tie.push({
@@ -64,21 +64,22 @@ Corrector.prototype.correct = function(recognition, blockIds, valueSets, blockTy
 					d : distance
 				});
 			}
-		};
+		}
 	}.bind(this));
 
 	// Seeing if we had a tie in our lowest distance (i.e the one that we are correcting to)
 	if(tie.length > 0 && tie[0].d == minDistance) {
 		var log = "Tie at recognition: " + '"' + recognition + '"\n' ;
 		tie.forEach(function(com) {
-			log += '"' + com.c + '"\n';
-		})
+			log += '"' + com.c + ' -->\t ' + this.toPhoneme_(com.c) + '"\n';
+		}.bind(this));
 		log += "All with editing distance: " + minDistance;
 		console.log(log);
 	}
 
 	if (minDistance > 0) {
 		console.log('"' + recognition + '" corrected to "' + minDistanceCommand + '" with an edit distance of ' + minDistance);
+		console.log('rseq: ' + rseq + "\ncseq: " + this.toPhoneme_(minDistanceCommand));
 	}
 
 	return minDistance < (Corrector.MAX_MODIFICATION * rseq.length) ? minDistanceCommand : recognition;
