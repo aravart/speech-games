@@ -82,7 +82,7 @@ Corrector.prototype.correct = function(recognition, blockIds, valueSets, blockTy
 	// 	console.log('rseq: ' + rseq + "\ncseq: " + this.toPhoneme_(minDistanceCommand));
 	// }
 
-	return minDistance < (Corrector.MAX_MODIFICATION * rseq.length) ? minDistanceCommand : recognition;
+	return minDistance < (this.MAX_MODIFICATION * rseq.length) ? minDistanceCommand : recognition;
 }
 
 /**
