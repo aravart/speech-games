@@ -6,14 +6,27 @@
 
 // AnalyzeThreshold.THRESHOLD_INCREMENT = 0.01;
 
-$(document).ready(function() {
-    $.ajax({
-        type: "GET",
-        url: "src/arpabet/data.csv",
-        dataType: "text",
-        success: function(data) {processData(data);}
-     });
-});
+// $(document).ready(function() {
+//     $.ajax({
+//         type: "GET",
+//         url: "src/arpabet/data.csv",
+//         dataType: "text",
+//         success: function(data) {
+//           processData(data);
+//         }
+//      });
+// });
+
+function evaluate_thresholds() {
+  $.ajax({
+    type: "GET",
+    url: "data.csv",
+    dataType: "text",
+    success: function(data) {
+      processData(data);
+    }
+ });
+}
 
 /**
   * Reads a given CSV file and returns a list of attributes of each row
