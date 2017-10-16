@@ -53,7 +53,7 @@ function processData(allText) {
         numCorrect++;
       }
     }
-
+    console.log("Threshold " + j + " = " + numCorrect/allTextLines.length);
     // Store the accuracy result
     results.push(numCorrect/allTextLines.length);
   }

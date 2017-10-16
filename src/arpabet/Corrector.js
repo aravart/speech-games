@@ -68,14 +68,14 @@ Corrector.prototype.correct = function(recognition, blockIds, valueSets, blockTy
 	}.bind(this));
 
 	// Seeing if we had a tie in our lowest distance (i.e the one that we are correcting to)
-	if(tie.length > 0 && tie[0].d == minDistance) {
-		var log = "Tie at recognition: " + '"' + recognition + '"\n' ;
-		tie.forEach(function(com) {
-			log += '"' + com.c + ' -->\t ' + this.toPhoneme_(com.c) + '"\n';
-		}.bind(this));
-		log += "All with editing distance: " + minDistance;
-		console.log(log);
-	}
+	// if(tie.length > 0 && tie[0].d == minDistance) {
+	// 	var log = "Tie at recognition: " + '"' + recognition + '"\n' ;
+	// 	tie.forEach(function(com) {
+	// 		log += '"' + com.c + ' -->\t ' + this.toPhoneme_(com.c) + '"\n';
+	// 	}.bind(this));
+	// 	log += "All with editing distance: " + minDistance;
+	// 	console.log(log);
+	// }
 
 	// if (minDistance > 0) {
 	// 	console.log('"' + recognition + '" corrected to "' + minDistanceCommand + '" with an edit distance of ' + minDistance);
