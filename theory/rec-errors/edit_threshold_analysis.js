@@ -37,10 +37,10 @@ function processData(allText) {
   var results = [];
 
   // For each value of threshold go over all lines and calculate accuracy
-  for (var i = 0; i <= (1.0/THRESHOLD_INCREMENT); i += THRESHOLD_INCREMENT) {
+  for (var j = 0; j <= 1.0; j += THRESHOLD_INCREMENT) {
     // Set the threshold to current value
     var corrector = new Corrector();
-    corrector.MAX_MODIFICATION = i*THRESHOLD_INCREMENT;
+    corrector.MAX_MODIFICATION = j;
 
     // Calculate the accuracy with current threshold
     var numCorrect = 0;
