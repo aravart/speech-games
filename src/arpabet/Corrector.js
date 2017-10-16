@@ -77,10 +77,10 @@ Corrector.prototype.correct = function(recognition, blockIds, valueSets, blockTy
 		console.log(log);
 	}
 
-	if (minDistance > 0) {
-		console.log('"' + recognition + '" corrected to "' + minDistanceCommand + '" with an edit distance of ' + minDistance);
-		console.log('rseq: ' + rseq + "\ncseq: " + this.toPhoneme_(minDistanceCommand));
-	}
+	// if (minDistance > 0) {
+	// 	console.log('"' + recognition + '" corrected to "' + minDistanceCommand + '" with an edit distance of ' + minDistance);
+	// 	console.log('rseq: ' + rseq + "\ncseq: " + this.toPhoneme_(minDistanceCommand));
+	// }
 
 	return minDistance < (Corrector.MAX_MODIFICATION * rseq.length) ? minDistanceCommand : recognition;
 }
