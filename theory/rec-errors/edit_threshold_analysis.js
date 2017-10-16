@@ -9,7 +9,7 @@
 $(document).ready(function() {
     $.ajax({
         type: "GET",
-        url: "data.csv",
+        url: "src/arpabet/data.csv",
         dataType: "text",
         success: function(data) {processData(data);}
      });
