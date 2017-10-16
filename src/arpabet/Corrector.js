@@ -8,9 +8,9 @@
 
  /**
   * Maximum fraction of phoneme sequence that can be modified
-  * @private @const
+  * @public
   */
-Corrector.MAX_MODIFICATION = 0.75;
+Corrector.prototype.MAX_MODIFICATION = 0.75;
 
 /**
 * Corrects a recognition from speech according to the given parameters
