@@ -1,0 +1,38 @@
+Edit Threshold Analysis
+
+Aim:
+Try to find an optimal value for threshold that gives the best combined accuracy
+on positive and negative examples.
+
+Method:
+1. Separated the examples which had valid utterances (marked positive/correct)
+   and the invalid utterances (marked negative/incorrect).
+2. Use Javascript to collect data about the accuracy corresponding to each
+   threshold - run the analysis code (edit_threshold_analysis.js) on the 2 data
+   files:-
+   a. correct-utterances.csv
+   b. incorrect-utterances.csv
+   For the correct examples, get the accuracy by counting the total number of
+   correct corrections (the utterance HAS to be corrected always in this case)
+   For the incorrect examples, get the accuracy by counting the total number of
+   times corrections were NOT made - since corrections are always valid, mapping
+   an incorrect utterance to a valid command IS NOT CORRECT.
+   Data is collected in the form of tuples - (threshold_value, accuracy)
+3. This data is collected in (in)correct_utterances_threshold.csv file.
+4. The data is now read by graph.py to plot the graphs using methods in util.py
+
+Results:
+1. The current optimal threshold, given that we weight each sample equally is
+   0.22 and it gives 86% accuracy overall.
+2. The optimal threshold if we weigh each category (positive and negative)
+   equally without considering number of instances is 0.37 and it gives
+   83% accuracy overall.
+
+These results are great but they don't EXACTLY represent the true picture, here
+is why:-
+1. We have ~110 positive examples, and ~200 negative, this is not a true
+   representation of our data. We would expect more positive examples.
+2. The negative examples we have are mostly unrelated to anything in Blockly.
+   Hence, we need examples that are incorrect but are still pretty close to
+   being correct.
+3. Sample size is still pretty low.
