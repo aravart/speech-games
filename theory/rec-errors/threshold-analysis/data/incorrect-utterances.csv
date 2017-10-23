@@ -1,0 +1,203 @@
+utterance,recognition,correction,correction correct,correction accepted
+hi,hi,get a move block,0,0
+what's up,what's up,get a turn block,0,0
+my name is david,my name is david,get a move block,0,0
+nice to meet you,nice to meet you,get a move block,0,0
+hey,hey,get a move block,0,0
+i like apples,i like apples,get a move block,0,0
+get me an apple,damien apple,get a move block,0,0
+get me an apple,get me an apple,get a turn block,0,1
+i want to eat an apple,i want to eat an apple,get a turn block,0,0
+i like oranges too,i like oranges too,get a turn block,0,0
+don't get a turn block,don't get a turn block,get a turn block,0,1
+don't get a move block,don't get a move block,get a move block,0,1
+get a move wait stop,get a move wait stop,get a move block,0,1
+quit,quit,get a move block,0,0
+exit,exit,get a move block,0,0
+i like chickens,i like chickens,delete block 1,0,0
+undo,undo,get a turn block,0,0
+redo,free deer,get a turn block,0,0
+help,help,get a move block,0,0
+i want my mommy,i want my mommy,get a turn block,0,0
+can you help me,can you help me,get a move block,0,0
+thanks,thanks,delete block 2,0,0
+alexa,alexa,get a pen block,0,0
+move block 2 under block 1,remove block to under block wine,connect block 2 under block 1,0,1
+erase black 1,erase black 1,delete block 1,0,1
+put a move block on the board,how to remove block on the board,get a move block,0,0
+grab a turn block,grab a turn block,get a turn block,0,1
+i like repeat blocks,i like repeat blocks,get a repeat block,0,1
+hey jerry,aj,get a move block,0,0
+hey jerry,hey jerry,get a pen block,0,0
+hey ara,kiara,get a move block,0,0
+hey david,hey david,get a move block,0,0
+i want dinner,i want dinner,get a turn block,0,0
+whens dinner,whens dinner,get a turn block,0,0
+am i done yet,am i done yet,get a turn block,0,0
+im bored,im bored,get a move block,0,0
+this sucks,blue socks,delete block 6,0,0
+this sucks,sucks,get a move block,0,0
+i hate life,i hate life,get a turn block,0,0
+i want to play computer games,i want to play computer games,get a move block,0,0
+iphone sucks,iphone sucks,get a turn block,0,0
+move the turtle up,move the turtle app,get a turn block,0,1
+this is too hard,this is too hard,get a move block,0,0
+i want to play a different game,i want to play a different game,get a turn block,0,0
+it doesn't even look like a turtle,then even look like it turned off,get a turn block,0,0
+it doesn't even look like a turtle,even look like a turtle,go the next level,0,0
+that's not a turtle,that's not a turtle,get a turn block,0,0
+what kind of turtle is white,what kind of turtle is white,get a turn block,0,0
+an albino one,an albino one,delete block 1,0,1
+isn't this supposed to be fun,isn't this supposed to be fun,run the program,0,0
+i hate this,i hate this,stay on this level,0,0
+lets eat mcdonalds,mcdonalds,get at urn block,0,0
+p equals np,p equals np,get a move block,0,0
+pi equals 3,pi equals 3,get a color block,0,0
+e equals 2.5,equals 2.5,get a move block,0,0
+a square is round,a square is round,run the program,0,0
+go to next level,tonight's weather,stay on this level,0,0
+go to next level,go to next level,go to the next level,1,1
+stay level,stay level,stay on this level,1,1
+stay,stay,get a move block,0,0
+stay here,same here,get a move block,0,0
+next,next,get a turn block,0,0
+next level,next level,go to the next level,0,0
+move block,move block,get a move block,0,1
+turn block,block,get a move block,0,1
+turn block,turn block,get a turn block,0,1
+what did you say,what did you say,get a move block,0,0
+how are you,how are you,get a move block,0,0
+can i say,can i say,get a turn block,0,0
+what time is it,what time is it,get a turn block,0,0
+what is the date today,what is the date today,run the program,0,0
+food is really good,food is really good,get a repeat block,0,0
+how come,how come,get a move block,0,0
+seriously ,seriously ,get a move block,0,0
+what,what,get a turn block,0,0
+why,fly,get a move block,0,0
+what do you think,what do you think,get a move block,0,0
+so we need to do change that,so we need to do change that,get a turn block,0,0
+how is everything going,how is everything going,run the program,0,0
+here is what i think we should do,here's what i think we should do,get a repeat block,0,0
+i'm trying to think,i'm trying to think,get a repeat block,0,0
+i don't want to do this,i don't want to do this,stay on this level,0,0
+can we go play outside,we go play outside,get a pen block,0,0
+coding is fun,coding is fun,get a turn block,0,0
+coding is boring,coding is boring,get a move block,0,0
+this is fun,this is fun,stay on this level,0,0
+i don't think so,i don't think so,get a turn block,0,0
+i think so,i think so,get a move block,0,0
+can you solve this problem,can you solve this problem,run the program,0,1
+do you have any questions,do you have any questions,go to the next level,0,0
+any questions,any questions,get a pen block,0,0
+do you want to do something else,i want to do something else,i want to do something else,0,0
+have you tried moving that block under that block,have you tried moving that block under that block,get a move block,0,0
+have you thought about doing it this way,have you thought about doing it this way,get a repeat block,0,0
+what do you want to do,what do you want to do,get a move block,0,0
+why can't you move that one,remove that one,get a move block,0,0
+what is in your workspace,what is in your workspace,get a turn block,0,0
+what's in your workspace,what's in your workspace,get a turn block,0,0
+how do i do that,how do i do that,get a move block,0,0
+its not working anymore,its not working anymore,get a turn block,0,0
+i already told it to do that,i already told you that,get a repeat block,0,0
+i'm not sure what to do,i'm not sure what to do,get a repeat block,0,0
+i don't know what to do,i don't know what to do,get a move block,0,0
+i think,i think,get a move block,0,0
+should you do that,should you do that,get a move block,0,0
+i am a boy,i am a boy,get a move block,0,0
+this is my friend,this is my friend,get a move block,0,0
+we like to play outside,we like to play outside,get a pen block,0,0
+i enjoy this,i enjoyed this,get a move block,0,0
+children,children,get a turn block,0,0
+hello,hello,get a move block,0,0
+like,lake,get a move block,0,0
+sure,sure,get a move block,0,0
+totally,totally,get a move block,0,0
+there isn't anything for me to do,there isn't anything for me to do,get a move block,0,0
+i can but i already tried that,i can but i already tried that,run the program,0,0
+look what i did,look what i did,get a turn block,0,0
+what is this,what is this,get a turn block,0,0
+i want to make a game,i want to make a game,get a move block,0,0
+games are fun,games are fun,get a move block,0,0
+soccer is my favorite sport,my favorite sport,get a turn block,0,0
+need,need,get a turn block,0,0
+lemons,lemons,get a turn block,0,0
+lemonade,lemonade,get a turn block,0,0
+good,good,get a turn block,0,0
+i'm just going to ask you a few questions,i'm just going to ask you a few questions,go to the next level,0,0
+look at the page,look at the page,get a turn block,0,0
+notesheet,note sheet,get a move block,0,0
+how did you sleep last night,how did you sleep last night,get a move block,0,0
+soccer field,soccer field,get a turn block,0,0
+can i go home,can i go home,run the program,0,0
+mom said i could,mom said i could,get a pen block,0,0
+dad said i could,dad said i could,get a pen block,0,0
+awaiting your command,awaiting your command,run the program,0,0
+create a program that draws a line,create a program that draws a line,run the program,0,1
+move,move,get a move block ,0,0
+turn block,turn block,get a turn block,0,1
+pen ,pain,get a pen block,0,0
+set color,set color,get a color block,0,0
+repeat ,repeat ,get a repeat block,0,0
+add,add,get a move block,0,0
+suggestions,suggestions,get a pen block,0,0
+delete,delete,delete block 1,0,0
+run,run,get a turn block,0,0
+trace,trace,get a move block,0,0
+ara,aura,get a move block,0,0
+evan,evan,get a turn block,0,0
+david,david,get a move block,0,0
+try something new,try something new,get a move block,0,0
+try something else,try something else,get a move block,0,0
+how come,how come,get a move block,0,0
+great job,great job,get a turn block,0,0
+i love algebra,i love algebra,get a color block,0,0
+hello will,hello well,get a move block,0,0
+can you get the door,can you get the door,get a pen block,0,0
+get off the counter,get off the counter,get a move block,0,0
+connect four is a fun game,connect 4 is a fun game,get a repeat block,0,0
+get up and leave,get up and leave,get a pen block,0,0
+finite group theory,finite group theory,get a move block,0,0
+get me some water,get me some water,get a move block,0,0
+haskell is cool,school is cool,get a move block,0,0
+did it get it,get it,get a turn block,0,0
+block 7,glock 7,stay on this level,0,0
+block 1 in block 2,black 1 black 2,connect block 1 under block 2,0,0
+move the move block,move the move block,get a move block,0,0
+get rid of block 2,get rid of block 2,get a move block,0,0
+connect the dots,connect the dots,delete block 2,0,0
+this game is fun,this game is fun,delete block 1,0,0
+what are we doing,what are we doing,get a move block,0,0
+where's the beef,where's the beef,get a move block,0,0
+conferences are expensive,expensive,get a pen block,0,0
+get the door,get the door,get a move block,0,0
+turn the block upside down,turn the block upside down,change up in block 1 to down,0,0
+i have no friends,i have no friends,stay on this level,0,0
+im not here to help people,im not here to help people,delete block 1,0,0
+cheese juice is good,cheese juice is good,get a move block,0,0
+that's not professional development,professional development,get a color block,0,0
+move block 3,move block 3,delete block 3,0,0
+move block 3 under block 1,no flock 3-under black one,connect block 3 under block 1,0,0
+that's nice,that's nice,get a turn block,0,0
+insert block 2 in block 3,block 2 in black 3,delete block 3,0,0
+im running out of examples,examples,get a move block,0,0
+remove block 4 from block 1,new block for block 1,delete block 1,0,0
+delete block 2 from block 1,walk to from black one,delete block 1,0,0
+grab a move block,grab a move block,get a move block,0,0
+insert a turn block,answer to turn block,get a turn block,0,0
+insert a new block,insert a new block,get a move block,0,0
+add a color block,color block,get a color block,0,0
+put a pen block,put a pain block,get a pen block,0,0
+put a color block inside block 2,what a color block in sidewalk to,connect block 2 inside block 2,0,0
+put block 3 under block 1,put block 3 under block 1,connect block 3 under block 1,0,0
+change 4 to 5 in block 2,change 4 to 5 in block 2,change 4 in block 2 to 2,0,0
+change up to down in the pen block,change up to down in the pain block,get a pen block,0,0
+separate the move block,great the move block,get a move block,0,0
+put block 3 after block 1,put block 3 after block 1,conncet block 3 under block 1,0,0
+make 4 number 5 in block 2,make for number 5 in block 2,change 5 in block 2 to 2,0,0
+change up to right in block 3,change up to write in black 3,change 2 in block 2 to 3,0,0
+make the repeat block 6,make the repeat block sets,get a repeat block,0,0
+move block 1 away,oblock 1 away,get a turn block,0,0
+make the color block blue,makes the color block blue,get a color block,0,0
+get a return block ,ghetto return block,get a turn block,0,0
+this is the last one,is the last one,delete block 1,0,0
