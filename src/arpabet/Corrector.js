@@ -10,7 +10,7 @@
   * Maximum fraction of phoneme sequence that can be modified
   * @public
   */
-Corrector.prototype.MAX_MODIFICATION = 0.75;
+Corrector.prototype.MAX_MODIFICATION = 0.37;
 
 /**
 * Corrects a recognition from speech according to the given parameters
