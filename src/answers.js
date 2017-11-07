@@ -40,6 +40,21 @@ Turtle.descriptions = {
   12: ''
 }
 
+Turtle.blockTypes = {
+    1: ['turtle_move'],
+    2: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
+    3: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
+    4: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
+    5: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
+    6: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
+    7: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
+    8: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
+    9: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
+    10: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
+    11: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
+    12: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal']
+}
+
 /**
  * Sample solutions for each level.
  * To create an answer, just solve the level in Blockly, then paste the

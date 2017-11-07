@@ -119,6 +119,9 @@ SpeechGames.Speech.prototype.correctSpeech_ = function(speech) {
     }
     valueSets[i] = valueSet;
   }
+  // TODO aravart Change corrector to accept two lists of types
+  // One list for blocks that can be added which comes from Turyle.blockTypes
+  // Second list for blocks currently on workspace to be involved in change / edit commands
   var blockTypes = ['move', 'turn', 'pen', 'color', 'repeat'];
   // var blockTypes = Object.values(workspaceState.blockTypes.map_.map_);
   return this.corrector_.correct(speech, blockIds, valueSets, blockTypes);
@@ -372,7 +375,10 @@ SpeechGames.getParameterByName_ = function(name, url) {
  * Initializes all of the SpeechGames objects and begins listening.
  */
 $(document).ready(function() {
+  SpeechGames.LEVEL = SpeechGames.getNumberParamFromURL_('level', 1, SpeechGames.MAX_LEVEL);
+  blockTypes =  Turtle.blockTypes
   SpeechGames.speech = new SpeechGames.Speech();
+  // TODO aravart Iterate through toolbox, remove elements not in blockTypes
   SpeechGames.workspace = Blockly.inject('blocklyDiv', {
     media: 'lib/google-blockly/media/',
     trashcan: false,
@@ -382,7 +388,7 @@ $(document).ready(function() {
   SpeechGames.controller = new SpeechBlocks.Controller(
       SpeechGames.workspace,
       SpeechGames.getParameterByName_('animate'));
-  SpeechGames.interpreter = new SpeechBlocks.Interpreter(SpeechGames.controller);
+  SpeechGames.interpreter = new SpeechBlocks.Interpreter(SpeechGames.controller, blockTypes);
 
   if(SpeechGames.getParameterByName_('demo') || window.location.href.includes('firebase') || window.location.href.includes('localhost')) {
     SpeechGames.speech.demoMode = true;
@@ -432,6 +438,5 @@ $(document).ready(function() {
   // });
   // $('#buttonRow').hide();
 
-  SpeechGames.LEVEL = SpeechGames.getNumberParamFromURL_('level', 1, SpeechGames.MAX_LEVEL);
   $('#levelDescription').text(Turtle.descriptions[SpeechGames.LEVEL]);
 });
