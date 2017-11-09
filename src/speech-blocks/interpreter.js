@@ -1,6 +1,6 @@
 /**
  * @fileoverview Interprets a given command and calls workspace controller_.functions.
- * @author david.liang@wisc.edu (David Liang), pandori@wisc.edu (Sahib Pandori)
+ * @author dliang@cs.wisc.edu (David Liang), pandori@wisc.edu (Sahib Pandori)
  */
 'use strict';
 
@@ -23,8 +23,9 @@ SpeechBlocks.Interpreter = function(controller, blockTypes) {
   /** @private @const */
   this.controller_ = controller;
 
-    /** @private @const */
-    this.blockTypes_ = blockTypes;
+  // Blocks available on current level.
+  /** @private @const */ 
+  this.blockTypes_ = blockTypes;
 
   /** @private {!goog.structs.Map<string, string>} */
   this.blockTypeMap_ = new goog.structs.Map();
@@ -107,10 +108,16 @@ SpeechBlocks.Interpreter.prototype.addBlock_ = function(command) {
     var msg = 'Block type ' + command.type + ' not available';
     throw new SpeechBlocks.UserError(msg);
   }
-  // TODO aravart: Check if block being added is in blockTypes for that level, throw sensible error if not
 
   // TODO(ehernandez4): The controller should handle layout management.
-  command.blockId = this.controller_.addBlock(this.blockTypeMap_.get(command.type));
+  var internalBlockType = this.blockTypeMap_.get(command.type)
+
+  if (!this.blockTypes_.includes(internalBlockType)) {
+    var msg = 'Block type \'' + command.type + '\' not available on this level.'
+    throw new SpeechBlocks.UserError(msg);
+  }
+
+  command.blockId = this.controller_.addBlock(internalBlockType);
   return 'Got a ' + command.type + ' block!';
 };
 

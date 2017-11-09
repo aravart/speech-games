@@ -376,7 +376,7 @@ SpeechGames.getParameterByName_ = function(name, url) {
  */
 $(document).ready(function() {
   SpeechGames.LEVEL = SpeechGames.getNumberParamFromURL_('level', 1, SpeechGames.MAX_LEVEL);
-  blockTypes =  Turtle.blockTypes
+  blockTypes =  Turtle.blockTypes[SpeechGames.LEVEL]
   SpeechGames.speech = new SpeechGames.Speech();
   // TODO aravart Iterate through toolbox, remove elements not in blockTypes
   SpeechGames.workspace = Blockly.inject('blocklyDiv', {
