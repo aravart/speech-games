@@ -16,17 +16,17 @@ Corrector.prototype.MAX_MODIFICATION = 0.37;
 * Corrects a recognition from speech according to the given parameters
 * @param recognition - string being corrected
 * @param blockIds - all the possible blocks in the workspace
-* @param valueSets - the specific values all the blocks can take on
+* @param blockValuesetMap - map from block id to value sets
 * @param blockTypes - all the possible block types in the workspace
 * @return the corrected recognition
 */
-Corrector.prototype.correct = function(recognition, blockIds, valueSets, blockTypes) {
+Corrector.prototype.correct = function(recognition, blockIds, blockValuesetMap, blockTypes) {
 	if (recognition === "") {
 		return "";
   	}
 
 	// generate all commands given the block ids, block types, and value sets
-	var commands = this.commandGenerator_.generateCommands(blockIds, valueSets, blockTypes);
+	var commands = this.commandGenerator_.generateCommands(blockIds, blockValuesetMap, blockTypes);
 
 	// find command with minimal edit phoneme edit distance from the recognition
 	var minDistance = Number.MAX_SAFE_INTEGER;

@@ -39,9 +39,9 @@ CommandGenerator.prototype.generateMoveCommands = function(blockIds) {
     @param List of all value sets for fields
     @return List of all CHANGE commands
  */
-CommandGenerator.prototype.generateChangeCommands = function(blockIds, valueSets) {
-    blockIds.forEach(function (blockId) {
-        valueSets.forEach(function(valueSet) {
+CommandGenerator.prototype.generateChangeCommands = function(blockIds, blockValuesetMap) {
+    blockValuesetMap.keys_.forEach(function(blockId) {
+        blockValuesetMap.get(blockId).forEach(function(valueSet) {
             valueSet.forEach(function(value1) {
                 valueSet.forEach(function(value2) {
                     if (value1 != value2) {
@@ -71,14 +71,14 @@ CommandGenerator.prototype.generateDeleteCommands = function(blockIds) {
  * @param List of all field value sets
  * @return The complete list of valid commands
  */
-CommandGenerator.prototype.generateCommands = function(blockIds, valueSets, blockTypes) {
+CommandGenerator.prototype.generateCommands = function(blockIds, blockValuesetMap, blockTypes) {
     Assert.assertNotUndefined(blockIds, 'block ids');
-    Assert.assertNotUndefined(valueSets, 'value sets');
+    Assert.assertNotUndefined(blockValuesetMap, 'value sets');
     Assert.assertNotUndefined(blockTypes, 'block types');
     this.commands = new Array();
     this.generateGetCommands(blockTypes);
     this.generateMoveCommands(blockIds);
-    this.generateChangeCommands(blockIds, valueSets);
+    this.generateChangeCommands(blockIds, blockValuesetMap);
     this.generateDeleteCommands(blockIds);
     this.generateSpecialCommands();
     return this.commands;

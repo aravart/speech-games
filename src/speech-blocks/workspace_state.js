@@ -1,6 +1,7 @@
 /**
  * @fileoverview A simple value class for workspace state.
  * @author ehernandez4@wisc.edu (Evan Hernandez)
+ * @author dliang@cs.wisc.edu (David Liang)
  */
 'use strict';
 
@@ -51,7 +52,7 @@ SpeechBlocks.WorkspaceState = function() {
    * The set of value sets for blocks with drop downs.
    * @public
    */
-  this.valueSets = new goog.structs.Set();
+  this.blockValuesetMap = new goog.structs.Map();
 
   /**
    * True if the workspace is empty.
@@ -82,7 +83,7 @@ SpeechBlocks.WorkspaceState.prototype.equals = function(state) {
       && this.statementInputBlockIds.equals(state.statementInputBlockIds)
       && this.valueInputBlockIds.equals(state.valueInputBlockIds)
       && this.modifiableBlockIds.equals(state.modifiableBlockIds)
-      && this.valueSets.equals(state.valueSets)
+      && this.blockValuesetMap.equals(state.blockValuesetMap)
       && this.allBlocksConnected == state.allBlocksConnected;
 };
 
@@ -112,6 +113,7 @@ SpeechBlocks.WorkspaceState.stateOf = function(workspace) {
     // Check for blocks with statement inputs, value inputs, and fields.
     // Also keep track of whether or not the block is ordinary.
     var ordinary = true;
+    var valueSets = [];
     block.inputList.forEach(function(input) {
       if (input.type == Blockly.NEXT_STATEMENT) {
         state.statementInputBlockIds.add(block.id);
@@ -130,13 +132,12 @@ SpeechBlocks.WorkspaceState.stateOf = function(workspace) {
         if (field instanceof Blockly.FieldDropdown) {
           var valueSet = [];
           field.menuGenerator_.forEach(function(value) {
-            valueSet.push(value[1]);
+            valueSet.push(value[1].toLowerCase().replace("turn","").replace("pen",""));
           });
-          // because the closure uids are unique, this allows 'duplicate' value sets
-          // TODO: fix
-          state.valueSets.add(valueSet);
+          valueSets.push(valueSet);
         }
       });
+      state.blockValuesetMap.set(block.id, valueSets);
     });
     // Handle case where block is ordinary.
     if (block.previousConnection && block.nextConnection && ordinary) {

@@ -108,23 +108,30 @@ SpeechGames.Speech.prototype.setMicInterval_ = function() {
 SpeechGames.Speech.prototype.correctSpeech_ = function(speech) {
   var workspaceState = SpeechGames.controller.workspaceState_;
   var blockIds = Object.values(workspaceState.blockIds.map_.map_);
-  var valueSets = Object.values(workspaceState.valueSets.map_.map_);
-  // convert the values to english words
-  for (var i = 0; i < valueSets.length; i++) {
-    var valueSet = valueSets[i];
-    for (var j = 0; j < valueSet.length; j++) {
-      // the turn values are turnUp and turnDown so removing 'turn' and lowercasing the word suffices
-      // likewise with pen values
-      valueSet[j] = valueSet[j].toLowerCase().replace("turn","").replace("pen","");
+  var blockValuesetMap = workspaceState.blockValuesetMap;
+  console.log(blockValuesetMap);
+  var blockTypeMap = new goog.structs.Map();
+  blockTypeMap.set('controls_if', 'if');
+  blockTypeMap.set('controls_repeat_ext', 'repeat');
+  blockTypeMap.set('turtle_turn_internal', 'turn');
+  blockTypeMap.set('turtle_move', 'move');
+  blockTypeMap.set('turtle_pen', 'pen');
+  blockTypeMap.set('turtle_repeat_internal', 'repeat');
+  blockTypeMap.set('turtle_colour_internal', 'color');
+  var blockTypes = Turtle.blockTypes[SpeechGames.LEVEL].slice(0);
+  for (var i = 0; i < blockTypes.length; i++) {
+    if (blockTypeMap.containsKey(blockTypes[i])) {
+      blockTypes[i] = blockTypeMap.get(blockTypes[i]);
     }
-    valueSets[i] = valueSet;
   }
+  console.log(blockTypes);
+
   // TODO aravart Change corrector to accept two lists of types
   // One list for blocks that can be added which comes from Turyle.blockTypes
   // Second list for blocks currently on workspace to be involved in change / edit commands
-  var blockTypes = ['move', 'turn', 'pen', 'color', 'repeat'];
+  // var blockTypes = ['move', 'turn', 'pen', 'color', 'repeat'];
   // var blockTypes = Object.values(workspaceState.blockTypes.map_.map_);
-  return this.corrector_.correct(speech, blockIds, valueSets, blockTypes);
+  return this.corrector_.correct(speech, blockIds, blockValuesetMap, blockTypes);
 };
 
 /**
@@ -405,7 +412,6 @@ $(document).ready(function() {
       SpeechGames.workspace,
       SpeechGames.getParameterByName_('animate'));
   SpeechGames.interpreter = new SpeechBlocks.Interpreter(SpeechGames.controller, blockTypes);
-
   if(SpeechGames.getParameterByName_('demo') || window.location.href.includes('firebase') || window.location.href.includes('localhost')) {
     SpeechGames.speech.demoMode = true;
     SpeechGames.speech.awake = false;
