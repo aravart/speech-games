@@ -42,9 +42,9 @@ Turtle.descriptions = {
 
 Turtle.blockTypes = {
     1: ['turtle_move'],
-    2: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
-    3: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
-    4: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
+    2: ['turtle_move', 'turtle_turn_internal'],
+    3: ['turtle_move', 'turtle_turn_internal', 'turtle_repeat_internal'],
+    4: ['turtle_move', 'turtle_turn_internal', 'turtle_repeat_internal'],
     5: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
     6: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
     7: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],

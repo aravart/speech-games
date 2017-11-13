@@ -372,13 +372,29 @@ SpeechGames.getParameterByName_ = function(name, url) {
 };
 
 /**
+ * 
+ * @param {$document} document Index of speech games
+ * @param {array} blockTypes Block types to be included in the toolbox XML
+ */
+SpeechGames.editToolboxXml_ = function(document, blockTypes) {
+  var $xmls = document.getElementsByTagName('xml');
+  var $toolbox = $xmls.toolbox.children;
+  for(var i = 0; i < $toolbox.length; ) {
+    if(!blockTypes.includes($toolbox[i].getAttribute('type')))
+      $toolbox[i].remove();
+    else
+      i++;
+  }
+}
+
+/**
  * Initializes all of the SpeechGames objects and begins listening.
  */
 $(document).ready(function() {
   SpeechGames.LEVEL = SpeechGames.getNumberParamFromURL_('level', 1, SpeechGames.MAX_LEVEL);
-  blockTypes =  Turtle.blockTypes[SpeechGames.LEVEL]
+  blockTypes =  Turtle.blockTypes[SpeechGames.LEVEL];
+  SpeechGames.editToolboxXml_(document, blockTypes);
   SpeechGames.speech = new SpeechGames.Speech();
-  // TODO aravart Iterate through toolbox, remove elements not in blockTypes
   SpeechGames.workspace = Blockly.inject('blocklyDiv', {
     media: 'lib/google-blockly/media/',
     trashcan: false,
