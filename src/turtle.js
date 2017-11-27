@@ -566,7 +566,7 @@ Turtle.animate = function(id) {
  * @param {?string} id ID of block.
  */
 Turtle.step = function(id) {
-    Turtle.move(100, id);
+    Turtle.move(Turtle.moveLength[SpeechGames.LEVEL], id);
 };
 
 /**

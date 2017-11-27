@@ -25,6 +25,21 @@
 
 goog.provide('Turtle.Answers');
 
+Turtle.moveLength = {
+    1: 100,
+    2: 100,
+    3: 100,
+    4: 100,
+    5: 100,
+    6: 50,
+    7: 50,
+    8: 50,
+    9: 50,
+    10: 50,
+    11: 50,
+    12: 50
+}
+
 Turtle.descriptions = {
   1: 'Create a program that draws a line.',
   2: 'Create a program that draws a right angle',
@@ -45,14 +60,14 @@ Turtle.blockTypes = {
     2: ['turtle_move', 'turtle_turn_internal'],
     3: ['turtle_move', 'turtle_turn_internal', 'turtle_repeat_internal'],
     4: ['turtle_move', 'turtle_turn_internal', 'turtle_repeat_internal'],
-    5: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
-    6: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
-    7: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
-    8: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
-    9: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
-    10: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
-    11: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal'],
-    12: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_colour_internal', 'turtle_repeat_internal']
+    5: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_repeat_internal'],
+    6: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_repeat_internal'],
+    7: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_repeat_internal'],
+    8: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_repeat_internal'],
+    9: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_repeat_internal'],
+    10: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_repeat_internal'],
+    11: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_repeat_internal'],
+    12: ['turtle_move', 'turtle_turn_internal', 'turtle_pen', 'turtle_repeat_internal']
 }
 
 /**
@@ -97,21 +112,21 @@ Turtle.answer = function() {
       break;
     case 5:
       // Star.
-      Turtle.penColor('#ffff00');
+      // Turtle.penColor('#ffff00');
       drawStar(100);
       break;
     case 6:
       // Pen up/down.
-      Turtle.penColor('#ffff00');
+      // Turtle.penColor('#ffff00');
       drawStar(50);
       Turtle.penDown(false);
-      Turtle.move(150);
+      Turtle.move(100);
       Turtle.penDown(true);
-      Turtle.move(20);
+      Turtle.move(50);
       break;
     case 7:
       // Four stars.
-      Turtle.penColor('#ffff00');
+      // Turtle.penColor('#ffff00');
       for (var count = 0; count < 4; count++) {
         Turtle.penDown(false);
         Turtle.move(150);
@@ -122,7 +137,7 @@ Turtle.answer = function() {
       break;
     case 8:
       // Three stars and a line.
-      Turtle.penColor('#ffff00');
+      // Turtle.penColor('#ffff00');
       for (var count = 0; count < 3; count++) {
         Turtle.penDown(false);
         Turtle.move(150);
@@ -134,12 +149,12 @@ Turtle.answer = function() {
       Turtle.turn(-90);
       Turtle.move(100);
       Turtle.penDown(true);
-      Turtle.penColor('#ffffff');
+      // Turtle.penColor('#ffffff');
       Turtle.move(50);
       break;
     case 9:
       // Three stars and 4 lines.
-      Turtle.penColor('#ffff00');
+      // Turtle.penColor('#ffff00');
       for (var count = 0; count < 3; count++) {
         Turtle.penDown(false);
         Turtle.move(150);
@@ -151,7 +166,7 @@ Turtle.answer = function() {
       Turtle.turn(-90);
       Turtle.move(100);
       Turtle.penDown(true);
-      Turtle.penColor('#ffffff');
+      // Turtle.penColor('#ffffff');
       for (var count = 0; count < 4; count++) {
         Turtle.move(50);
         Turtle.move(-50);
@@ -160,7 +175,7 @@ Turtle.answer = function() {
       break;
     case 10:
       // Three stars and a circle.
-      Turtle.penColor('#ffff00');
+      // Turtle.penColor('#ffff00');
       for (var count = 0; count < 3; count++) {
         Turtle.penDown(false);
         Turtle.move(150);
@@ -172,7 +187,7 @@ Turtle.answer = function() {
       Turtle.turn(-90);
       Turtle.move(100);
       Turtle.penDown(true);
-      Turtle.penColor('#ffffff');
+      // Turtle.penColor('#ffffff');
       for (var count = 0; count < 360; count++) {
         Turtle.move(50);
         Turtle.move(-50);
@@ -181,7 +196,7 @@ Turtle.answer = function() {
       break;
     case 11:
       // Three stars and a crescent.
-      Turtle.penColor('#ffff00');
+      // Turtle.penColor('#ffff00');
       for (var count = 0; count < 3; count++) {
         Turtle.penDown(false);
         Turtle.move(150);
@@ -193,7 +208,7 @@ Turtle.answer = function() {
       Turtle.turn(-90);
       Turtle.move(100);
       Turtle.penDown(true);
-      Turtle.penColor('#ffffff');
+      // Turtle.penColor('#ffffff');
       for (var count = 0; count < 360; count++) {
         Turtle.move(50);
         Turtle.move(-50);
@@ -201,7 +216,7 @@ Turtle.answer = function() {
       }
       Turtle.turn(120);
       Turtle.move(20);
-      Turtle.penColor('#000000');
+      // Turtle.penColor('#000000');
       for (var count = 0; count < 360; count++) {
         Turtle.move(50);
         Turtle.move(-50);
