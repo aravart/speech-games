@@ -22,30 +22,30 @@ SpeechGames.Suggestions = function() {
     [
       ['get'], // key
       ['Getting a block:'], // title
-      ['get a <span style=font-weight:bold>move</span> block'] //text
+      ['Get a <span style=font-weight:bold>move</span> block'] //text
     ],
     [
       ['connect'],
       ['Connect blocks:'],
-      ['connect block <span style=font-weight:bold>2</span> under block ' + 
+      ['Connect block <span style=font-weight:bold>2</span> under block ' + 
           '<span style=font-weight:bold>1</span>']
     ],
     [
       ['change'],
       ['Changing a block:'],
-      ['change <span style=font-weight:bold>4</span> in ' + 
+      ['Change <span style=font-weight:bold>4</span> in ' + 
           'block <span style=font-weight:bold>1</span> to ' + 
           '<span style=font-weight:bold>5</span>']
     ],
     [
       ['delete'],
       ['Deleting a block:'],
-      ['delete block <span style=font-weight:bold>1</span>']
+      ['Delete block <span style=font-weight:bold>1</span>']
     ],
     [
       ['run'],
       ['Running the program:'],
-      ['run the program']
+      ['Run the program']
     ]
   ];
 
@@ -104,11 +104,13 @@ SpeechGames.Suggestions.prototype.updateSuggestions = async function updateSugge
   }
   $('#suggestionDiv').empty();
   for (var i = 0; i < this.suggestions_.length; i++) {
-    var title = '<h3 id=\'suggestionTitle' + i + '\'>' 
-      + this.suggestions_[i][1][0] + '</h3>';
-    var text = '<span id=\'suggestionText' + i + '\'>\"' 
-      + this.suggestions_[i][2][0] + '\"</span>';
-    $(title).hide().appendTo(suggestionDiv).delay(i*100).fadeIn(500);
+    // var title = '<h3 id=\'suggestionTitle' + i + '\'>' 
+    //   + this.suggestions_[i][1][0] + '</h3>';
+    // var text = '<span id=\'suggestionText' + i + '\'>\"' 
+    //   + this.suggestions_[i][2][0] + '\"</span>';
+    var text = '<h3 id=\'suggestionText' + i + '\'>\"' 
+      + this.suggestions_[i][2][0] + '\"</h3>';
+    // $(title).hide().appendTo(suggestionDiv).delay(i*100).fadeIn(500);
     $(text).hide().appendTo(suggestionDiv).delay(i*100).fadeIn(500);
   }
   setTimeout(function() {
