@@ -109,7 +109,6 @@ SpeechGames.Speech.prototype.correctSpeech_ = function(speech) {
   var workspaceState = SpeechGames.controller.workspaceState_;
   var blockIds = Object.values(workspaceState.blockIds.map_.map_);
   var blockValuesetMap = workspaceState.blockValuesetMap;
-  console.log(blockValuesetMap);
   var blockTypeMap = new goog.structs.Map();
   blockTypeMap.set('controls_if', 'if');
   blockTypeMap.set('controls_repeat_ext', 'repeat');
@@ -118,19 +117,13 @@ SpeechGames.Speech.prototype.correctSpeech_ = function(speech) {
   blockTypeMap.set('turtle_pen', 'pen');
   blockTypeMap.set('turtle_repeat_internal', 'repeat');
   blockTypeMap.set('turtle_colour_internal', 'color');
+  
   var blockTypes = Turtle.blockTypes[SpeechGames.LEVEL].slice(0);
   for (var i = 0; i < blockTypes.length; i++) {
     if (blockTypeMap.containsKey(blockTypes[i])) {
       blockTypes[i] = blockTypeMap.get(blockTypes[i]);
     }
   }
-  console.log(blockTypes);
-
-  // TODO aravart Change corrector to accept two lists of types
-  // One list for blocks that can be added which comes from Turyle.blockTypes
-  // Second list for blocks currently on workspace to be involved in change / edit commands
-  // var blockTypes = ['move', 'turn', 'pen', 'color', 'repeat'];
-  // var blockTypes = Object.values(workspaceState.blockTypes.map_.map_);
   return this.corrector_.correct(speech, blockIds, blockValuesetMap, blockTypes);
 };
 

@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Define blocks for Speech Games.
+ * @author aravart@cs.wisc.edu (Ara Vartanian), ehernandez4@wisc.edu (Evan Hernandez), david.liang@wisc.edu (David Liang)
+ */
+
 HUE = 160
 LEFT_TURN = ' \u21BA';
 RIGHT_TURN = ' \u21BB';
@@ -60,47 +65,47 @@ Blockly.JavaScript['turtle_move'] = function (block)
 //   }
 // };
 
-Blockly.JavaScript['turtle_move_internal'] = function (block)
-{
-  var value = block.getFieldValue('VALUE');
-  return block.getFieldValue('DIR') +
-    '(' + value + ', \'block_id_' + block.id + '\');\n';
-};
+// Blockly.JavaScript['turtle_move_internal'] = function (block)
+// {
+//   var value = block.getFieldValue('VALUE');
+//   return block.getFieldValue('DIR') +
+//     '(' + value + ', \'block_id_' + block.id + '\');\n';
+// };
 
-Blockly.Blocks['turtle_turn'] = {
-  init: function ()
-  {
-    var DIRECTIONS = [
-      ["turn right by", 'turnRight'],
-      ["turn left by", 'turnLeft']
-    ];
-    // Append arrows to direction messages.
-    DIRECTIONS[0][0] += RIGHT_TURN;
-    DIRECTIONS[1][0] += LEFT_TURN;
-    this.setColour(HUE);
-    this.appendValueInput('VALUE')
-      .setCheck('Number')
-      .appendField(new Blockly.FieldDropdown(DIRECTIONS), 'DIR');
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setTooltip("Turns the turtle left or right by the specified number of degrees.");
-  }
-};
+// Blockly.Blocks['turtle_turn'] = {
+//   init: function ()
+//   {
+//     var DIRECTIONS = [
+//       ["turn right by", 'turnRight'],
+//       ["turn left by", 'turnLeft']
+//     ];
+//     // Append arrows to direction messages.
+//     DIRECTIONS[0][0] += RIGHT_TURN;
+//     DIRECTIONS[1][0] += LEFT_TURN;
+//     this.setColour(HUE);
+//     this.appendValueInput('VALUE')
+//       .setCheck('Number')
+//       .appendField(new Blockly.FieldDropdown(DIRECTIONS), 'DIR');
+//     this.setPreviousStatement(true);
+//     this.setNextStatement(true);
+//     this.setTooltip("Turns the turtle left or right by the specified number of degrees.");
+//   }
+// };
 
-Blockly.JavaScript['turtle_turn'] = function (block)
-{
-  var value = Blockly.JavaScript.valueToCode(block, 'VALUE',
-    Blockly.JavaScript.ORDER_NONE) || '0';
-  return block.getFieldValue('DIR') +
-    '(' + value + ', \'block_id_' + block.id + '\');\n';
-};
+// Blockly.JavaScript['turtle_turn'] = function (block)
+// {
+//   var value = Blockly.JavaScript.valueToCode(block, 'VALUE',
+//     Blockly.JavaScript.ORDER_NONE) || '0';
+//   return block.getFieldValue('DIR') +
+//     '(' + value + ', \'block_id_' + block.id + '\');\n';
+// };
 
 Blockly.Blocks['turtle_turn_internal'] = {
   init: function ()
   {
     var DIRECTIONS = [
-      ["turn right by", 'turnRight'],
-      ["turn left by", 'turnLeft']
+      ["turn right", 'turnRight'],
+      ["turn left", 'turnLeft']
     ];
     var VALUES = [
       ['1\u00B0', '1'],
@@ -116,6 +121,7 @@ Blockly.Blocks['turtle_turn_internal'] = {
     this.setColour(HUE);
     this.appendDummyInput()
       .appendField(new Blockly.FieldDropdown(DIRECTIONS), 'DIR')
+      .appendField(new Blockly.FieldLabel('by','by'))
       .appendField(new Blockly.FieldDropdown(VALUES), 'VALUE');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
