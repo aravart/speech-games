@@ -25,9 +25,15 @@ SpeechGames.Suggestions = function() {
       ['Get a <span style=font-weight:bold>move</span> block'] //text
     ],
     [
-      ['connect'],
+      ['connect_under'],
       ['Connect blocks:'],
       ['Connect block <span style=font-weight:bold>2</span> under block ' + 
+          '<span style=font-weight:bold>1</span>']
+    ],
+    [
+      ['connect_inside'],
+      ['nest blocks:'],
+      ['Connect block <span style=font-weight:bold>2</span> inside block ' + 
           '<span style=font-weight:bold>1</span>']
     ],
     [

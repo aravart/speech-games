@@ -33,7 +33,24 @@ SpeechGames.controller.addStateChangeListener(function(state) {
   }
   
   if (!state.allBlocksConnected) {
-    sugs.push('connect');
+    sugs.push('connect_under');
+  }
+  
+  var blocks = SpeechGames.workspace.getAllBlocks();
+  // has repeat block type
+  var hasRepeat = false;
+  // has block types other than repeat
+  var hasOther = false;
+  for (var i = 0; i < blocks.length; i++) {
+    if (blocks[i].type == 'turtle_repeat_internal') {
+      hasRepeat = true;
+    } else {
+      hasOther = true;
+    }
+  }
+
+  if (hasRepeat && hasOther) {
+    sugs.push('connect_inside');
   }
 
   if (!state.modifiableBlockIds.isEmpty()) {
