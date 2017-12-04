@@ -39,17 +39,13 @@ SpeechGames.controller.addStateChangeListener(function(state) {
   var blocks = SpeechGames.workspace.getAllBlocks();
   // has repeat block type
   var hasRepeat = false;
-  // has block types other than repeat
-  var hasOther = false;
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i].type == 'turtle_repeat_internal') {
       hasRepeat = true;
-    } else {
-      hasOther = true;
-    }
+    } 
   }
 
-  if (hasRepeat && hasOther) {
+  if (hasRepeat && blocks.length >= 2) {
     sugs.push('connect_inside');
   }
 
