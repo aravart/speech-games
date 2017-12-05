@@ -68,8 +68,6 @@ SpeechGames.Speech = function() {
     this.output = null;
     this.timeout = null;
     this.animating = false;
-    this.demoMode = false;
-    this.awake = false;
     this.listening = false;
     this.recognition = null;
     this.mic_animate = 'assets/img/mic-animate.gif';
@@ -188,20 +186,6 @@ SpeechGames.Speech.prototype.toggleDictation_ = function() {
 };
 
 /**
- * Checks to see if 'Hey Jerry' has been said yet.
- * @return {boolean} True if Hey Jerry has been said yet, else false.
- * @private
- */
-SpeechGames.Speech.prototype.checkHeyJerry_ = function() {
-  if (this.awake || this.rawSpeech === "hey jerry") {
-    this.awake = true;
-    return true;
-  } else {
-    return false;
-  }
-};
-
-/**
  * Parses the input and sends the result to SpeechGames.interpreter. Then outputs the response
  * to the user interface.
  * @private
@@ -209,53 +193,25 @@ SpeechGames.Speech.prototype.checkHeyJerry_ = function() {
 SpeechGames.Speech.prototype.parseSpeech_ = function() {
   this.previousRecognitionTime = Date.now();
   this.oldQ = $('#q').val();
-  // $('#output').addClass('disabled').text('Output not available.');
   var result = false;
   this.rawSpeech = $('#q').val();
   try {
-    // if demoing, check to see if 'hey jerry' was said
-    // if (!this.awake && this.demoMode) {
-    //   this.checkHeyJerry_();
-    //   if (this.awake) {
-    //     $('#user-message').hide().text("Awaiting your command!").fadeIn(200);
-    //     return;
-    //   } else {
-    //     $("#user-message").hide().text("Say 'Hey Jerry' to wake me up.").fadeIn(500);
-    //     return;
-    //   }
-    // }
-
     this.correctedSpeech = this.correctSpeech_(this.rawSpeech);
     $('#q').val(this.correctedSpeech);
     this.output = parser.parse(this.correctedSpeech);
 
-    // change message displayed to user
-    // $('#parse-messasge')
-    //       .attr('class', 'message info')
-    //       .text('Input parsed successfully.');
-    // $('#output').removeClass('disabled').text(jsDump.parse(this.output));
-
-    // interpret and perform action
     this.response = this.interpretSpeech_(this.output);
     clearTimeout(this.timeout);
     this.result = true;
     $("#user-message").hide().text('I heard "' + this.correctedSpeech + '"').fadeIn(200);
-    
-    // submit proposed corrections
-    // this.proposeCorrections(this.misrecognized, this.rawSpeech);
-    // this.misrecognized = [];
-
   } catch (e) {
     console.log(e);
 
-    if(e instanceof SpeechBlocks.UserError) {
+    if (e instanceof SpeechBlocks.UserError) {
       $('#user-message').text(e.message);
     } else {
       $('#parse-message').attr('class', 'message error').text(this.buildErrorMessage_(e));
-      if(this.rawSpeech !== '') {
-        // if (this.rawSpeech.length > 0) {
-        //   this.misrecognized.push(this.rawSpeech);
-        // }
+      if (this.rawSpeech !== '') {
         $('#user-message').hide().text('Sorry, I didn\'t understand \"' + this.rawSpeech + '\"').fadeIn(200);
         clearTimeout(this.timeout);
         this.timeout = setTimeout(function(){
@@ -372,7 +328,29 @@ SpeechGames.getParameterByName_ = function(name, url) {
 };
 
 /**
- * 
+ * Gets all params except for level flag from the url.
+ * @return {string} extraParams Extra params, besides level.
+ */
+SpeechGames.getExtraParams = function() {
+  var href = window.location.href;
+  var extraParams = href.substring(href.indexOf('?')).replace('?level='+SpeechGames.LEVEL, '');
+  
+  if (!extraParams.includes('?microphone') && SpeechGames.speech.listening) {
+    extraParams += '&?microphone=1';
+  } else {
+    if (!SpeechGames.speech.listening) {
+      extraParams = extraParams.replace('&?microphone=1','');
+    }
+  }
+
+  if (extraParams[0] != '&') {
+    extraParams = '&' + extraParams;
+  }
+  return extraParams;
+}
+
+/**
+ * Edit toolbox xml.
  * @param {$document} document Index of speech games
  * @param {array} blockTypes Block types to be included in the toolbox XML
  */
@@ -380,7 +358,7 @@ SpeechGames.editToolboxXml_ = function(document, blockTypes) {
   var $xmls = document.getElementsByTagName('xml');
   var $toolbox = $xmls.toolbox.children;
   for(var i = 0; i < $toolbox.length; ) {
-    if(!blockTypes.includes($toolbox[i].getAttribute('type')))
+    if (!blockTypes.includes($toolbox[i].getAttribute('type')))
       $toolbox[i].remove();
     else
       i++;
@@ -405,26 +383,16 @@ $(document).ready(function() {
       SpeechGames.workspace,
       SpeechGames.getParameterByName_('animate'));
   SpeechGames.interpreter = new SpeechBlocks.Interpreter(SpeechGames.controller, blockTypes);
-  if(SpeechGames.getParameterByName_('demo') || window.location.href.includes('firebase') || window.location.href.includes('localhost')) {
-    SpeechGames.speech.demoMode = true;
-    SpeechGames.speech.awake = false;
+
+  if (SpeechGames.getParameterByName_('microphone')) {
     SpeechGames.speech.setMicInterval_();
-    console.log("DEMOING");
   }
 
-  if(SpeechGames.getParameterByName_('debug')) {
+  if (SpeechGames.getParameterByName_('debug')) {
     $('#q').css('visibility','visible');
   } else {
     $('#debug').hide();
   }
-
-  // if (window.location.href.includes('firebase') || window.location.href.includes('localhost'))  {
-  //   firebase.auth().onAuthStateChanged(function(user) {
-  //     if (user) {
-  //       SpeechGames.speech.loadCorrections();
-  //     }
-  //   });
-  // }
 
   // listen for mouse clicks, key presses
   $('#q')
@@ -439,9 +407,6 @@ $(document).ready(function() {
   // if microphone icon clicked
   $('#microphone')
     .click(SpeechGames.speech.toggleDictation_.bind(SpeechGames.speech));
-  // if (SpeechGames.speech.demoMode && !SpeechGames.speech.awake) {
-  // $("#user-message").hide().text("Say 'Hey Jerry' to wake me up.").fadeIn(500);
-  // } else {
   $("#user-message").hide().text("Awaiting your command!").fadeIn(500);
   // }
 

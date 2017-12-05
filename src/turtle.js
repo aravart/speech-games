@@ -55,7 +55,7 @@ Turtle.pause = 0;
  * Adjusts speed of execution
  * @type number
  */
-Turtle.stepSpeed = 0.5
+Turtle.stepSpeed = 0.5;
 
 /**
  * JavaScript interpreter for executing program.
