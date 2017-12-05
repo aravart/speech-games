@@ -212,7 +212,7 @@ SpeechGames.Speech.prototype.parseSpeech_ = function() {
     } else {
       $('#parse-message').attr('class', 'message error').text(this.buildErrorMessage_(e));
       if (this.rawSpeech !== '') {
-        $('#user-message').hide().text('Sorry, I didn\'t understand \"' + this.rawSpeech + '\"').fadeIn(200);
+        $('#user-message').hide().text('Sorry, I didn\'t understand.').fadeIn(200);
         clearTimeout(this.timeout);
         this.timeout = setTimeout(function(){
           $('#user-message').hide().text("Awaiting your command!").fadeIn(200);

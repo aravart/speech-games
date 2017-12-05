@@ -280,13 +280,13 @@ SpeechBlocks.Interpreter.prototype.modifyBlock_ = function(command) {
         + "']").map(function () { return $(this).attr("alias") }).toArray()
     if (synonyms.length > 0) {
       if (synonyms.indexOf(command.new) < 0) {
-        var msg = "Sorry, I didn't understand '" + command.new + "'. You can say " + 
+        var msg = "Sorry, I didn't understand. You can say " + 
             synonyms.map(function (x) { return "'" + x + "'" }).join(" or ") + " here.";
         throw new SpeechBlocks.UserError(msg);
       }
     } else {
       if (dropdowns.indexOf(String(value)) < 0) {
-        var msg = "Sorry, I didn't understand '" + command.new + "'. You can say " 
+        var msg = "Sorry, I didn't understand . You can say " 
             + dropdowns.map(function (x) { return "'" + x + "'" }).join(" or ") + " here.";
         throw new SpeechBlocks.UserError(msg);
       }
