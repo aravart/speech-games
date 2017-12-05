@@ -1,9 +1,6 @@
 /**
  * @fileoverview Controls UI and suggestions.
- * @author aravart@cs.wisc.edu (Ara Vartanian)
- * @author dliang@cs.wisc.edu (David Liang)
- * @author pandori@wisc.edu (Sahib Singh Pandori)
- * @author ehernandez4@wisc.edu (Evan Hernandez)
+ * @author aravart@cs.wisc.edu (Ara Vartanian), dliang@cs.wisc.edu (David Liang), pandori@wisc.edu (Sahib Singh Pandori), ehernandez4@wisc.edu (Evan Hernandez)
  */
 
 $(document).ready(function() {

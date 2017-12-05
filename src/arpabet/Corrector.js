@@ -1,9 +1,7 @@
 /**
  * Corrects phrases to commands in the speech games grammar based on the edit
  * distances of the arpabet phonetic sequences.
- * @author Trace Carrasco <tcarrasco@wisc.edu>
- * @author David Liang <david.liang@wisc.edu>
- * @author Sahib Singh Pandori <pandori@wisc.edu>
+ * @author tcarrasco@wisc.edu (Trace Carrasco), david.liang@wisc.edu(David Liang),pandori@wisc.edu (Sdahib Singh Pandori)
  */
 
  /**

@@ -1,7 +1,6 @@
 /**
  * @fileoverview A simple value class for workspace state.
- * @author ehernandez4@wisc.edu (Evan Hernandez)
- * @author dliang@cs.wisc.edu (David Liang)
+ * @author ehernandez4@wisc.edu (Evan Hernandez), dliang@cs.wisc.edu (David Liang)
  */
 'use strict';
 
