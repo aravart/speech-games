@@ -114,8 +114,8 @@ SpeechGames.Suggestions.prototype.updateSuggestions = async function updateSugge
     //   + this.suggestions_[i][1][0] + '</h3>';
     // var text = '<span id=\'suggestionText' + i + '\'>\"' 
     //   + this.suggestions_[i][2][0] + '\"</span>';
-    var text = '<h3 id=\'suggestionText' + i + '\'>\"' 
-      + this.suggestions_[i][2][0] + '\"</h3>';
+    var text = '<h4 id=\'suggestionText' + i + '\'>\"' 
+      + this.suggestions_[i][2][0] + '\"</h4>';
     // $(title).hide().appendTo(suggestionDiv).delay(i*100).fadeIn(500);
     $(text).hide().appendTo(suggestionDiv).delay(i*100).fadeIn(500);
   }

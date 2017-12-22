@@ -6,6 +6,7 @@ body {
 h1 {
   font-weight: normal;
   font-size: 130%;
+  display: inline-block;
 }
 h1 a {
   text-decoration: none;
@@ -18,6 +19,12 @@ a:hover {
 }
 html[dir="RTL"] .farSide {
   text-align: left;
+}
+.header {
+  padding:10px;
+}
+#levels {
+  margin-top: -25px;
 }
 .level_number {
   border: solid 1px #ddd;
@@ -172,36 +179,43 @@ button:hover:not(:disabled) {
 
 #userbox {
   border: 5px solid #ddd;
-  height: 120px;
+  height: 75px;
   animation: fade-in;
-  padding: 0px;
-  border-radius: 25px;
+  padding: 5px;
+  border-radius: 10px;
   background-color: white;
 }
 
 #user-message {
-  font-size: 22pt;
+  font-size: 12pt;
+  font-style: oblique;
   text-align: center;
 }
 
 .full-container {
-  margin-right: 10%;
-  margin-left: 10%;
+  margin-right: 5%;
+  margin-left: 5%;
+}
+
+#blocklyDiv {
+  height:80vh;
 }
 
 #suggestionContainer {
-  border: 1px solid #ddd;
   word-wrap: break-word;
   white-space: normal;
-  height: 502px;
+  height: 100%;
   width: 100%;
-  padding: 20px;
+
+  padding: 0px;
 }
 
 #suggestionHead {
-  font-size: 22pt;
+  font-weight: bold;
+  font-size: 15pt;
   border-bottom: 1px solid #ddd;
   padding-bottom: 5px;
+  text-align: center;
 }
 
 #suggestionDiv {
@@ -222,7 +236,7 @@ button:hover:not(:disabled) {
 .absolute-text {
   position: absolute; 
   bottom: 0;
-  font-size: 20px; 
+  font-size: 18px; 
   color: rgba(255, 255, 255, 0.9);
   border-top: 1px solid #ddd;
   width: 100%; 
@@ -236,7 +250,7 @@ button:hover:not(:disabled) {
 
 #suggestionContainer {
     /*border: 1px solid transparent;    */
-    background-image: url("../img/paper.jpg");
+    /*background-image: url("../img/paper.jpg");*/
     background-repeat: no-repeat;
     -webkit-transition: border 1s linear, box-shadow 1s linear;
        -moz-transition: border 1s linear, box-shadow 1s linear;
@@ -244,12 +258,14 @@ button:hover:not(:disabled) {
 }
 
 #suggestionContainer.active {
+  /*
     border-color: grey;
     -webkit-box-shadow: 0 0 20px grey;
        -moz-box-shadow: 0 0 20px grey;
             box-shadow: 0 0 20px grey;
+            */
 }
 
 body {
-  background-image: url("../img/white-background.jpg");
+  /*background-image: url("../img/white-background.jpg");*/
 }

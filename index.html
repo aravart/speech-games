@@ -51,28 +51,28 @@
 </head>
 
 <body>
-
   <div class="full-container">
 
-    <table width="100%">
-      <tbody>
-        <tr>
-          <td>
-            <h1 id="levels">
-              <span><a href=".">Speech Games</a> : Turtle</span> &nbsp;
-            </h1>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="row form-inline">
-      <div class="col-md-12 no-margin">
-        <img id="microphone" style="width: 5.5%;" src="assets/img/mic.gif"/>
-        <input id="q" autocomplete="off" style="width: 94%; visibility: hidden;" class="form-control" type="text" name="q" id="transcript" placeholder="Speak"/>
+    <div class="header">
+      <div class="mui-row form-inline">
+        <div class="mui-col-md-4">
+          <h1 id="levels">
+            <input id="q" autocomplete="off" style="width: 94%; visibility: hidden;" class="form-control" type="text" name="q" id="transcript"
+              placeholder="Speak" />
+            <img id="microphone" style="width: 12.5%;" src="assets/img/mic.gif" />
+          </h1>
+        </div>
+        <div class="mui-col-md-8">
+          <div class="mui-row form-inline">
+            <div id="userbox">
+              <pre id="user-message"> </pre>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-
+    
+  
     <div id="debug">
 
       <div class="row">
@@ -89,11 +89,7 @@
 
     </div>
 
-    <div class="mui-row form-inline">
-      <div id="userbox" class="mui-col-md-12">
-        <pre id="user-message"> </pre>
-      </div>
-    </div>
+
 
     <div class="space">
       <p></p>
@@ -101,19 +97,17 @@
 
     <div class="mui-row">
       <div class="mui-col-md-4 relative no-margin">
-        <span class="absolute-text" id="levelDescription" style="padding-top: 35px;">Description</span>
-        <canvas id="display" height="500" width="500" style="border:1px solid #ccc;"></canvas>
-        <canvas id="answer" height="500" width="500" style="border:1px solid #ccc; display: none;"></canvas>
-        <canvas id="scratch" height="500" width="500" style="border:1px solid #ccc; display: none;"></canvas>
-      </div>
-      <div class="mui-col-md-5 no-margin">
-        <div id="blocklyDiv" style="height: 502px"></div>
-      </div>
-      <div class="mui-col-md-3 no-margin">
+        <!-- <span class="absolute-text" id="levelDescription" style="padding-top: 5px;">Description</span> -->
+        <canvas id="display" height="300" width="500" style="width:100%;border:1px solid #ccc;"></canvas>
+        <canvas id="answer" height="300" width="500" style="width:100%;border:1px solid #ccc; display: none;"></canvas>
+        <canvas id="scratch" height="300" width="500" style="width:100%;border:1px solid #ccc; display: none;"></canvas>
         <div id="suggestionContainer">
-          <div id="suggestionHead">Suggestions</div>
-          <div id="suggestionDiv"></div>
-        </div>
+            <div id="suggestionHead">Suggestions</div>
+            <div id="suggestionDiv"></div>
+          </div>
+      </div>
+      <div class="mui-col-md-8">
+        <div id="blocklyDiv"></div>
       </div>
     </div>
 
