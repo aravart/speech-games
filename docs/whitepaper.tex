@@ -1,5 +1,7 @@
 \documentclass[]{article}
 
+\usepackage{amsmath, amssymb, xspace, mathalfa}
+
 \title{Voice Programming in Computer Science Education}
 
 \begin{document}
@@ -113,20 +115,50 @@
 
 \section{Layout}
 
-\subsection{How are commands intereted visually?}
+%\subsection{How are commands interpreted visually?}
+%\subsection{Where do new blocks go?}
+%\subsection{How are blocks reordered when one is moved?}
+%\subsection{What happens if the user runs out of space on the workspace?}
+%\subsection{Describe the layout algorithm in pseudocode}
+%\subsection{Show an example of the a before and after with the layout algorithm}
+%\subsection{Are there any cases that currently give problems for the layout algorithm?}
 
-\subsection{Where do new blocks go?}
+As the user writes a program, certain locations on the workspace fill with blocks.
+This presents a challenge: what should happen when blocks overlap with one another?
+For our system to be practically useful, it must avoid introducing such visual impairments,
+which may prevent the user from issuing commands (e.g. if they cannot see a block ID)
+or which may introduce unnecessary cognitive load.
 
-\subsection{How are blocks reordered when one is moved?}
+Blockly by default places new blocks at the top left of the workspace, even if the new block
+will overlap an old block. Similarly, when Blockly connects one block to another, the resulting chain
+might overlap another chain.
 
-\subsection{What happens if the user runs out of space on the workspace?}
+We devise simple layout algorithms for each case. To make this formal, we view
+the workspace as a 2D plane.
 
-\subsection{Describe the layout algorithm in pseudocode}
+% TODO(evanfredhernandez): Diagrams for these algorithms. And pseudocode?
 
-\subsection{Show an example of the a before and after with the layout algorithm}
+\textbf{Adding Blocks} (1) Find the vertically lowest block on the workspace.
+Let $y$ be the vertical coordinate of its lower left corner. (2) Place the new block
+such that its top left corner is at $(20, y)$, that is, below the lowest block on the
+workspace, 20 pixels right of the flyout.
 
-\subsection{Are there any cases that currently give problems for the layout algorithm?}
-
+\textbf{Moving Blocks} Suppose the user has just connected one block to another, and the
+resulting chain now overlaps $n$ blocks. We repair the layout by moving the $n$ conflicting
+blocks via the procedure below. For brevity, let $W$ and $H$ be the width and height of
+the entire workspace, respectively, let $b$ be the block to be moved, and let
+$w_b$ and $h_b$ be the width and height of $b$ and its children. Additionally define $m$
+to be a small margin.
+\begin{enumerate}
+\item{Construct the set of candidate new locations: $$C = \{(x, y) = (rm, sm) : r, s \in \mathbb{Z}, x \le W, y \le H\}$$}
+\item{For every $(x,y) \in C$ check if there is no block within the box bounded by the four points:
+	$$(x,y), (x + w_b, y), (x, y + h_b), (x + w_b, y + h_b)$$
+Let $(\hat{x}, \hat{y})$ be the first found satisfying that condition. If none is found, set $\hat{x} = \hat{y} = m$.
+}
+\item{Move $b$ so that its top left corner is located at $(\hat x, \hat y)$.}
+\end{enumerate}
+We choose $m = 20$ (pixels) because it is small enough to preserve space on the workspace,
+and large enough to prevent Blockly from automatically connecting nearby blocks.
 
 \section{Related Work}
 
