@@ -18,6 +18,7 @@ SpeechGames.Suggestions = function() {
   this.map_ = new goog.structs.Map();
 
   /** @private */
+  // TODO (dliangsta): Make the block numbers flexible.
   this.suggestionList_ = [
     [
       ['get'], // key

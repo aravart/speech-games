@@ -272,20 +272,6 @@ SpeechGames.Speech.prototype.proposeCorrections = function (misrecognized, inten
   firebase.database().ref('/proposed/').push().set(arr);
 }
 
-SpeechGames.Speech.prototype.reviewProposedCorrections = function () {
-  //TODO: dliangsta
-}
-
-// will delete a single proposed correction
-SpeechGames.Speech.prototype.deleteProposedCorrection = function () {
-  //TODO: dliangsta
-}
-
-// will push a single proposed correction
-SpeechGames.Speech.prototype.pushProposedCorrection = function () {
-  //TODO: dliangsta
-}
-
 // pushes everything under '/proposed/' to '/corrections/' in the database
 SpeechGames.Speech.prototype.pushAllProposedCorrections = function () {
   firebase.database().ref('/proposed/').once('value').then(function (snapshot) {
