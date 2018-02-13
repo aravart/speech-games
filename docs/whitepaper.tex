@@ -11,12 +11,23 @@
 
 \documentclass[]{article}
 
-\usepackage{amsmath, amssymb, xspace, mathalfa, algorithm, algpseudocode, hyperref, graphicx}
+\usepackage{wrapfig, algorithm, algpseudocode, amsmath, amssymb, xspace, mathalfa, algorithm, algpseudocode, hyperref, graphicx}
 \hypersetup{colorlinks=True, linkcolor=blue}
 \graphicspath{ {images/} }
-\usepackage{amsmath, amssymb, xspace, mathalfa}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
+
+% Example of this command
+% \fig{MYFIGNAME001}{my caption}{size}
+% See figure \ref{fig:MYFIGNAME001}
+
+\newcommand\fig[3]{
+\begin{figure}
+  \begin{center}
+  \includegraphics[#3]{images/#1}
+  \caption{#2} 
+  \label{fig:#1}
+  \end{center}
+\end{figure}
+}
 
 \title{Voice Programming in Computer Science Education}
 
@@ -48,27 +59,29 @@ recognized programming, our project will help teach people who are unable to use
 \subsection{What is the Blockly environment?}
 Google Blockly is a JavaScript library that creates a visual block programming 
 environment where core computer science logic can be taught, such as conditionals and 
-looping. Blockly is run in the web browser, which gives the opportunity for mobile use. We chose Google Blockly over other block based languages due to its easy to
-work with and customizable API.
+looping. Blockly is run in the web browser, which gives the opportunity for mobile use. 
+We chose Google Blockly over other block based languages due to its easy to work with and 
+has a customizable API.
 
 \subsection{How are blocks arranged horizontally? What language do we use to describe this?}
 
 \subsection{How are blocks arranged vertically? What language do we use to describe this?}
 
-% TODO Define chain before you use it. Use bold for first instance of it in the text.
-% TODO A non-technical reader won't know what y location means
-% TODO Add an image here that visually identified toolbox
+\fig{workspaceDiagram.jpg}{Google Blockly workspace diagram}{width=7cm}
 
-In Blockly, there is the ability to allow several chains of blocks to be run while
-in the workspace. The order of execution causes the topmost chain of blocks (topmost 
-being indicated by the top block in the chain's y location). Normally, users interact
+Blockly has a ``workspace''(See figure \ref{fig:workspaceDiagram.jpg}), which is where all of the blocks in the program are located. A ``chain of blocks''
+(See figure \ref{fig:workspaceDiagram.jpg}) is used to refer to a series of connected blocks in the workspace. In Google Blockly,  
+there is the ability to allow several chains of blocks to be run while
+in the workspace. The order of execution causes the topmost chain of blocks. The topmost chain
+is computed based off the highest vertical location of the first block in a chain. Normally, users interact
 with Blockly through looking at the workspace and adding blocks to the workspace by
-using the toolbox. In order to move blocks from the toolbox to the workspace, users
-must click and drag using a mouse. 
+using a menu that holds the allowed blocks for a program, which we will refer to as the 
+``toolbox'' (See figure \ref{fig:workspaceDiagram.jpg}). In order to move blocks from the toolbox to the 
+workspace, usersmust click and drag using a mouse. 
 
 % TODO May want to move this to the section describing turtle
 
-\\\\ \textbf{Available blocks}
+\textbf{Available blocks}
 \begin{itemize}
 \item $\textbf{move}$: moves the tutle forward
 \item $\textbf{turn}$: turns the turtle, can decide between left or right turning and angle of turning  1,45,72,90,120,140 degrees
