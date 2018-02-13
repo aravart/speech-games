@@ -2,13 +2,25 @@
 % Block: A literal block on the workspace (like a move block)
 % Chain: A series of connected blocks.
 % Program: All chains on the workspace.
-% Workspace: The canvas where blocks are 
+% Workspace: The canvas where blocks are.
+% Cognative Load: The amount of thinking needed to complete a task.
+% Utterance: What is said by the user
+% Recognition: What the speech recognition "hears" from the user
+% Correction: The outcome of our correction algorithm on the recogition
+% Toolbox: Where the available blocks can be found 
 
 \documentclass[]{article}
 
 \usepackage{amsmath, amssymb, xspace, mathalfa, algorithm, algpseudocode, hyperref, graphicx}
 \hypersetup{colorlinks=True, linkcolor=blue}
 \graphicspath{ {images/} }
+\usepackage{amsmath, amssymb, xspace, mathalfa}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\algnewcommand\algorithmicforeach{\textbf{for each}}
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
 
 \title{Voice Programming in Computer Science Education}
 
@@ -17,12 +29,17 @@
 
 \section{Introduction}
 
-\subsection{What is the goal of the project? What problem does it solve?}
-
-\subsection{Who is meant to benefit?}
+Our goal is to create a voice enabled platform that uses machine learning to allow 
+anyone to learn the fundamentals of computer science. Currently, we seek to reduce the amount
+of cognitive load required to be introduced to programming concepts, which would give more 
+students opportunities in computer science. 
+\\ 
+Voice programming looks to benefit both new and experienced programmers.  
+Google Blockly is a simple language that allows us to create a robust programming grammer 
+that can be used of people of all ages. In addition to discovering solutions to voice 
+recognized programming, our project will help teach people who are unable to use a traditional mouse and keyboard.
 
 \subsection{What are the results or outcome of the project?}
-
 
 \section{HCI Principles}
 
@@ -30,35 +47,38 @@
 
 \subsection{How did those HCI principles influence our design decisions?}
 
-
 \section{Blockly}
 
 \subsection{What is the Blockly environment?}
-
-\subsection{What is the goal of the Blockly project?}
+Google Blockly is a JavaScript library that creates a visual block programming 
+enviornment where core computer science logic can be taugh, such as conditionals and 
+looping. Blockly is run in the web browser, which gives the opportunity for mobile development. We chose Google Blockly over other block based languages due to its easy to
+work with and customizable API.
 
 \subsection{How are blocks arranged horizontally? What language do we use to describe this?}
 
 \subsection{How are blocks arranged vertically? What language do we use to describe this?}
 
-\subsection{Is just one chain of blocks allowed or several?}
-
-\subsection{If several, how are they executed?}
-
-\subsection{How does the user typically interact with Blockly?}
-
-\subsubsection{What's the medium (hint: mouse)?}
-
-\subsubsection{What actions are available?}
-
-\subsubsection{How can we group them into categories?}
-
-\subsubsection{How does moving blocks work?}
-
-\subsubsection{How does deleting blocks work?}
-
-\subsubsection{How does connecting blocks work?}
-
+In Blockly, there is the ability to allow several chains of blocks to be run while
+in the workspace. The order of execution causes the topmost chain of blocks (topmost 
+being indicated by the top block in the chain's y location). Normally, users interact
+with Blockly through looking at the workspace and adding blocks to the workspace by
+using the toolbox. In order to move blocks from the toolbox to the workspace, users
+must click and drag using a mouse. 
+\\\\ \textbf{Available blocks}
+\begin{itemize}
+\item $\textbf{move}$: moves the tutle forward
+\item $\textbf{turn}$: turns the turtle, can decide between left or right turning and angle of turning  1,45,72,90,120,140 degrees
+\item $\textbf{repeat}$: repeats the blocks found inside, can decide to repeat either 2,3,4,5 or 360 times
+\item $\textbf{pen}$: can decide between up/down, up stops the turtle from drawing a line, down makes the turtle's movements draw lines again
+\end{itemize}
+Users must refer to blocks as the block number that is shown on the block\\
+\textbf{Users can move blocks in 2 ways}:
+\begin{itemize}
+\item \textbf{Connect block $<$ID$>$ under block $<$ID$>$}: allows user to move blocks and chains of block under any block or chain of blocks
+\item \textbf{Connect block $<$ID$>$ inside block $<$ID$>$}: allows user to move block and chains of blocks inside of a repeat block
+\end{itemize}
+\textbf{delete block $<$ID$>$}: deletes a block,  unless the block is the head of a chain of blocks, then this command deletes the entire chain of blocks. 
 \subsubsection{How does separating blocks work?}
 
 
@@ -84,7 +104,6 @@
 \subsection{What commands are available in that grammar?}
 
 \subsection{How do the user interface commands described earlier map to the commands in the grammar?  }
-
 
 \section{Speech recognition}
 
@@ -115,7 +134,16 @@ We modify the suggestions list when we believe it could be useful for the user. 
 	\end{tabular}
 \end{table}
 
+\subsection{What is basis on which a speech suggestion is made? What circumstances trigger it?}
+
+\subsection{What are the limitations of the current method and what future work might improve upon it?}
+
+\subsection{Show an example of the suggestions box and workspace before and after an operation}
+
 \section{Corrections}
+\textit{Utterance:} A single command given by the programmer\\
+\textit{Recognition:} What the speech reognition software recogizes an utterance as\\
+\textit{Correction:} The proposed utterance given a recognition, calculated using correction algorithm\\
 
 %\subsection{Give an example of a common recognition error that falls out of the grammar}
 %\subsection{What algorithm was used to correct recognition?}
@@ -142,6 +170,7 @@ As previously described, we use the webkitspeechrecognition speech API to captur
 	\end{algorithmic}
 \end{algorithm}\\
 Furthermore, if the minimum edit-distance command is too far from the original recognition, we reject the correction and simply notify the user that we didn't understand their command. Our notion of "too far" is more concretely defined by a maximum modification factor which defines the the number of phoneme edits that can be made as a percentage of the number of phonemes in the recognition. As such, there is no fixed maximum number of edits, as this could give different performance for different string lengths. We determined the threshold in the following way.
+\subsection{If there are any parameters to be fit in this correction algorithm, how were they fit?}
 \subsubsection{What statistical procedure was use?}
 \subsubsection{What data was gathered?}
 \subsubsection{What assumptions were made that could be considered weaknesses of the model?}
