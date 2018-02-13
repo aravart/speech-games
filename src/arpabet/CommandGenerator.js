@@ -20,16 +20,27 @@ CommandGenerator.prototype.generateSpecialCommands = function () {
 }
 
 /**
- * Generates all the MOVE commands
+ * Generates all the CONNECT commands
  * @param blockIds: List of all block IDs that are presume to be in the workspace
- * @return List of all valid MOVE commands
+ * @return List of all valid CONNECT commands
  */
-CommandGenerator.prototype.generateMoveCommands = function (blockIds) {
+CommandGenerator.prototype.generateConnectCommands = function (blockIds) {
   blockIds.forEach(function (blockId1) {
     blockIds.forEach(function (blockId2) {
       this.commands.push('connect block ' + blockId1 + ' under block ' + blockId2);
       this.commands.push('connect block ' + blockId1 + ' inside block ' + blockId2);
     }.bind(this));
+  }.bind(this));
+}
+
+/**
+ * Generates all the SEPARATE commands
+ * @param blockIds: List of all block IDs that are presume to be in the workspace
+ * @return List of all valid SEPARATE commands
+ */
+CommandGenerator.prototype.generateSeparateCommands = function (blockIds) {
+  blockIds.forEach(function (blockId) {
+    this.commands.push('separate block ' + blockId);
   }.bind(this));
 }
 
@@ -74,9 +85,10 @@ CommandGenerator.prototype.generateDeleteCommands = function (blockIds) {
 CommandGenerator.prototype.generateCommands = function (blockIds, blockValuesetMap, blockTypes) {
   this.commands = new Array();
   this.generateGetCommands(blockTypes);
-  this.generateMoveCommands(blockIds);
+  this.generateConnectCommands(blockIds);
   this.generateChangeCommands(blockIds, blockValuesetMap);
   this.generateDeleteCommands(blockIds);
+  this.generateSeparateCommands(blockIds);
   this.generateSpecialCommands();
   return this.commands;
 }

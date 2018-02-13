@@ -1,4 +1,4 @@
-Start = command:( Connect / Get / Delete / Change / Run / Next / Stay) { return command }
+Start = command:( Connect / Separate / Get / Delete / Change / Run / Next / Stay) { return command }
 
 Article = "an" / "a"
 Type = "set" / "if" / "repeat" / "comparison" / "math" / "arithmetic" / "print" / "text" / "number" / "variable" / "connect" / "turn" / "pen" / "color" / "move"
@@ -7,6 +7,11 @@ Connect = "connect" _ block:BlockToken _ where:BlockPosition { return {
   "action": "connect",
   "blockId": block,
   "where": where
+} }
+
+Separate = "separate" _ block:BlockToken { return {
+  "action": "separate",
+  "blockId": block,
 } }
 
 BlockType = type:Type _ "block" { return type }
