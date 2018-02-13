@@ -3,7 +3,7 @@
 % Chain: A series of connected blocks.
 % Program: All chains on the workspace.
 % Workspace: The canvas where blocks are.
-% Cognative Load: The amount of thinking needed to complete a task.
+% Cognitive Load: The amount of thinking needed to complete a task.
 % Utterance: What is said by the user
 % Recognition: What the speech recognition "hears" from the user
 % Correction: The outcome of our correction algorithm on the recogition
@@ -47,13 +47,17 @@ recognized programming, our project will help teach people who are unable to use
 
 \subsection{What is the Blockly environment?}
 Google Blockly is a JavaScript library that creates a visual block programming 
-enviornment where core computer science logic can be taugh, such as conditionals and 
-looping. Blockly is run in the web browser, which gives the opportunity for mobile development. We chose Google Blockly over other block based languages due to its easy to
+environment where core computer science logic can be taught, such as conditionals and 
+looping. Blockly is run in the web browser, which gives the opportunity for mobile use. We chose Google Blockly over other block based languages due to its easy to
 work with and customizable API.
 
 \subsection{How are blocks arranged horizontally? What language do we use to describe this?}
 
 \subsection{How are blocks arranged vertically? What language do we use to describe this?}
+
+% TODO Define chain before you use it. Use bold for first instance of it in the text.
+% TODO A non-technical reader won't know what y location means
+% TODO Add an image here that visually identified toolbox
 
 In Blockly, there is the ability to allow several chains of blocks to be run while
 in the workspace. The order of execution causes the topmost chain of blocks (topmost 
@@ -61,6 +65,9 @@ being indicated by the top block in the chain's y location). Normally, users int
 with Blockly through looking at the workspace and adding blocks to the workspace by
 using the toolbox. In order to move blocks from the toolbox to the workspace, users
 must click and drag using a mouse. 
+
+% TODO May want to move this to the section describing turtle
+
 \\\\ \textbf{Available blocks}
 \begin{itemize}
 \item $\textbf{move}$: moves the tutle forward
@@ -68,6 +75,9 @@ must click and drag using a mouse.
 \item $\textbf{repeat}$: repeats the blocks found inside, can decide to repeat either 2,3,4,5 or 360 times
 \item $\textbf{pen}$: can decide between up/down, up stops the turtle from drawing a line, down makes the turtle's movements draw lines again
 \end{itemize}
+
+% TODO Move any description of the speech down to the appropriate environment
+
 Users must refer to blocks as the block number that is shown on the block\\
 \textbf{Users can move blocks in 2 ways}:
 \begin{itemize}
@@ -76,7 +86,6 @@ Users must refer to blocks as the block number that is shown on the block\\
 \end{itemize}
 \textbf{delete block $<$ID$>$}: deletes a block,  unless the block is the head of a chain of blocks, then this command deletes the entire chain of blocks. 
 \subsubsection{How does separating blocks work?}
-
 
 \section{Turtle}
 
@@ -116,6 +125,18 @@ Users must refer to blocks as the block number that is shown on the block\\
 %\subsection{What is basis on which a speech suggestion is made? What circumstances trigger it?}
 %\subsection{What are the limitations of the current method and what future work might improve upon it?}
 %\subsection{Show an example of the suggestions box and workspace before and after an operation}
+
+% TODO Why do we have a suggestions list? (Well, because of the fixed grammar.
+% The user is not given any training in the grammar per se.)
+
+% TODO Point out that the user might get the impression that we are giving
+% suggestsions to solve the problem while we are only giving hints on how to use
+% the grammar.
+
+% TODO Fix "novel algorithm", reference alg
+% TODO May want to shorten Alg 1 vars and describe it in text
+% TODO Fix quotes
+
 We modify the suggestions list when we believe it could be useful for the user. For example, when there is a repeat block on the canvas, we suggest that the user connects a block inside of the repeat block, to make use of the repeat block. However, our current suggestions system is quite limited. It provides generic suggestions, not specific to the block IDs. For example, when an empty repeat block is on the canvas, we suggest that the user ``Connect block 2 inside block 1'' with these exact block IDs, regardless of what the block ID of the repeat block is. Finally, we provide an example in \hyperref[SuggestionsBeforeAndAfter]{Table \ref{SuggestionsBeforeAndAfter}} of the suggestions box with the corresponding workspace before and after adding the first block. \\
 \begin{table}
 	\caption{Example of suggestions before and after adding the first block to the workspace.}
@@ -165,7 +186,11 @@ As previously described, we use the webkitspeechrecognition speech API to captur
 		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}\\
+% TODO Why? What's the problem with always correcting? If the user says
+% something utterly unrelated, we still correct it!
+
 Furthermore, if the minimum edit-distance command is too far from the original recognition, we reject the correction and simply notify the user that we didn't understand their command. Our notion of ``too far'' is more concretely defined by a maximum modification factor which defines the the number of phoneme edits that can be made as a percentage of the number of phonemes in the recognition. As such, there is no fixed maximum number of edits, as this could give different performance for different string lengths. We determined the threshold in the following way.
+
 \subsection{If there are any parameters to be fit in this correction algorithm, how were they fit?}
 \subsubsection{What statistical procedure was use?}
 \subsubsection{What data was gathered?}
