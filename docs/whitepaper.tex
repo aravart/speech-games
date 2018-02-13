@@ -6,8 +6,9 @@
 
 \documentclass[]{article}
 
-\usepackage{amsmath, amssymb, xspace, mathalfa, algorithm, algpseudocode, hyperref}
+\usepackage{amsmath, amssymb, xspace, mathalfa, algorithm, algpseudocode, hyperref, graphicx}
 \hypersetup{colorlinks=True, linkcolor=blue}
+\graphicspath{ {images/} }
 
 \title{Voice Programming in Computer Science Education}
 
@@ -91,19 +92,28 @@
 
 \subsection{What tradeoffs are there in our decision by comparison to alternatives? What was gained and what lost?}
 
+\clearpage
 
 \section{Suggestions}
 
 \subsection{Why do we give suggestions to the user? What HCI principle is behind this?}
 
-\subsection{What is basis on which a speech suggestion is made? What circumstances trigger it?}
-
-\subsection{What are the limitations of the current method and what future work might improve upon it?}
-
-\subsection{Show an example of the suggestions box and workspace before and after an operation}
-
-
-\clearpage
+%\subsection{What is basis on which a speech suggestion is made? What circumstances trigger it?}
+%\subsection{What are the limitations of the current method and what future work might improve upon it?}
+%\subsection{Show an example of the suggestions box and workspace before and after an operation}
+We modify the suggestions list when we believe it could be useful for the user. For example, when there is a repeat block on the canvas, we suggest that the user connects a block inside of the repeat block, to make use of the repeat block. However, our current suggestions system is quite limited. It provides generic suggestions, not specific to the block IDs. For example, when an empty repeat block is on the canvas, we suggest that the user ``Connect block 2 inside block 1'' with these exact block IDs, regardless of what the block ID of the repeat block is. Finally, we provide an example in \hyperref[SuggestionsBeforeAndAfter]{Table \ref{SuggestionsBeforeAndAfter}} of the suggestions box with the corresponding workspace before and after adding the first block. \\
+\begin{table}
+	\caption{Example of suggestions before and after adding the first block to the workspace.}
+	\label{SuggestionsBeforeAndAfter}
+	\begin{tabular}{cccc}
+		\hline
+		when & workspace & suggestions \\\hline
+		\\
+		before & \includegraphics{suggestions_before_workspace.jpg} & \includegraphics{suggestions_before.jpg} \\\hline
+		\\
+		after & \includegraphics{suggestions_after_workspace.jpg} & \includegraphics{suggestions_after.jpg} \\\hline
+	\end{tabular}
+\end{table}
 
 \section{Corrections}
 
