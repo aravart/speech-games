@@ -3,3 +3,4 @@ docs/*.aux
 docs/*.log
 docs/*.synctex.gz
 docs/auto/*.el
+docs/*.out

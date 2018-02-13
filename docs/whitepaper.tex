@@ -1,12 +1,13 @@
 %%% LEXICON %%%
-% Block: An literal block on the workspace (like a move block)
+% Block: A literal block on the workspace (like a move block)
 % Chain: A series of connected blocks.
 % Program: All chains on the workspace.
 % Workspace: The canvas where blocks are 
 
 \documentclass[]{article}
 
-\usepackage{amsmath, amssymb, xspace, mathalfa}
+\usepackage{amsmath, amssymb, xspace, mathalfa, algorithm, algpseudocode, hyperref}
+\hypersetup{colorlinks=True, linkcolor=blue}
 
 \title{Voice Programming in Computer Science Education}
 
@@ -75,7 +76,7 @@
 
 \section{Speech}
 
-\subsection{Why did we decide to model speech using a}
+\subsection{Why did we decide to model speech using a} % This subsection heading might be incomplete?
 
 \subsection{What choices did we make as we designed that grammar?}
 
@@ -102,23 +103,39 @@
 \subsection{Show an example of the suggestions box and workspace before and after an operation}
 
 
+\clearpage
+
 \section{Corrections}
 
-\subsection{Give an example of a common recognition error that falls out of the grammar}
-
-\subsection{What algorithm was used to correct recognition?}
-
-\subsection{If there are any parameters to be fit in this correction algorithm, how were they fit?}
-
+%\subsection{Give an example of a common recognition error that falls out of the grammar}
+%\subsection{What algorithm was used to correct recognition?}
+%\subsection{If there are any parameters to be fit in this correction algorithm, how were they fit?}
+As previously described, we use the webkitspeechrecognition speech API to capture user commands. However, the API has a hard time understanding commands from our grammar. We hypothesize that the API expects ordinary English, and as a result, phrases like "get a turn block" or "change 4 in block 3 to 5" are often recognized incorrectly by webkitspeechcrecognition. We developed a \hyperref[CorrectionAlgorithm]{novel algorithm} to correct incorrectly recognized phrases ("recognitions") to what we hope are the intended commands ("utterances"). The algorithm finds the command with minimal phoneme edit distance from the set of possible commands for a given workspace.
+\begin{algorithm}
+	\caption{Correction Algorithm}\label{CorrectionAlgorithm}
+	\begin{algorithmic}[1]
+		\Procedure{Correct}{recognition, workspace}
+		\State $recognitionPhoneme \leftarrow stringToPhoneme(recognition)$
+		\State $allPossibleCommands\leftarrow generateAllPossibleCommands(workspace) $
+		\State $minimumEditDistance \leftarrow \infty$
+		\State $minimumEditDistanceCommand = recognition$
+		\For{$command$ in $allPossibleCommands$}
+			\State $commandPhoneme \leftarrow stringToPhoneme(command)$
+			\State $editDistance \leftarrow findMinimumEditDistance(recognitionPhoneme, commandPhoneme)$
+			\If{$editDistance < minimumEditDistance$}
+				\State $minimumEditDistanceCommand = command$
+				\State $minimumEditDistance = editDistance$
+			\EndIf
+		\EndFor
+		\State \Return{$minimumEditDistanceCommand$}
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}\\
+Furthermore, if the minimum edit-distance command is too far from the original recognition, we reject the correction and simply notify the user that we didn't understand their command. Our notion of "too far" is more concretely defined by a maximum modification factor which defines the the number of phoneme edits that can be made as a percentage of the number of phonemes in the recognition. As such, there is no fixed maximum number of edits, as this could give different performance for different string lengths. We determined the threshold in the following way.
 \subsubsection{What statistical procedure was use?}
-
 \subsubsection{What data was gathered?}
-
 \subsubsection{What assumptions were made that could be considered weaknesses of the model?}
-
 \subsection{Give an example of a common case that the corrections algorithm, as currently implemented, fails on}
-
-\clearpage
 
 \section{Layout}
 
