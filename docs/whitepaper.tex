@@ -144,7 +144,7 @@ We modify the suggestions list when we believe it could be useful for the user. 
 %\subsection{Give an example of a common recognition error that falls out of the grammar}
 %\subsection{What algorithm was used to correct recognition?}
 %\subsection{If there are any parameters to be fit in this correction algorithm, how were they fit?}
-As previously described, we use the webkitspeechrecognition speech API to capture user commands. However, the API has a hard time understanding commands from our grammar. We hypothesize that the API expects ordinary English, and as a result, phrases like "get a turn block" or "change 4 in block 3 to 5" are often recognized incorrectly by webkitspeechcrecognition. We developed a \hyperref[CorrectionAlgorithm]{novel algorithm} to correct incorrectly recognized phrases ("recognitions") to what we hope are the intended commands ("utterances"). The algorithm finds the command with minimal phoneme edit distance from the set of possible commands for a given workspace.
+As previously described, we use the webkitspeechrecognition speech API to capture user commands. However, the API has a hard time understanding commands from our grammar. We hypothesize that the API expects ordinary English, and as a result, phrases like ``get a turn block'' or ``change 4 in block 3 to 5'' are often recognized incorrectly by webkitspeechcrecognition. We developed a \hyperref[CorrectionAlgorithm]{novel algorithm} to correct incorrectly recognized phrases (``recognitions'') to what we hope are the intended commands (``utterances''). The algorithm finds the command with minimal phoneme edit distance from the set of possible commands for a given workspace.
 \begin{algorithm}
 	\caption{Correction Algorithm}\label{CorrectionAlgorithm}
 	\begin{algorithmic}[1]
@@ -165,7 +165,7 @@ As previously described, we use the webkitspeechrecognition speech API to captur
 		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}\\
-Furthermore, if the minimum edit-distance command is too far from the original recognition, we reject the correction and simply notify the user that we didn't understand their command. Our notion of "too far" is more concretely defined by a maximum modification factor which defines the the number of phoneme edits that can be made as a percentage of the number of phonemes in the recognition. As such, there is no fixed maximum number of edits, as this could give different performance for different string lengths. We determined the threshold in the following way.
+Furthermore, if the minimum edit-distance command is too far from the original recognition, we reject the correction and simply notify the user that we didn't understand their command. Our notion of ``too far'' is more concretely defined by a maximum modification factor which defines the the number of phoneme edits that can be made as a percentage of the number of phonemes in the recognition. As such, there is no fixed maximum number of edits, as this could give different performance for different string lengths. We determined the threshold in the following way.
 \subsection{If there are any parameters to be fit in this correction algorithm, how were they fit?}
 \subsubsection{What statistical procedure was use?}
 \subsubsection{What data was gathered?}
