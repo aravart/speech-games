@@ -1,6 +1,6 @@
 /**
  * @fileoverview Manager for command manual.
- * @author david.liang@wisc.edu (David Liang), pandori@wisc.edu (Sahib Pandori)
+ * @author dliang@cs.wisc.edu (David Liang), pandori@wisc.edu (Sahib Pandori)
  */
 goog.provide('SpeechGames.Suggestions');
 
@@ -36,6 +36,11 @@ SpeechGames.Suggestions = function() {
       ['nest blocks:'],
       ['Connect block <span style=font-weight:bold>2</span> inside block ' + 
           '<span style=font-weight:bold>1</span>']
+    ],
+    [
+      ['separate'],
+      ['separate blocks:'],
+      ['Separate block <span style=font-weight:bold>2</span>']
     ],
     [
       ['change'],

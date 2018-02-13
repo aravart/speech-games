@@ -1,7 +1,7 @@
 /**
  * @fileoverview High-level view of a Blockly Workspace that allows
  * for programmatically adding, moving, and deleting blocks. 
- * @author ehernandez4@wisc.edu (Evan Hernandez)
+ * @author ehernandez4@wisc.edu (Evan Hernandez), dliang@cs.wisc.edu (David Liang)
  */
 'use strict';
 
@@ -184,6 +184,8 @@ SpeechBlocks.Controller.prototype.disconnectBlock = function(blockId) {
     var conn = SpeechBlocks.BlockUtils.getPreviousConnection(blockId, this.workspace_);
     if (!conn.isConnected()) {
       throw 'There\'s nothing to separate block ' + blockId + ' from!';
+    } else {
+      conn.disconnect();
     }
   }
   var block = SpeechBlocks.BlockUtils.getBlock(blockId, this.workspace_);

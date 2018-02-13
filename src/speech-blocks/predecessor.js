@@ -37,8 +37,6 @@ SpeechBlocks.Predecessor.prototype.place = function(blockId, workspace, opt_anim
       goog.asserts.assertInstanceof(opt_animator, SpeechBlocks.Animator));
     return;
   }
-
-  this.placeProgrammatically_(blockId, workspace);
 }
 
 SpeechBlocks.Predecessor.prototype.placeProgrammatically_ = function(blockId, workspace) {

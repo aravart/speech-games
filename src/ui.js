@@ -37,18 +37,24 @@ $(document).ready(function() {
     if (!state.allBlocksConnected) {
       sugs.push('connect_under');
     }
+
     
     var blocks = SpeechGames.workspace.getAllBlocks();
     // has repeat block type
-    var hasRepeat = false;
     for (var i = 0; i < blocks.length; i++) {
       if (blocks[i].type == 'turtle_repeat_internal') {
         hasRepeat = true;
       } 
     }
+    
+    if (state.someBlocksConnected && blocks.length > 1) {
+      sugs.push('separate')
+    }
 
     if (hasRepeat && blocks.length >= 2) {
       sugs.push('connect_inside');
+      var hasRepeat = false;
+
     }
 
     if (!state.modifiableBlockIds.isEmpty()) {

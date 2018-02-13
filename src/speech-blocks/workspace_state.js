@@ -64,6 +64,12 @@ SpeechBlocks.WorkspaceState = function() {
   this.empty = false;
 
   /**
+   * True if any blocks are unconnected, false otherwise.
+   * @public
+   */
+  this.someBlocksConnected = false;
+
+  /**
    * True if all blocks are unconnected, false if there is at least one
    * pair of blocks for which there is no connection path from one to the other.
    * @public
@@ -99,7 +105,9 @@ SpeechBlocks.WorkspaceState.stateOf = function(workspace) {
     return state;
   }
 
+  state.someBlocksConnected = false;
   state.allBlocksConnected = true;
+
   var refBlock = blocks[0];
   blocks.forEach(function(block) {
     state.blockIds.add(block.id);
@@ -107,7 +115,13 @@ SpeechBlocks.WorkspaceState.stateOf = function(workspace) {
     // Check for unconnected blocks.
     if (!SpeechBlocks.BlockUtils.areBlocksConnected(refBlock.id, block.id, workspace)) {
       state.allBlocksConnected = false;
-    }
+    } 
+    
+    blocks.forEach(function(block2) {
+      if (block != block2 && SpeechBlocks.BlockUtils.areBlocksConnected(block.id, block2.id, workspace)) {
+        state.someBlocksConnected = true;
+      }
+    })
 
     // Check for blocks with statement inputs, value inputs, and fields.
     // Also keep track of whether or not the block is ordinary.
