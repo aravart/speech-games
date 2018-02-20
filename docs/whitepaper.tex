@@ -5,10 +5,10 @@
 % Workspace: The canvas where blocks are.
 % Cognitive Load: The amount of thinking needed to complete a task.
 % Redundancy Effect: When redundant information causes a user to understand content less, than if the redundant content was removed
-% Grammer: The structure of language that is recognized by our speech recognition
+% Grammar: The structure of language that is recognized by our speech recognition
 % Utterance: What is said by the user
 % Recognition: What the speech recognition "hears" from the user
-% Correction: The outcome of our correction algorithm on the recogition
+% Correction: The outcome of our correction algorithm on the recognition
 % Toolbox: Where the available blocks can be found 
 
 \documentclass[]{article}
@@ -43,7 +43,7 @@ of cognitive load required to be introduced to programming concepts, which would
 students opportunities in computer science. 
 \\ 
 Voice programming looks to benefit both new and experienced programmers.  
-Google Blockly is a simple language that allows us to create a robust programming grammer 
+Google Blockly is a simple language that allows us to create a robust programming grammar 
 that can be used of people of all ages. In addition to discovering solutions to voice 
 recognized programming, our project will help teach people who are unable to use a traditional mouse and keyboard.
 
@@ -51,8 +51,8 @@ recognized programming, our project will help teach people who are unable to use
 
 \section{HCI Principles}
 
-Cognitive load,the amount of thinking requiredto complete a task, wasa main focus when
-making design decisions. According to “The Limits of Speech Recognition” by Ben Shneiderman, certain
+Cognitive load,the amount of thinking required to complete a task, was a main focus when
+making design decisions. According to ``The Limits of Speech Recognition'' by Ben Shneiderman, certain
 applications of speech recognition can be successful as long as the designers of the application 
 focus on creating an efficient and reduced grammar. Our grammar is the structure of language that is 
 recognized by our speech recognition and it is built to be as simple as possible. Simplicity for the
@@ -84,7 +84,7 @@ is computed based off the highest vertical location of the first block in a chai
 with Blockly through looking at the workspace and adding blocks to the workspace by
 using a menu that holds the allowed blocks for a program, which we will refer to as the 
 ``toolbox'' (See figure \ref{fig:workspaceDiagram.jpg}). In order to move blocks from the toolbox to the 
-workspace, usersmust click and drag using a mouse. \\
+workspace, users must click and drag using a mouse. \\
 
 The toolbox is where available blocks can be found. Google Blockly has a large library of blocks, which can be grouped as:
 \begin{itemize}
@@ -98,16 +98,17 @@ The toolbox is where available blocks can be found. Google Blockly has a large l
   \item$\textbf{Functions}$: a chain of blocks with a name and possibly a return value
 \end{itemize}
 \section{Turtle}
-Turtle, is a Blocky game, that has a ``Turtle” that can be moved the a smaller subset of commands
-than what the blocky library contains. The objective of the game is to trace the path that can be found
-in the Turtle canvas with the provided blocks in the toolbox. 
+Turtle, is a Blockly game, that has a turtle that can be moved the a smaller
+subset of commands. The objective of the game is to trace the path shown to the
+user with the provided blocks in the toolbox.
 \textbf{Available blocks}
 \begin{itemize}
-  \item $\textbf{move}$: moves the tutle forward
+  \item $\textbf{move}$: moves the turtle forward
   \item $\textbf{turn}$: turns the turtle, can decide between left or right turning and angle of turning  1,45,72,90,120,140 degrees
   \item $\textbf{repeat}$: repeats the blocks found inside, can decide to repeat either 2,3,4,5 or 360 times
   \item $\textbf{pen}$: can decide between up/down, up stops the turtle from drawing a line, down makes the turtle's movements draw lines again
 \end{itemize}
+% TODO Simplify the paragraph below.
 Turtle is a level based system that simplifies the task of learning. By breaking the concepts of computer science into individual
 levels, where each level reinforces already taught topics and introduces new topics incrementally, the amount of cognitive load
 required to understand how to use each of the four blocks is greatly reduced. A natural progression of this style of teaching would be as follows:
@@ -134,7 +135,6 @@ Users must refer to blocks as the block number that is shown on the block\\
 \item \textbf{Connect block $<$ID$>$ inside block $<$ID$>$}: allows user to move block and chains of blocks inside of a repeat block
 \end{itemize}
 \textbf{delete block $<$ID$>$}: deletes a block,  unless the block is the head of a chain of blocks, then this command deletes the entire chain of blocks.
-\subsubsection{How does separating blocks work?}
 \subsection{How do the user interface commands described earlier map to the commands in the grammar?  }
 
 \section{Speech recognition}
@@ -261,10 +261,10 @@ on the workspace, and large enough to prevent Blockly from automatically connect
 
 \textbf{Adding Blocks} We place new blocks by finding the vertically lowest free
 position on the workspace and placing the new block there, exactky $m$ pixels right of
-the flyout. This is summarized by Algorithm~\ref{alg:place}.
+the toolbox. This is summarized by Algorithm~\ref{alg:place}.
 
 \textbf{Moving Blocks} Suppose the user has just connected one block to another, and the
-resulting chain now overlaps $n$ blocks. We repair the layout by moving the $n$ conflicting
+resulting chain now overlaps $n$ chains. We repair the layout by moving the $n$ conflicting
 blocks individually via Algorithm~\ref{alg:relayout}. 
 
 \begin{algorithm}[H]
@@ -290,7 +290,7 @@ blocks individually via Algorithm~\ref{alg:relayout}.
 \While{$x < \textsc{width}(W)$}
 	\State $y \gets m$
 	\While{$y < \textsc{height}(W)$}
-		\If{$\textsc{EphemeralMove}(b, (x,y))$ and no conflicts} 
+		\If{$\textsc{CanMoveWithoutConflict}(b, (x,y))$} 
 				\State $\textsc{Move}(b, (x,y))$
 		\EndIf
 		\State $y \gets y + m$
