@@ -37,6 +37,9 @@
 
 \section{Introduction}
 
+% \subsection{What is the goal of the project? What problem does it solve?}
+% \subsection{Who is meant to benefit?}
+
 Our goal is to create a voice enabled platform that uses machine learning to allow 
 anyone to learn the fundamentals of computer science. Currently, we seek to reduce the amount
 of cognitive load required to be introduced to programming concepts, which would give more 
@@ -51,6 +54,9 @@ recognized programming, our project will help teach people who are unable to use
 
 \section{HCI Principles}
 
+% \subsection{What HCI principles were kept in mind in the design of our system?}
+% \subsection{How did those HCI principles influence our design decisions?}
+
 Cognitive load,the amount of thinking required to complete a task, was a main focus when
 making design decisions. According to ``The Limits of Speech Recognition'' by Ben Shneiderman, certain
 applications of speech recognition can be successful as long as the designers of the application 
@@ -63,16 +69,27 @@ should decrease the amount of cognitive load needed to use voice programming in 
 
 \section{Blockly}
 
-\subsection{What is the Blockly environment?}
+% \subsection{What is the Blockly environment?}
+% \subsection{What is the goal of the Blockly project?}
+
 Google Blockly is a JavaScript library that creates a visual block programming 
 environment where core computer science logic can be taught, such as conditionals and 
 looping. Blockly is run in the web browser, which gives the opportunity for mobile use. 
 We chose Google Blockly over other block based languages due to its easy to work with and 
 has a customizable API.
 
-\subsection{How are blocks arranged horizontally? What language do we use to describe this?}
-
-\subsection{How are blocks arranged vertically? What language do we use to describe this?}
+% \subsection{How are blocks arranged horizontally? What language do we use to describe this?}
+% \subsection{How are blocks arranged vertically? What language do we use to describe this?}
+% \subsection{Is just one chain of blocks allowed or several?}
+% \subsection{If several, how are they executed?}
+% \subsection{How does the user typically interact with Blockly?}
+% \subsubsection{What's the medium (hint: mouse)?}
+% \subsubsection{What actions are available?}
+% \subsubsection{How can we group them into categories?}
+% \subsubsection{How does moving blocks work?}
+% \subsubsection{How does deleting blocks work?}
+% \subsubsection{How does connecting blocks work?}
+% \subsubsection{How does separating blocks work?}
 
 \fig{workspaceDiagram.jpg}{Google Blockly workspace diagram}{width=7cm}
 
@@ -97,7 +114,15 @@ The toolbox is where available blocks can be found. Google Blockly has a large l
   \item$\textbf{Variables}$: creating a variable, setting a variable's initial value and changing a variable's value
   \item$\textbf{Functions}$: a chain of blocks with a name and possibly a return value
 \end{itemize}
+
 \section{Turtle}
+
+% \subsection{What is the turtle game?}
+% \subsection{What set of blocks are available to complete the game?}
+% \subsection{What do these blocks do?}
+% \subsection{Why is the game divided into levels?}
+% \subsection{How do the levels serve to teach different programming concepts?}
+
 Turtle, is a Blockly game, that has a turtle that can be moved the a smaller
 subset of commands. The objective of the game is to trace the path shown to the
 user with the provided blocks in the toolbox.
@@ -121,9 +146,10 @@ required to understand how to use each of the four blocks is greatly reduced. A 
 A user has now, in two levels, been first introduced at simply how to move and turn the turtle in the Google Blockly enviornment and then
 naturally transitions into looping. Since the task is simply ``create a square'', it is not difficult to utilize the new blocks provided,
 given knowledge of previous levels.
+
 \section{Speech}
 
-\subsection{Why did we decide to model speech using a} % This subsection heading might be incomplete?
+\subsection{Why did we decide to model speech using a fixed grammar?}
 
 \subsection{What choices did we make as we designed that grammar?}
 
@@ -194,7 +220,6 @@ We provide the user a list of suggestions to teach them the grammar. We do this 
 
 %\subsection{Give an example of a common recognition error that falls out of the grammar}
 %\subsection{What algorithm was used to correct recognition?}
-%\subsection{If there are any parameters to be fit in this correction algorithm, how were they fit?}
 As previously described, we use the Google speech API built into Google Chrome to capture user commands. However, the API has a hard time understanding commands from our grammar. We hypothesize that the API expects ordinary English, and as a result, phrases like ``get a turn block'' or ``change 4 in block 3 to 5'' are often recognized incorrectly by webkitspeechcrecognition. We developed Algorithm \ref{CorrectionAlgorithm} to correct incorrectly recognized phrases (``recognitions'') to what we hope are the intended commands (``utterances''). First, we convert the recognition into a phoneme sequence using CMU's pronouncing dictionary. Then we generate all of the possible commands that a user can specify given the workspace. We convert all of these commands into phoneme sequences and find the command whose corresponding phoneme sequence has the minimum edit distance to the recognition's phoneme sequence (breaking ties arbitrarily) and return that command. 
 
 Furthermore, if the minimum edit-distance command is too far from the original recognition, we reject the correction and simply notify the user that we didn't understand their command. We added this feature to avoid using a ``correction'' from a completely unrelated sentence picked-up or recognized by the speech API. Our notion of ``too far'' is more concretely defined by a maximum modification factor which defines the the number of phoneme edits that can be made as a percentage of the number of phonemes in the recognition. As such, there is no fixed maximum number of edits, as this could give different performance for different string lengths. 
