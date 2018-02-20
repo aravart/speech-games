@@ -214,12 +214,11 @@ Furthermore, if the minimum edit-distance command is too far from the original r
 				\State $minEditDist \leftarrow editDist$
 			\EndIf
 		\EndFor
-		\If{$minEditDist <= maxModification * length(rphon)$}
+		\If{$minEditDist \leq maxModification * length(rphon)$}
 			\State \Return{$minEditCommand$}
 		\Else
 			\State \Return{$recognition$}
 		\EndIf
-		\State \Return{$minEditCommand$}
 		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}
