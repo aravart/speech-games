@@ -273,8 +273,8 @@ blocks individually via Algorithm~\ref{alg:relayout}.
 \Procedure{PlaceNewBlock}{$B, m$}
 \State $\ell \gets m$ \Comment{stores lowest $y$ on the workspace}
 \For{$b \in B$} 
-	\If{$y_b + h_b \ge \ell$}
-		\State $\ell \gets y_b + h_b + m$
+	\If{$y_b + \textsc{height}(b) \ge \ell$}
+		\State $\ell \gets y_b + \textsc{height}(b) + m$
 	\EndIf
 \EndFor
 \State \Return $(m, \ell)$
