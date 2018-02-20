@@ -11,8 +11,7 @@
 
 \documentclass[]{article}
 
-\usepackage{wrapfig, algorithm, algpseudocode, amsmath, amssymb, xspace, mathalfa, algorithm, algpseudocode, hyperref, graphicx}
-\hypersetup{colorlinks=True, linkcolor=blue}
+\usepackage{wrapfig, algorithm, algpseudocode, amsmath, amssymb, xspace, mathalfa, graphicx}
 \graphicspath{ {images/} }
 
 % Example of this command
@@ -134,23 +133,26 @@ Users must refer to blocks as the block number that is shown on the block\\
 \section{Suggestions}
 
 \subsection{Why do we give suggestions to the user? What HCI principle is behind this?}
-
 %\subsection{What is basis on which a speech suggestion is made? What circumstances trigger it?}
 %\subsection{What are the limitations of the current method and what future work might improve upon it?}
 %\subsection{Show an example of the suggestions box and workspace before and after an operation}
 
 % TODO Why do we have a suggestions list? (Well, because of the fixed grammar.
-% The user is not given any training in the grammar per se.)
+% The user is not given any training in the grammar per se.) -- done
 
 % TODO Point out that the user might get the impression that we are giving
 % suggestsions to solve the problem while we are only giving hints on how to use
-% the grammar.
+% the grammar. -- done
 
-% TODO Fix "novel algorithm", reference alg
-% TODO May want to shorten Alg 1 vars and describe it in text
-% TODO Fix quotes
+% TODO Fix "novel algorithm", reference alg -- done
+% TODO May want to shorten Alg 1 vars and describe it in text -- done
+% TODO Fix quotes -- done
+% TODO Why? What's the problem with always correcting? If the user says
+% something utterly unrelated, we still correct it! -- done
 
-We modify the suggestions list when we believe it could be useful for the user. For example, when there is a repeat block on the canvas, we suggest that the user connects a block inside of the repeat block, to make use of the repeat block. However, our current suggestions system is quite limited. It provides generic suggestions, not specific to the block IDs. For example, when an empty repeat block is on the canvas, we suggest that the user ``Connect block 2 inside block 1'' with these exact block IDs, regardless of what the block ID of the repeat block is. Finally, we provide an example in \hyperref[SuggestionsBeforeAndAfter]{Table \ref{SuggestionsBeforeAndAfter}} of the suggestions box with the corresponding workspace before and after adding the first block. \\
+% TODO Cite Arpabet
+
+We provide the user a list of suggestions to teach them the grammar. We do this because the grammar is a rigid, fixed grammar. Furthermore, we provide these suggestions because we don't give any training in the grammar to the user. Instead, we hope that they can pick it up by following the suggestions. The suggestions mechanism provides generic suggestions, not specific to the block IDs or the workspace. We do not suggest how the user should solve the program, as the user might mistakenly believe. Instead, we simply teach them how to use the grammar. However, the appearance of particular suggestions is triggered by certain states of the workspace. For example, when an empty repeat block is on the canvas, we suggest that the user ``Connect block 2 inside block 1'' with these exact block IDs, regardless of what the block ID of the repeat block is. Finally, we provide an example in Table \ref{SuggestionsBeforeAndAfter} of the suggestions box with the corresponding workspace before and after adding the first block. We modify the suggestions list when we believe it could be useful for the user. For example, when there is a repeat block on the canvas, we suggest that the user connects a block inside of the repeat block, to make use of the repeat block. However, our current suggestions system is quite limited.\\
 \begin{table}
 	\caption{Example of suggestions before and after adding the first block to the workspace.}
 	\label{SuggestionsBeforeAndAfter}
@@ -171,38 +173,43 @@ We modify the suggestions list when we believe it could be useful for the user. 
 \subsection{Show an example of the suggestions box and workspace before and after an operation}
 
 \section{Corrections}
-\textit{Utterance:} A single command given by the programmer\\
-\textit{Recognition:} What the speech reognition software recogizes an utterance as\\
-\textit{Correction:} The proposed utterance given a recognition, calculated using correction algorithm\\
+%\textit{Utterance:} A single command given by the programmer\\
+%\textit{Recognition:} What the speech reognition software recogizes an utterance as\\
+%\textit{Correction:} The proposed utterance given a recognition, calculated using correction algorithm\\
 
 %\subsection{Give an example of a common recognition error that falls out of the grammar}
 %\subsection{What algorithm was used to correct recognition?}
 %\subsection{If there are any parameters to be fit in this correction algorithm, how were they fit?}
-As previously described, we use the webkitspeechrecognition speech API to capture user commands. However, the API has a hard time understanding commands from our grammar. We hypothesize that the API expects ordinary English, and as a result, phrases like ``get a turn block'' or ``change 4 in block 3 to 5'' are often recognized incorrectly by webkitspeechcrecognition. We developed a \hyperref[CorrectionAlgorithm]{novel algorithm} to correct incorrectly recognized phrases (``recognitions'') to what we hope are the intended commands (``utterances''). The algorithm finds the command with minimal phoneme edit distance from the set of possible commands for a given workspace.
+As previously described, we use the Google speech API built into Google Chrome to capture user commands. However, the API has a hard time understanding commands from our grammar. We hypothesize that the API expects ordinary English, and as a result, phrases like ``get a turn block'' or ``change 4 in block 3 to 5'' are often recognized incorrectly by webkitspeechcrecognition. We developed Algorithm \ref{CorrectionAlgorithm} to correct incorrectly recognized phrases (``recognitions'') to what we hope are the intended commands (``utterances''). First, we convert the recognition into a phoneme sequence using CMU's pronouncing dictionary. Then we generate all of the possible commands that a user can specify given the workspace. We convert all of these commands into phoneme sequences and find the command whose corresponding phoneme sequence has the minimum edit distance to the recognition's phoneme sequence (breaking ties arbitrarily) and return that command. 
+
+Furthermore, if the minimum edit-distance command is too far from the original recognition, we reject the correction and simply notify the user that we didn't understand their command. We added this feature to avoid using a ``correction'' from a completely unrelated sentence picked-up or recognized by the speech API. Our notion of ``too far'' is more concretely defined by a maximum modification factor which defines the the number of phoneme edits that can be made as a percentage of the number of phonemes in the recognition. As such, there is no fixed maximum number of edits, as this could give different performance for different string lengths. 
 \begin{algorithm}
 	\caption{Correction Algorithm}\label{CorrectionAlgorithm}
 	\begin{algorithmic}[1]
 		\Procedure{Correct}{recognition, workspace}
-		\State $recognitionPhoneme \leftarrow stringToPhoneme(recognition)$
-		\State $allPossibleCommands\leftarrow generateAllPossibleCommands(workspace) $
-		\State $minimumEditDistance \leftarrow \infty$
-		\State $minimumEditDistanceCommand = recognition$
-		\For{$command$ in $allPossibleCommands$}
-			\State $commandPhoneme \leftarrow stringToPhoneme(command)$
-			\State $editDistance \leftarrow findMinimumEditDistance(recognitionPhoneme, commandPhoneme)$
-			\If{$editDistance < minimumEditDistance$}
-				\State $minimumEditDistanceCommand = command$
-				\State $minimumEditDistance = editDistance$
+		\State $rphon \leftarrow stringToPhoneme(recognition)$
+		\State $commands\leftarrow generatePossibleCommands(workspace) $
+		\State $minEditDist \leftarrow \infty$
+		\State $minEditCommand \leftarrow recognition$
+		\For{$command$ in $commands$}
+			\State $cphon \leftarrow stringToPhoneme(command)$
+			\State $editDist \leftarrow findMinEditDist(rphon, cphon)$
+			\If{$editDist < minEditDist$}
+				\State $minEditCommand \leftarrow command$
+				\State $minEditDist \leftarrow editDist$
 			\EndIf
 		\EndFor
-		\State \Return{$minimumEditDistanceCommand$}
+		\If{$minEditDist <= maxModification * length(rphon)$}
+			\State \Return{$minEditCommand$}
+		\Else
+			\State \Return{$recognition$}
+		\EndIf
+		\State \Return{$minEditCommand$}
 		\EndProcedure
 	\end{algorithmic}
-\end{algorithm}\\
-% TODO Why? What's the problem with always correcting? If the user says
-% something utterly unrelated, we still correct it!
+\end{algorithm}
 
-Furthermore, if the minimum edit-distance command is too far from the original recognition, we reject the correction and simply notify the user that we didn't understand their command. Our notion of ``too far'' is more concretely defined by a maximum modification factor which defines the the number of phoneme edits that can be made as a percentage of the number of phonemes in the recognition. As such, there is no fixed maximum number of edits, as this could give different performance for different string lengths. We determined the threshold in the following way.
+We determined the threshold in the following way.
 
 \subsection{If there are any parameters to be fit in this correction algorithm, how were they fit?}
 \subsubsection{What statistical procedure was use?}
