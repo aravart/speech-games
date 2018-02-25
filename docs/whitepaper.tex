@@ -226,7 +226,7 @@ Furthermore, if the minimum edit-distance command is too far from the original r
 \begin{algorithm}
 	\caption{Correction Algorithm}\label{CorrectionAlgorithm}
 	\begin{algorithmic}[1]
-		\Procedure{Correct}{recognition, workspace}
+		\Procedure{Correct}{recognition, workspace, maxModification}
 		\State $rphon \leftarrow stringToPhoneme(recognition)$
 		\State $commands\leftarrow generatePossibleCommands(workspace) $
 		\State $minEditDist \leftarrow \infty$
@@ -248,12 +248,32 @@ Furthermore, if the minimum edit-distance command is too far from the original r
 	\end{algorithmic}
 \end{algorithm}
 
-We determined the threshold in the following way.
+\subsection{Correction Algorithm Parameters}
+The correction algorithm requires the following parameters to run:-
+\begin{itemize}
+\item \textbf{Recognition}: The recognition of the utterance by the speech API.
+\item \textbf{Workspace}: The state of the workspace that contains information about the numbers and types of blocks currently present on the workspace.
+\item \textbf{Maximum Modification Factor}: The maximum percentage of modification (i.e. correction) allowed to the original recognition. The methodology to get calculate this number, is described in section 8.2.
+\end{itemize}
 
-\subsection{If there are any parameters to be fit in this correction algorithm, how were they fit?}
-\subsubsection{What statistical procedure was use?}
-\subsubsection{What data was gathered?}
-\subsubsection{What assumptions were made that could be considered weaknesses of the model?}
+\subsection{Calculation of Maximum Modification Factor}
+
+\subsubsection{Data Collection}
+The data was gathered manually by speaking into the speech engine and recording the utterance, recognition and correction (if it exists) in text form.
+The correct and incorrect utterances, along with their recognitions and corrections were stored as CSV files. 
+\subsubsection{Statistical Procedure}
+The data containing the accuracy corresponding to each threshold value from 0.00 to 1.00 (with a step size of 0.01) was collected by running the analysis on both positive and negative data examples.
+
+For the correct examples, the accuracy was obtained by counting the total number of correct corrections. In other words, we need to count the total number of times the recognition was corrected to the original utterance. For the incorrect examples, the accuracy was obtained by counting the total number of times corrections were not made - since corrections are always valid, mapping an incorrect utterance to a valid command is not correct.
+
+Lastly, the maximum modification factor was calculated by using the threshold value that corresponded to the maximum average accuracy of the positive and negative examples. It is important to note that the average was calculated by weighing the categories equally, and not the examples.
+
+\subsubsection{Limitations}
+\begin{enumerate}
+\item We had approximately 100 positive examples and 200 negative examples, and this is not the expected distribution of real-world data. In practice, we would expect a lot more positive examples than negative.
+\item The negative examples were mostly random utterances that might be picked up by the microphone in a loud environment. In other words, these utterances didn't even come close to being recognized as a valid speech command. While this data might be useful when a lot of vocal activity is going on around the user, this does not serve any purpose in adapting the speech recognition to a user that is using the speech interface in a quiet environment (which is the expected behavior).
+\item Sample size of approximately 300 examples is low.
+\end{enumerate}
 \subsection{Give an example of a common case that the corrections algorithm, as currently implemented, fails on}
 
 \section{Layout}
