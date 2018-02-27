@@ -30,6 +30,9 @@
 \end{figure}
 }
 
+% Blank
+\newcommand{\uline}[1]{\rule[0pt]{#1}{0.4pt}}
+
 \title{Voice Programming in Computer Science Education}
 
 \begin{document}
@@ -53,11 +56,9 @@ recognized programming, our project will help teach people who are unable to use
 \subsection{What are the results or outcome of the project?}
 
 \section{HCI Principles}
-
 % \subsection{What HCI principles were kept in mind in the design of our system?}
 % \subsection{How did those HCI principles influence our design decisions?}
-
-Cognitive load,the amount of thinking required to complete a task, was a main focus when
+Cognitive load, the amount of thinking required to complete a task, was a main focus when
 making design decisions. According to ``The Limits of Speech Recognition'' by Ben Shneiderman, certain
 applications of speech recognition can be successful as long as the designers of the application 
 focus on creating an efficient and reduced grammar. Our grammar is the structure of language that is 
@@ -68,10 +69,8 @@ less than if the redundant content was removed; therefore, using a simple gramma
 should decrease the amount of cognitive load needed to use voice programming in computer science education.
 
 \section{Blockly}
-
 % \subsection{What is the Blockly environment?}
 % \subsection{What is the goal of the Blockly project?}
-
 Google Blockly is a JavaScript library that creates a visual block programming 
 environment where core computer science logic can be taught, such as conditionals and 
 looping. Blockly is run in the web browser, which gives the opportunity for mobile use. 
@@ -123,20 +122,21 @@ The toolbox is where available blocks can be found. Google Blockly has a large l
 % \subsection{Why is the game divided into levels?}
 % \subsection{How do the levels serve to teach different programming concepts?}
 
+\fig{turtle_workspace.jpg}{Turtle workspace diagram}{width=4cm}
+
 Turtle, is a Blockly game, that has a turtle that can be moved the a smaller
 subset of commands. The objective of the game is to trace the path shown to the
 user with the provided blocks in the toolbox.
-\textbf{Available blocks}
+
 \begin{itemize}
   \item $\textbf{move}$: moves the turtle forward
   \item $\textbf{turn}$: turns the turtle, can decide between left or right turning and angle of turning  1,45,72,90,120,140 degrees
   \item $\textbf{repeat}$: repeats the blocks found inside, can decide to repeat either 2,3,4,5 or 360 times
   \item $\textbf{pen}$: can decide between up/down, up stops the turtle from drawing a line, down makes the turtle's movements draw lines again
 \end{itemize}
-% TODO Simplify the paragraph below.
-Turtle is a level based system that simplifies the task of learning. By breaking the concepts of computer science into individual
-levels, where each level reinforces already taught topics and introduces new topics incrementally, the amount of cognitive load
-required to understand how to use each of the four blocks is greatly reduced. A natural progression of this style of teaching would be as follows:
+Turtle is a game that breaks the concepts of computer science into individual
+levels. Each level reinforces already taught topics and introduces new topics, the amount of cognitive load
+required is reduced by splitting concepts between levels. An example of the teaching would be as follows:
 \begin{enumerate}
   \item User is exposed to how to move the turtle forward and also turn the turtle to make a square. In order to make the square, the user
     is only give move and turn blocks, meaning they need four move blocks and three turn blocks to complete the task.
@@ -149,18 +149,40 @@ given knowledge of previous levels.
 
 \section{Speech}
 
-\subsection{Why did we decide to model speech using a fixed grammar?}
+%\subsection{Why did we decide to model speech using a fixed grammar?}
+To reduce cognitive load, we focused on creating a concise and fixed grammar, meaning there is only one way to say a command. While speech 
+recognition can be used for a conversation style of programming, we wanted to mimic the standard idea that computer languages have rigid grammars. 
 
-\subsection{What choices did we make as we designed that grammar?}
+%\subsection{What choices did we make as we designed that grammar?}
+To create a rigid grammar, we focused on how to make the grammar as simple as possible. 
+It was important to use verbiage that came natural as well. For example, instead of having two 
+commands to either move a block below/above another block, we only supply the user to 
+moving a block below another one. Reducing the grammar by even one command simplifies 
+tasks, because instead of saying, “move block 1 above block 2” the user can simply use the 
+opposite command and say “move block 2 below block 1”.
 
 \subsection{What commands are available in that grammar?}
-Users must refer to blocks as the block number that is shown on the block\\
-\textbf{Users can move blocks in 2 ways}:
+%Users must refer to blocks as the block number that is shown on the block\\
+%\textbf{Users can move blocks in 2 ways}:
+%\begin{itemize}
+%\item \textbf{Connect block $<$ID$>$ under block $<$ID$>$}: allows user to move blocks and chains of block under any block or chain of blocks
+%\item \textbf{Connect block $<$ID$>$ inside block $<$ID$>$}: allows user to move block and chains of blocks inside of a repeat block
+%\end{itemize}
+%\textbf{delete block $<$ID$>$}: deletes a block,  unless the block is the head of a chain of blocks, then this command deletes the entire chain of blocks.
+
+% TODO: I'm not sure what this means exactly
+The user has the following commands: 
 \begin{itemize}
-\item \textbf{Connect block $<$ID$>$ under block $<$ID$>$}: allows user to move blocks and chains of block under any block or chain of blocks
-\item \textbf{Connect block $<$ID$>$ inside block $<$ID$>$}: allows user to move block and chains of blocks inside of a repeat block
+  \item Add  - ``get a \uline{1cm} block''
+  \item Connect - ``connect bock \uline{.5cm} under block \uline{.5cm}''
+  \item Connect inside - ``connect block \uline{.5cm} inside block \uline{.5cm}''
+  \item Seperate - ``seperate block \uline{.5cm}''
+  \item Change field - ``change \uline{.5cm} in block \uline{.5cm} to \uline{.5cm}''
+  \item Delete - ``delete block \uline{.5cm}''
+  \item Run program - ``run the program''
+  \item Next level - ``go to the next level''
+  \item Stay on level - ``stay on this level''
 \end{itemize}
-\textbf{delete block $<$ID$>$}: deletes a block,  unless the block is the head of a chain of blocks, then this command deletes the entire chain of blocks.
 \subsection{How do the user interface commands described earlier map to the commands in the grammar?  }
 
 \section{Speech recognition}
