@@ -10,6 +10,8 @@
 % Recognition: What the speech recognition "hears" from the user
 % Correction: The outcome of our correction algorithm on the recognition
 % Toolbox: Where the available blocks can be found 
+% Action: A manipulation performed by mouse or keyboard
+% Command: A manipulation performed by speech
 
 \documentclass[]{article}
 
@@ -89,6 +91,7 @@ has a customizable API.
 % \subsubsection{How does deleting blocks work?}
 % \subsubsection{How does connecting blocks work?}
 % \subsubsection{How does separating blocks work?}
+% TODO: Define 'actions' in this section
 
 \fig{workspaceDiagram.jpg}{Google Blockly workspace diagram}{width=7cm}
 
@@ -113,6 +116,50 @@ The toolbox is where available blocks can be found. Google Blockly has a large l
   \item$\textbf{Variables}$: creating a variable, setting a variable's initial value and changing a variable's value
   \item$\textbf{Functions}$: a chain of blocks with a name and possibly a return value
 \end{itemize}
+
+\section{Speech}
+
+% TODO: Define 'commands' in this section
+
+%\subsection{Why did we decide to model speech using a fixed grammar?}
+To reduce cognitive load, we focused on creating a concise and fixed grammar, meaning there is only one way to say a command. While speech 
+recognition can be used for a conversation style of programming, we wanted to mimic the standard idea that computer languages have rigid grammars. 
+
+%\subsection{What choices did we make as we designed that grammar?}
+To create a rigid grammar, we focused on how to make the grammar as simple as possible. 
+It was important to use verbiage that came natural as well. For example, instead of having two 
+commands to either move a block below/above another block, we only supply the user to 
+moving a block below another one. Reducing the grammar by even one command simplifies 
+tasks, because instead of saying, ``move block 1 above block 2'' the user can simply use the 
+opposite command and say ``move block 2 below block 1''.
+
+%\subsection{What commands are available in that grammar?}
+%Users must refer to blocks as the block number that is shown on the block\\
+%\textbf{Users can move blocks in 2 ways}:
+%\begin{itemize}
+%\item \textbf{Connect block $<$ID$>$ under block $<$ID$>$}: allows user to move blocks and chains of block under any block or chain of blocks
+%\item \textbf{Connect block $<$ID$>$ inside block $<$ID$>$}: allows user to move block and chains of blocks inside of a repeat block
+%\end{itemize}
+%\textbf{delete block $<$ID$>$}: deletes a block,  unless the block is the head of a chain of blocks, then this command deletes the entire chain of blocks.
+
+% TODO: I'm not sure what this means exactly
+The user has the following commands: 
+\begin{itemize}
+  \item Add  - ``get a \uline{1cm} block''
+  \item Connect - ``connect bock \uline{.5cm} under block \uline{.5cm}''
+  \item Connect inside - ``connect block \uline{.5cm} inside block \uline{.5cm}''
+  \item Separate - ``seperate block \uline{.5cm}''
+  \item Change field - ``change \uline{.5cm} in block \uline{.5cm} to \uline{.5cm}''
+  \item Delete - ``delete block \uline{.5cm}''
+  \item Run program - ``run the program''
+  \item Next level - ``go to the next level''
+  \item Stay on level - ``stay on this level''
+\end{itemize}
+%\subsection{How do the user interface commands described earlier map to the commands in the grammar?}
+We use a parser to map interface commands to commands in the grammar. The parser
+extracts information on which action to execute and white blocks to manipulate
+if necessary, and passes the structured information to the workspace controller.
+% TODO This sentence is a bit vague
 
 \section{Turtle}
 
@@ -143,55 +190,15 @@ required is reduced by splitting concepts between levels. An example of the teac
   \item User is given a repeat block in the toolbox. Now the user is tasked at completing the same task as before, but with only using one repeat
     block, one move block and one turn block.
 \end{enumerate}
-A user has now, in two levels, been first introduced at simply how to move and turn the turtle in the Google Blockly enviornment and then
+A user has now, in two levels, been first introduced at simply how to move and turn the turtle in the Google Blockly environment and then
 naturally transitions into looping. Since the task is simply ``create a square'', it is not difficult to utilize the new blocks provided,
 given knowledge of previous levels.
-
-\section{Speech}
-
-%\subsection{Why did we decide to model speech using a fixed grammar?}
-To reduce cognitive load, we focused on creating a concise and fixed grammar, meaning there is only one way to say a command. While speech 
-recognition can be used for a conversation style of programming, we wanted to mimic the standard idea that computer languages have rigid grammars. 
-
-%\subsection{What choices did we make as we designed that grammar?}
-To create a rigid grammar, we focused on how to make the grammar as simple as possible. 
-It was important to use verbiage that came natural as well. For example, instead of having two 
-commands to either move a block below/above another block, we only supply the user to 
-moving a block below another one. Reducing the grammar by even one command simplifies 
-tasks, because instead of saying, “move block 1 above block 2” the user can simply use the 
-opposite command and say “move block 2 below block 1”.
-
-%\subsection{What commands are available in that grammar?}
-%Users must refer to blocks as the block number that is shown on the block\\
-%\textbf{Users can move blocks in 2 ways}:
-%\begin{itemize}
-%\item \textbf{Connect block $<$ID$>$ under block $<$ID$>$}: allows user to move blocks and chains of block under any block or chain of blocks
-%\item \textbf{Connect block $<$ID$>$ inside block $<$ID$>$}: allows user to move block and chains of blocks inside of a repeat block
-%\end{itemize}
-%\textbf{delete block $<$ID$>$}: deletes a block,  unless the block is the head of a chain of blocks, then this command deletes the entire chain of blocks.
-
-% TODO: I'm not sure what this means exactly
-The user has the following commands: 
-\begin{itemize}
-  \item Add  - ``get a \uline{1cm} block''
-  \item Connect - ``connect bock \uline{.5cm} under block \uline{.5cm}''
-  \item Connect inside - ``connect block \uline{.5cm} inside block \uline{.5cm}''
-  \item Seperate - ``seperate block \uline{.5cm}''
-  \item Change field - ``change \uline{.5cm} in block \uline{.5cm} to \uline{.5cm}''
-  \item Delete - ``delete block \uline{.5cm}''
-  \item Run program - ``run the program''
-  \item Next level - ``go to the next level''
-  \item Stay on level - ``stay on this level''
-\end{itemize}
-%\subsection{How do the user interface commands described earlier map to the commands in the grammar?}
-We use a parser to map interface commands to commands in the grammar. The parser extracts information on which action to execute and white blocks to manipulate if necessary, and passes the structured information to the workspace controller.
-
 
 \section{Speech recognition}
 % TODO: Find out why we didn't use CMU's Sphinx speech recognition.
 %\subsection{How do we perform the speech recognition? What do we use?}
 %\subsection{What tradeoffs are there in our decision by comparison to alternatives? What was gained and what lost?}
-We perform speech recognition using the Google Speech API in Google Chrome. The API provides us with what it recognizes as the user's speech. We chose this option over Carnegie Mellon University's Sphinx for unknown reasons 
+We perform speech recognition using the Google Speech API in Google Chrome. The API provides us with what it recognizes as the user's speech. We chose this option over CMU's Sphinx for unknown reasons 
 
 \section{Suggestions}
 
@@ -236,9 +243,12 @@ We provide the user a list of suggestions to teach them the grammar. We do this 
 
 %\subsection{Give an example of a common recognition error that falls out of the grammar}
 %\subsection{What algorithm was used to correct recognition?}
-As previously described, we use the Google speech API built into Google Chrome to capture user commands. However, the API has a hard time understanding commands from our grammar. We hypothesize that the API expects ordinary English, and as a result, phrases like ``get a turn block'' or ``change 4 in block 3 to 5'' are often recognized incorrectly by webkitspeechcrecognition. We developed Algorithm \ref{CorrectionAlgorithm} to correct incorrectly recognized phrases (``recognitions'') to what we hope are the intended commands (``utterances''). First, we convert the recognition into a phoneme sequence using CMU's pronouncing dictionary. Then we generate all of the possible commands that a user can specify given the workspace. We convert all of these commands into phoneme sequences and find the command whose corresponding phoneme sequence has the minimum edit distance to the recognition's phoneme sequence (breaking ties arbitrarily) and return that command. 
+As previously described, we use the Google speech API built into Google Chrome to capture user commands. However, the API has a hard time understanding commands from our grammar. We hypothesize that the API expects ordinary English, and as a result, phrases like ``get a turn block'' or ``change 4 in block 3 to 5'' are often recognized incorrectly by webkitspeechcrecognition. We developed Algorithm \ref{CorrectionAlgorithm} to correct incorrectly recognized phrases (``recognitions'') to what we hope are the intended commands (``utterances''). First, we convert the recognition into a phoneme sequence using CMU's pronouncing dictionary. Then we generate all of the possible commands that a user can specify given the workspace. We convert all of these commands into phoneme sequences and find the command whose corresponding phoneme sequence has the minimum edit distance to the recognition's phoneme sequence (breaking ties arbitrarily). 
+% TODO Cite CMU pronouncing dictionary
+% TODO Introduce some simple notation (and use same notation in algorithm 1)
 
-Furthermore, if the minimum edit-distance command is too far from the original recognition, we reject the correction and simply notify the user that we didn't understand their command. We added this feature to avoid using a ``correction'' from a completely unrelated sentence picked-up or recognized by the speech API. Our notion of ``too far'' is more concretely defined by a maximum modification factor which defines the the number of phoneme edits that can be made as a percentage of the number of phonemes in the recognition. As such, there is no fixed maximum number of edits, as this could give different performance for different string lengths. 
+Furthermore, if the minimum edit-distance command is too far from the original recognition, we reject the correction and notify the user that we didn't understand their command. We added this feature to avoid using a ``correction'' from a completely unrelated sentence picked-up or recognized by the speech API. Our notion of ``too far'' is more concretely defined by a maximum modification factor which defines the the number of phoneme edits that can be made as a percentage of the number of phonemes in the recognition. As such, there is no fixed maximum number of edits, as this could give different performance for different string lengths. 
+% TODO make this math
 \begin{algorithm}
 	\caption{Correction Algorithm}\label{CorrectionAlgorithm}
 	\begin{algorithmic}[1]
