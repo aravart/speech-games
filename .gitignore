@@ -4,3 +4,5 @@ docs/*.log
 docs/*.synctex.gz
 docs/auto/*.el
 docs/*.out
+docs/*.bbl
+docs/*.blg
