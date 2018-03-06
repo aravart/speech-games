@@ -119,11 +119,14 @@ The toolbox is where available blocks can be found. Google Blockly has a large l
 
 \section{Speech}
 
-% TODO: Define 'commands' in this section
+% TODO: Define 'commands' in this section -- done
 
 %\subsection{Why did we decide to model speech using a fixed grammar?}
-To reduce cognitive load, we focused on creating a concise and fixed grammar, meaning there is only one way to say a command. While speech 
-recognition can be used for a conversation style of programming, we wanted to mimic the standard idea that computer languages have rigid grammars. 
+To reduce cognitive load, we focused on creating a concise and fixed grammar, 
+meaning there is only one way to say a command, which is a term we use to 
+describe a manipulation performed by speech. While speech recognition can be 
+used for a conversation style of programming, we wanted to mimic the standard 
+idea that computer languages have rigid grammars. 
 
 %\subsection{What choices did we make as we designed that grammar?}
 To create a rigid grammar, we focused on how to make the grammar as simple as possible. 
@@ -155,11 +158,9 @@ The user has the following commands:
   \item Next level - ``go to the next level''
   \item Stay on level - ``stay on this level''
 \end{itemize}
-%\subsection{How do the user interface commands described earlier map to the commands in the grammar?}
-We use a parser to map interface commands to commands in the grammar. The parser
-extracts information on which action to execute and white blocks to manipulate
-if necessary, and passes the structured information to the workspace controller.
-% TODO This sentence is a bit vague
+\subsection{How do the user interface commands described earlier map to the 
+commands in the grammar?}
+
 
 \section{Turtle}
 
@@ -195,10 +196,14 @@ naturally transitions into looping. Since the task is simply ``create a square''
 given knowledge of previous levels.
 
 \section{Speech recognition}
-% TODO: Find out why we didn't use CMU's Sphinx speech recognition.
 %\subsection{How do we perform the speech recognition? What do we use?}
 %\subsection{What tradeoffs are there in our decision by comparison to alternatives? What was gained and what lost?}
-We perform speech recognition using the Google Speech API in Google Chrome. The API provides us with what it recognizes as the user's speech. We chose this option over CMU's Sphinx for unknown reasons 
+We perform speech recognition using the Google Speech API in Google Chrome. The 
+API provides us with what it recognizes as the user's speech. We chose this 
+option over CMU's Sphinx because we wanted to get better recognition. So we 
+chose to use Google Speech API which has been trained on lots of data over 
+CMU's Sphinx engine which we could train on a limited and non-representative 
+set of data that we would generate.
 
 \section{Suggestions}
 
@@ -219,8 +224,6 @@ We perform speech recognition using the Google Speech API in Google Chrome. The 
 % TODO Fix quotes -- done
 % TODO Why? What's the problem with always correcting? If the user says
 % something utterly unrelated, we still correct it! -- done
-
-% TODO Cite Arpabet
 
 We provide the user a list of suggestions to teach them the grammar. We do this because the grammar is a rigid, fixed grammar. Furthermore, we provide these suggestions because we don't give any training in the grammar to the user. Instead, we hope that they can pick it up by following the suggestions. The suggestions mechanism provides generic suggestions, not specific to the block IDs or the workspace. We do not suggest how the user should solve the program, as the user might mistakenly believe. Instead, we simply teach them how to use the grammar. However, the appearance of particular suggestions is triggered by certain states of the workspace. For example, when an empty repeat block is on the canvas, we suggest that the user ``Connect block 2 inside block 1'' with these exact block IDs, regardless of what the block ID of the repeat block is. Finally, we provide an example in Table \ref{SuggestionsBeforeAndAfter} of the suggestions box with the corresponding workspace before and after adding the first block. We modify the suggestions list when we believe it could be useful for the user. For example, when there is a repeat block on the canvas, we suggest that the user connects a block inside of the repeat block, to make use of the repeat block. However, our current suggestions system is quite limited.\\
 \begin{table}
@@ -243,32 +246,59 @@ We provide the user a list of suggestions to teach them the grammar. We do this 
 
 %\subsection{Give an example of a common recognition error that falls out of the grammar}
 %\subsection{What algorithm was used to correct recognition?}
-As previously described, we use the Google speech API built into Google Chrome to capture user commands. However, the API has a hard time understanding commands from our grammar. We hypothesize that the API expects ordinary English, and as a result, phrases like ``get a turn block'' or ``change 4 in block 3 to 5'' are often recognized incorrectly by webkitspeechcrecognition. We developed Algorithm \ref{CorrectionAlgorithm} to correct incorrectly recognized phrases (``recognitions'') to what we hope are the intended commands (``utterances''). First, we convert the recognition into a phoneme sequence using CMU's pronouncing dictionary. Then we generate all of the possible commands that a user can specify given the workspace. We convert all of these commands into phoneme sequences and find the command whose corresponding phoneme sequence has the minimum edit distance to the recognition's phoneme sequence (breaking ties arbitrarily). 
-% TODO Cite CMU pronouncing dictionary
-% TODO Introduce some simple notation (and use same notation in algorithm 1)
+As previously described, we use the Google speech API built into Google Chrome 
+to capture user commands. However, the API has a hard time understanding 
+commands from our grammar. We hypothesize that the API expects ordinary 
+English, and as a result, phrases like ``get a turn block'' or ``change 4 in 
+block 3 to 5'' are often recognized incorrectly by webkitspeechcrecognition. We 
+developed Algorithm \ref{CorrectionAlgorithm} to correct incorrectly recognized 
+phrases (``recognitions'') to what we hope are the intended commands 
+(``utterances''). 
 
-Furthermore, if the minimum edit-distance command is too far from the original recognition, we reject the correction and notify the user that we didn't understand their command. We added this feature to avoid using a ``correction'' from a completely unrelated sentence picked-up or recognized by the speech API. Our notion of ``too far'' is more concretely defined by a maximum modification factor which defines the the number of phoneme edits that can be made as a percentage of the number of phonemes in the recognition. As such, there is no fixed maximum number of edits, as this could give different performance for different string lengths. 
-% TODO make this math
+The correction algorithm first takes in a recognition $r$, a workspace $W$, and 
+a max modification factor (described later) $\lambda$. First, the recognition 
+$r$ is converted into a phoneme sequence $\rho$ using a modified version of 
+CMU's pronouncing dictionary~\cite{rudnicky2015cmudict}. Then we generate a set 
+$C$ of all possible commands that a user can specify given the workspace. For 
+each command $c$, we convert it into a phoneme sequence $\gamma$ and compute 
+its edit distance $e$ to $\rho$. We iterate over $C$ to find the minimum edit 
+distance $e^*$ (breaking ties arbitrarily) and corresponding minimum edit 
+distance command $c^*$.  
+% TODO Cite CMU pronouncing dictionary -- done
+% TODO Introduce some simple notation (and use same notation in algorithm 1) -- 
+%done
+
+Furthermore, if $\mu$ is too far from the original recognition sequence $\rho$, 
+we reject the correction  $\mu$ and notify the user that we didn't understand 
+their command. We added this feature to avoid using a ``correction'' from a 
+completely unrelated sentence picked-up or recognized by the speech API. Our 
+notion of ``too far'' is satisfied when$$ e^* > \lambda * length(\rho)$$ As 
+such, 
+there is no fixed maximum number of edits, as this could give 
+different performance for different string lengths. 
+% TODO make this math -- done?
 \begin{algorithm}
 	\caption{Correction Algorithm}\label{CorrectionAlgorithm}
 	\begin{algorithmic}[1]
-		\Procedure{Correct}{recognition, workspace, maxModification}
-		\State $rphon \leftarrow stringToPhoneme(recognition)$
-		\State $commands\leftarrow generatePossibleCommands(workspace) $
-		\State $minEditDist \leftarrow \infty$
-		\State $minEditCommand \leftarrow recognition$
-		\For{$command$ in $commands$}
-			\State $cphon \leftarrow stringToPhoneme(command)$
-			\State $editDist \leftarrow findMinEditDist(rphon, cphon)$
-			\If{$editDist < minEditDist$}
-				\State $minEditCommand \leftarrow command$
-				\State $minEditDist \leftarrow editDist$
+		\Procedure{Correct}{r, W, $\lambda$}
+		\State $\rho \leftarrow stringToPhoneme(r)$
+		\State $C\leftarrow generatePossibleCommands(W) $
+		\State $e^* \leftarrow \infty$
+		\State $c^* \leftarrow r$
+		\State $\gamma^* \leftarrow \rho$
+		\For{$c$ in $C$}
+			\State $\gamma \leftarrow stringToPhoneme(c)$
+			\State $e \leftarrow findMinEditDist(\rho, \gamma)$
+			\If{$e < e^*$}
+				\State $e^* \leftarrow e$
+				\State $c^* \leftarrow c$
+				\State $\gamma^* \leftarrow \gamma$
 			\EndIf
 		\EndFor
-		\If{$minEditDist \leq maxModification * length(rphon)$}
-			\State \Return{$minEditCommand$}
+		\If{$e^* \leq \lambda * length(\rho)$}
+			\State \Return{$c^*$}
 		\Else
-			\State \Return{$recognition$}
+			\State \Return{$r$}
 		\EndIf
 		\EndProcedure
 	\end{algorithmic}
@@ -380,5 +410,8 @@ blocks individually via Algorithm~\ref{alg:relayout}.
 
 
 \section{Future Work}
+
+\bibliographystyle{unsrt}
+\bibliography{whitepaper}
 
 \end{document}
