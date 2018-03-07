@@ -47,7 +47,7 @@
 
 Our goal is to create a voice enabled platform that uses machine learning to allow 
 anyone to learn the fundamentals of computer science. Currently, we seek to reduce the amount
-of cognitive load required to be introduced to programming concepts, which would give more 
+of cognitive load required to be learn programming concepts, which would give more 
 students opportunities in computer science. 
 \\ 
 Voice programming looks to benefit both new and experienced programmers.  
@@ -102,14 +102,14 @@ in the workspace. The order of execution causes the topmost chain of blocks. The
 is computed based off the highest vertical location of the first block in a chain. Normally, users interact
 with Blockly through looking at the workspace and adding blocks to the workspace by
 using a menu that holds the allowed blocks for a program, which we will refer to as the 
-``toolbox'' (See figure \ref{fig:workspaceDiagram.jpg}). In order to move blocks from the toolbox to the 
+``toolbox'' (See figure\ref{fig:workspaceDiagram.jpg}). In order to move blocks from the toolbox to the 
 workspace, users must click and drag using a mouse. \\
 
 The toolbox is where available blocks can be found. Google Blockly has a large library of blocks, which can be grouped as:
 \begin{itemize}
   \item$\textbf{Logic}$: if statements and equality testing
   \item$\textbf{Loops}$: while loops, for loops, for-each loops and breaking from a loop
-  \item$\textbf{Math}$: incrementing variables, basic math and geometry operations, sumation and randomized numbers
+  \item$\textbf{Math}$: incrementing variables, basic math and geometry operations, summation randomized numbers
   \item$\textbf{Text}$: displaying text, appending text, searching through text, substring, printing and prompting
   \item$\textbf{Lists}$: creating a list with variables, length, testing if empty and searching through a list
   \item$\textbf{Color}$: changing the color and random coloring
@@ -172,9 +172,11 @@ commands in the grammar?}
 
 \fig{turtle_workspace.jpg}{Turtle workspace diagram}{width=4cm}
 
-Turtle, is a Blockly game, that has a turtle that can be moved the a smaller
-subset of commands. The objective of the game is to trace the path shown to the
-user with the provided blocks in the toolbox.
+Turtle, is a Blockly game, that has a turtle that can be moved with a small
+set of commands in the Google Blockly library. The objective of the game is to trace the path shown to the
+user with the provided blocks in the toolbox. Turtle is one of many Blockly games
+that we could have chosen in combination with Google Blockly and our speech recognition,
+but chose it for its simplistic design.
 
 \begin{itemize}
   \item $\textbf{move}$: moves the turtle forward
@@ -182,7 +184,7 @@ user with the provided blocks in the toolbox.
   \item $\textbf{repeat}$: repeats the blocks found inside, can decide to repeat either 2,3,4,5 or 360 times
   \item $\textbf{pen}$: can decide between up/down, up stops the turtle from drawing a line, down makes the turtle's movements draw lines again
 \end{itemize}
-Turtle is a game that breaks the concepts of computer science into individual
+Turtle breaks the concepts of computer science into individual
 levels. Each level reinforces already taught topics and introduces new topics, the amount of cognitive load
 required is reduced by splitting concepts between levels. An example of the teaching would be as follows:
 \begin{enumerate}
