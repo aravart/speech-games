@@ -45,39 +45,30 @@
 % \subsection{What is the goal of the project? What problem does it solve?}
 % \subsection{Who is meant to benefit?}
 
-Our goal is to create a voice enabled platform that uses machine learning to allow 
-anyone to learn the fundamentals of computer science. Currently, we seek to reduce the amount
-of cognitive load required to be learn programming concepts, which would give more 
-students opportunities in computer science. 
-\\ 
-Voice programming looks to benefit both new and experienced programmers.  
-Google Blockly is a simple language that allows us to create a robust programming grammar 
-that can be used of people of all ages. In addition to discovering solutions to voice 
-recognized programming, our project will help teach people who are unable to use a traditional mouse and keyboard.
+Our goal is to create a voice-enabled platform that uses machine learning to allow anyone to learn the fundamentals of computer science. Currently, we seek to reduce the amount of cognitive load required to introduce programming concepts, which would give more 
+students the opportunity to study computer science. 
+
+Programming by voice looks to benefit both new and experienced programmers. We used Google Blockly, a simple visual coding library, and created a robust programming grammar on top of it so that anyone could use it regardless of age. In addition to discovering solutions to voice-enabled programming, our project will help teach computer science concepts to people who are unable to use a traditional mouse and keyboard.
 
 \subsection{What are the results or outcome of the project?}
 
 \section{HCI Principles}
 % \subsection{What HCI principles were kept in mind in the design of our system?}
 % \subsection{How did those HCI principles influence our design decisions?}
-Cognitive load, the amount of thinking required to complete a task, was a main focus when
-making design decisions. According to ``The Limits of Speech Recognition'' by Ben Shneiderman, certain
-applications of speech recognition can be successful as long as the designers of the application 
-focus on creating an efficient and reduced grammar. Our grammar is the structure of language that is 
-recognized by our speech recognition and it is built to be as simple as possible. Simplicity for the
-speech recognition aims at reducing cognitive load by reducing redundancy. In “Cognitive Load Theory”
-by John Sweller, the redundancy effect is when redundant information causes a user to understand the content
-less than if the redundant content was removed; therefore, using a simple grammar without redundancy,
-should decrease the amount of cognitive load needed to use voice programming in computer science education.
+Cognitive load, the amount of thinking required to complete a task, was the main focus when making design decisions. 
+According to ``The Limits of Speech Recognition'' by Ben Shneiderman, certain applications of speech recognition can be successful as long as the designers of the application focus on creating an efficient and reduced grammar.
+Our grammar is the structure of language that is recognized by our speech recognition and it is built to be as simple as possible. 
+Simplicity for the speech recognition aims at reducing cognitive load by reducing redundancy. 
+In ``Cognitive Load Theory'' by John Sweller, the redundancy effect is when redundant information causes a user to understand the content
+less than if the redundant content was removed. 
+Therefore, using a concise grammar for voice-programming, should decrease the cognitive load required for computer science education.
 
 \section{Blockly}
 % \subsection{What is the Blockly environment?}
 % \subsection{What is the goal of the Blockly project?}
-Google Blockly is a JavaScript library that creates a visual block programming 
-environment where core computer science logic can be taught, such as conditionals and 
-looping. Blockly is run in the web browser, which gives the opportunity for mobile use. 
-We chose Google Blockly over other block based languages due to its easy to work with and 
-has a customizable API.
+Google Blockly is a JavaScript library that creates a visual block programming environment where core computer science logic can be taught, such as conditionals and looping. 
+Blockly is run in the web browser, which allows it to be used on any smartphone. 
+We chose Google Blockly over other block based languages due to its easily extendible and customizable API.
 
 % \subsection{How are blocks arranged horizontally? What language do we use to describe this?}
 % \subsection{How are blocks arranged vertically? What language do we use to describe this?}
@@ -95,26 +86,25 @@ has a customizable API.
 
 \fig{workspaceDiagram.jpg}{Google Blockly workspace diagram}{width=7cm}
 
-Blockly has a ``workspace''(See figure \ref{fig:workspaceDiagram.jpg}), which is where all of the blocks in the program are located. A ``chain of blocks''
-(See figure \ref{fig:workspaceDiagram.jpg}) is used to refer to a series of connected blocks in the workspace. In Google Blockly,  
-there is the ability to allow several chains of blocks to be run while
-in the workspace. The order of execution causes the topmost chain of blocks. The topmost chain
-is computed based off the highest vertical location of the first block in a chain. Normally, users interact
-with Blockly through looking at the workspace and adding blocks to the workspace by
-using a menu that holds the allowed blocks for a program, which we will refer to as the 
-``toolbox'' (See figure\ref{fig:workspaceDiagram.jpg}). In order to move blocks from the toolbox to the 
-workspace, users must click and drag using a mouse. \\
+Let us introduce some terminology here that would be used extensively in the paper moving forward.
+Blockly has the concept of a ``workspace''(See figure\ref{fig:workspaceDiagram.jpg}). This is the space where all the blocks that need to be executed in the program are located.
+A ``chain of blocks'' (See figure \ref{fig:workspaceDiagram.jpg}) is used to refer to a series of vertically-connected blocks in the workspace that are executed sequentially. 
+In Google Blockly, it is also possible to several independent chains of blocks in the workspace. 
+The order of execution causes the topmost chain of blocks to be executed first. 
+The topmost chain is decided based on the highest vertical location of the first block in the chain. 
+Normally, users interact with Blockly by looking at the workspace and adding blocks to the it by using a menu that holds the allowed blocks for a program. We will refer to this menu of allowed blocks as the  ``toolbox'' (See figure \ref{fig:workspaceDiagram.jpg}). 
+In order to move blocks from the toolbox to the workspace, users must click and drag using a mouse in a traditional Blockly setting.
 
-The toolbox is where available blocks can be found. Google Blockly has a large library of blocks, which can be grouped as:
+The toolbox is where all the allowed blocks for a particular program can be found. Google Blockly has a large library of blocks, which can be grouped as:
 \begin{itemize}
   \item$\textbf{Logic}$: if statements and equality testing
-  \item$\textbf{Loops}$: while loops, for loops, for-each loops and breaking from a loop
-  \item$\textbf{Math}$: incrementing variables, basic math and geometry operations, summation randomized numbers
+  \item$\textbf{Loops}$: while loops, for loops, for-each loops and break statements
+  \item$\textbf{Math}$: incrementing variables, summing numbers, randomizing numbers and other basic math and geometry operations.
   \item$\textbf{Text}$: displaying text, appending text, searching through text, substring, printing and prompting
   \item$\textbf{Lists}$: creating a list with variables, length, testing if empty and searching through a list
   \item$\textbf{Color}$: changing the color and random coloring
-  \item$\textbf{Variables}$: creating a variable, setting a variable's initial value and changing a variable's value
-  \item$\textbf{Functions}$: a chain of blocks with a name and possibly a return value
+  \item$\textbf{Variables}$: creating a variable, initializing it and modifying its value
+  \item$\textbf{Functions}$: a chain of blocks with a name and a possible return value
 \end{itemize}
 
 \section{Speech}
@@ -122,19 +112,14 @@ The toolbox is where available blocks can be found. Google Blockly has a large l
 % TODO: Define 'commands' in this section -- done
 
 %\subsection{Why did we decide to model speech using a fixed grammar?}
-To reduce cognitive load, we focused on creating a concise and fixed grammar, 
-meaning there is only one way to say a command, which is a term we use to 
-describe a manipulation performed by speech. While speech recognition can be 
-used for a conversation style of programming, we wanted to mimic the standard 
-idea that computer languages have rigid grammars. 
+To reduce cognitive load, we focused on creating a concise and fixed grammar, i.e. there is only one way to say a command. While speech 
+recognition can be used for a conversational style of programming, we wanted to mimic the standard idea that computer languages have a rigid grammar (or syntax). 
 
 %\subsection{What choices did we make as we designed that grammar?}
-To create a rigid grammar, we focused on how to make the grammar as simple as possible. 
-It was important to use verbiage that came natural as well. For example, instead of having two 
-commands to either move a block below/above another block, we only supply the user to 
-moving a block below another one. Reducing the grammar by even one command simplifies 
-tasks, because instead of saying, ``move block 1 above block 2'' the user can simply use the 
-opposite command and say ``move block 2 below block 1''.
+To create a rigid grammar, we focused on how to make the grammar as simple and succinct as possible. 
+It was important to use verbiage that came naturally as well. 
+For example, instead of having two commands to either move a block above/below another block, we only supply the user to moving a block below another one. 
+Reducing the grammar by even one command simplifies tasks, because instead of saying, ``move block 1 above block 2'' the user can simply use the opposite command and say ``move block 2 below block 1''.
 
 %\subsection{What commands are available in that grammar?}
 %Users must refer to blocks as the block number that is shown on the block\\
@@ -149,7 +134,7 @@ opposite command and say ``move block 2 below block 1''.
 The user has the following commands: 
 \begin{itemize}
   \item Add  - ``get a \uline{1cm} block''
-  \item Connect - ``connect bock \uline{.5cm} under block \uline{.5cm}''
+  \item Connect - ``connect block \uline{.5cm} under block \uline{.5cm}''
   \item Connect inside - ``connect block \uline{.5cm} inside block \uline{.5cm}''
   \item Separate - ``seperate block \uline{.5cm}''
   \item Change field - ``change \uline{.5cm} in block \uline{.5cm} to \uline{.5cm}''
@@ -158,9 +143,11 @@ The user has the following commands:
   \item Next level - ``go to the next level''
   \item Stay on level - ``stay on this level''
 \end{itemize}
-\subsection{How do the user interface commands described earlier map to the 
-commands in the grammar?}
 
+%\subsection{How do the user interface commands described earlier map to the commands in the grammar?}
+In order to execute the above commands, we use a parser to map interface commands to commands in the grammar. The parser extracts information on which action to execute and which blocks to manipulate if necessary, and passes the structured information to the workspace controller.
+% TODO This sentence is a bit vague
+\subsection{How do the user interface commands described earlier map to the commands in the grammar?}
 
 \section{Turtle}
 
@@ -172,40 +159,33 @@ commands in the grammar?}
 
 \fig{turtle_workspace.jpg}{Turtle workspace diagram}{width=4cm}
 
-Turtle, is a Blockly game, that has a turtle that can be moved with a small
-set of commands in the Google Blockly library. The objective of the game is to trace the path shown to the
-user with the provided blocks in the toolbox. Turtle is one of many Blockly games
-that we could have chosen in combination with Google Blockly and our speech recognition,
-but chose it for its simplistic design.
+In order to implement the voice-programming interface using Blockly, we decided to use Turtle.
+Turtle is a Blockly game, that contains a turtle that can be moved around using a small subset of commands (blocks). 
+The objective of the game is to make the turtle trace a particular path shown to the user, using only the provided blocks in the toolbox.
+Turtle is one of many Blockly games that we could have chosen in combination with Google Blockly and our speech recognition, but chose it for its simplistic design.
 
 \begin{itemize}
   \item $\textbf{move}$: moves the turtle forward
-  \item $\textbf{turn}$: turns the turtle, can decide between left or right turning and angle of turning  1,45,72,90,120,140 degrees
-  \item $\textbf{repeat}$: repeats the blocks found inside, can decide to repeat either 2,3,4,5 or 360 times
+  \item $\textbf{turn}$: turns the turtle, can decide between left or right turning and angle of turning  1, 45, 72, 90, 120, 140 degrees
+  \item $\textbf{repeat}$: repeatedly executes the blocks inside it, can decide to repeat either 2, 3, 4, 5 or 360 times
   \item $\textbf{pen}$: can decide between up/down, up stops the turtle from drawing a line, down makes the turtle's movements draw lines again
 \end{itemize}
-Turtle breaks the concepts of computer science into individual
-levels. Each level reinforces already taught topics and introduces new topics, the amount of cognitive load
-required is reduced by splitting concepts between levels. An example of the teaching would be as follows:
+
+Turtle evenly divides computer science concepts into levels in order to reduce the cognitive load of the learner.
+Each individual level reinforces previously learned topics, while introducing new ones simultaneously. 
+An example of a couple of consecutive levels would be as follows:
 \begin{enumerate}
-  \item User is exposed to how to move the turtle forward and also turn the turtle to make a square. In order to make the square, the user
-    is only give move and turn blocks, meaning they need four move blocks and three turn blocks to complete the task.
-  \item User is given a repeat block in the toolbox. Now the user is tasked at completing the same task as before, but with only using one repeat
-    block, one move block and one turn block.
+  \item User is exposed to how to move the turtle forward and also turn the turtle to make a square. In order to make the square, the user is only give move and turn blocks, meaning they need four move blocks and three turn blocks to complete the task.
+  \item User is given a repeat block in the toolbox. Now the user is tasked at completing the same task as before, but with only using one repeat block, one move block and one turn block.
 \end{enumerate}
-A user has now, in two levels, been first introduced at simply how to move and turn the turtle in the Google Blockly environment and then
-naturally transitions into looping. Since the task is simply ``create a square'', it is not difficult to utilize the new blocks provided,
-given knowledge of previous levels.
+
+A user has now, in two levels, been first introduced to the mechanics of moving and turning the turtle in the Google Blockly environment and then naturally transitioned into loops. Since the task is simply ``create a square'', it is not too difficult to utilize the new blocks provided, given the knowledge of previous levels.
 
 \section{Speech recognition}
 %\subsection{How do we perform the speech recognition? What do we use?}
 %\subsection{What tradeoffs are there in our decision by comparison to alternatives? What was gained and what lost?}
-We perform speech recognition using the Google Speech API in Google Chrome. The 
-API provides us with what it recognizes as the user's speech. We chose this 
-option over CMU's Sphinx because we wanted to get better recognition. So we 
-chose to use Google Speech API which has been trained on lots of data over 
-CMU's Sphinx engine which we could train on a limited and non-representative 
-set of data that we would generate.
+
+We perform speech recognition using the Webkit Speech API in Google Chrome. The API provides us with the user's speech, as understood by the speech recognition engine, in text form. We chose this option over CMU's Sphinx because we wanted to get better recognition and the Google Speech API has been trained on a lot more data compared to CMU's Sphinx engine which we could train on a limited and non-representative set of data that we would generate. Google's Speech API is also easier to use and available in other web browsers (since this is primarily a web application).
 
 \section{Suggestions}
 
