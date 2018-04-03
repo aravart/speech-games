@@ -424,21 +424,43 @@ blocks individually via Algorithm~\ref{alg:relayout}.
 \section{Related Work}
 
 Speech interfaces for programming tasks have a long history, dating back to the
-beginning of speech recognition research.
+beginning of speech recognition research \cite{bolt1980put}.
 
 The bulk of work aims to improve the productivity of professional developers
-using IDEs. The first body of work here tends to specify its method to a
-particular programming language. For example, \cite{Begel05programmingby}
-creates a grammar for a language, Spoken Java, which is syntactically similar to
-Java, with a goal of disambiguating natural language utterances.
-\cite{desilets2006voicecode} uses a set of rules to trasncribe dictation results
-into fragments of code.
+using IDEs through speech. The first body of work here tends to specify its
+method to a particular programming language. For example,
+\cite{Begel05programmingby} creates a grammar for a language, Spoken Java, which
+is syntactically similar to Java, with a goal of disambiguating natural language
+utterances. \cite{desilets2006voicecode} uses a set of rules to trasncribe
+dictation results into fragments of code. \cite{shaik2003speechclipse}
+constructs a speech plug-in focused more on the IDE's control than its language.
+And \cite{gordon2011developing} designs a programming language from the ground
+up for the purpose of being developed through a speech interface.
+\cite{hubbell2006voice} proposes a voice-activated syntax-directed editor.
 
-The second group uses voice and other modalities, such as gesture and
+A second group uses voice and other modalities, such as gesture and
 eye-tracking, to control aspects of the IDE which need not be language-specific.
 \cite{delimarschi2014enabling} maps human voice and gestures are mapped to IDE
 commends using hardware sensors for Microsoft Kinect. \cite{glucker2014eyede}
 adds eye-tracking control to IDEs.
+
+The question of education for motorically challenged children has been
+investigated in \cite{wagner2012programming} where a speech-based IDE was built
+atop Scratch.
+
+Our design decision were motivated by a consideration of cognitive load theory.
+Both cognitive load theory and the value of block-based programming environments
+have been extensively discussed in the literature. Cognitive load theory was
+first introduced in \cite{sweller1988cognitive} as an explanation for how
+problem-solving activity may be ineffective in facilitating learning.
+\cite{shaffer2003applying} and \cite{nolan2015examining} explore the
+implications of cognitive load theory for computer science education.
+\cite{bau2017learnable} conducts a comprehensive review on the value of
+blocks-based programming environments for reducing cognitive load, while
+\cite{meerbaum2013learning} conducts experiments in the value of block-based
+programming environments for teaching computer science concepts. And
+\cite{gibson2013evaluation} evaluates the benefit of teaching computer science
+in game-like environments.
 
 % \subsection{What is the related work in speech interfaces for programming?}
 
