@@ -35,40 +35,68 @@
 % Blank
 \newcommand{\uline}[1]{\rule[0pt]{#1}{0.4pt}}
 
-\title{Voice Programming in Computer Science Education}
+\def\sg{\textsc{SpeechGames}}
+
+\title{\sg: Voice Programming in Computer Science Education}
 
 \begin{document}
 \maketitle
+
+\begin{abstract}
+  We introduce the $\sg$ platform for exploring topics in computer science
+  education.
+  % TODO
+\end{abstract}
 
 \section{Introduction}
 
 % \subsection{What is the goal of the project? What problem does it solve?}
 % \subsection{Who is meant to benefit?}
 
-Our goal is to create a voice-enabled platform that uses machine learning to allow anyone to learn the fundamentals of computer science. Currently, we seek to reduce the amount of cognitive load required to introduce programming concepts, which would give more 
-students the opportunity to study computer science. 
+There is tremendous interest in computer science education.
+% cite our of code
+\sg is a platform
+that may be used to explore topics in computer science education for children
+who may be suffering from disabilities by means of a voice interface to the
+Blockly coding environment. The may help children who are unable to use a mouse
+and keyboard interface.
 
-Programming by voice looks to benefit both new and experienced programmers. We used Google Blockly, a simple visual coding library, and created a robust programming grammar on top of it so that anyone could use it regardless of age. In addition to discovering solutions to voice-enabled programming, our project will help teach computer science concepts to people who are unable to use a traditional mouse and keyboard.
+% Our goal is to create a voice enabled platform that uses machine learning to allow 
+% anyone to learn the fundamentals of computer science. Currently, we seek to reduce the amount
+% of cognitive load required to be learn programming concepts, which would give more 
+% students opportunities in computer science. 
+% \\ 
+% Voice programming looks to benefit both new and experienced programmers.  
+% Google Blockly is a simple language that allows us to create a robust programming grammar 
+% that can be used of people of all ages. In addition to discovering solutions to voice 
+% recognized programming, our project will help teach people who are unable to use a traditional mouse and keyboard.
 
-\subsection{What are the results or outcome of the project?}
+% \subsection{What are the results or outcome of the project?}
+
+% TODO We need something more experiential
 
 \section{HCI Principles}
 % \subsection{What HCI principles were kept in mind in the design of our system?}
 % \subsection{How did those HCI principles influence our design decisions?}
-Cognitive load, the amount of thinking required to complete a task, was the main focus when making design decisions. 
-According to ``The Limits of Speech Recognition'' by Ben Shneiderman, certain applications of speech recognition can be successful as long as the designers of the application focus on creating an efficient and reduced grammar.
-Our grammar is the structure of language that is recognized by our speech recognition and it is built to be as simple as possible. 
-Simplicity for the speech recognition aims at reducing cognitive load by reducing redundancy. 
-In ``Cognitive Load Theory'' by John Sweller, the redundancy effect is when redundant information causes a user to understand the content
-less than if the redundant content was removed. 
-Therefore, using a concise grammar for voice-programming, should decrease the cognitive load required for computer science education.
+Cognitive load, the amount of thinking required to complete a task, was a main focus when
+% Can we get a citation to a definition?
+making design decisions. According to ``The Limits of Speech Recognition'' by Ben Shneiderman, certain
+applications of speech recognition can be successful as long as the designers of the application 
+focus on creating an efficient and reduced grammar. Our grammar is the structure of language that is 
+recognized by our speech recognition and it is built to be as simple as possible. Simplicity for the
+speech recognition aims at reducing cognitive load by reducing redundancy. In ``Cognitive Load Theory''
+by John Sweller, the redundancy effect is when redundant information causes a user to understand the content
+less than if the redundant content was removed; therefore, using a simple grammar without redundancy,
+should decrease the amount of cognitive load needed to use voice programming in computer science education.
 
 \section{Blockly}
 % \subsection{What is the Blockly environment?}
 % \subsection{What is the goal of the Blockly project?}
-Google Blockly is a JavaScript library that creates a visual block programming environment where core computer science logic can be taught, such as conditionals and looping. 
-Blockly is run in the web browser, which allows it to be used on any smartphone. 
-We chose Google Blockly over other block based languages due to its easily extendible and customizable API.
+Google Blockly is a JavaScript library that creates a visual block programming 
+environment where core computer science logic can be taught, such as conditionals and 
+looping. Blockly is run in the web browser, which gives the opportunity for mobile use. 
+We chose Google Blockly over other block based languages due to its easy to work with and 
+has a customizable API.
 
 % \subsection{How are blocks arranged horizontally? What language do we use to describe this?}
 % \subsection{How are blocks arranged vertically? What language do we use to describe this?}
@@ -112,14 +140,25 @@ The toolbox is where all the allowed blocks for a particular program can be foun
 % TODO: Define 'commands' in this section -- done
 
 %\subsection{Why did we decide to model speech using a fixed grammar?}
-To reduce cognitive load, we focused on creating a concise and fixed grammar, i.e. there is only one way to say a command. While speech 
-recognition can be used for a conversational style of programming, we wanted to mimic the standard idea that computer languages have a rigid grammar (or syntax). 
+To reduce cognitive load, we focused on creating a concise and fixed grammar, 
+meaning there is only one way to say a command, which is a term we use to 
+describe a manipulation performed by speech. While speech recognition can be 
+used for a conversation style of programming, we wanted to mimic the standard 
+idea that computer languages have rigid grammars. 
 
 %\subsection{What choices did we make as we designed that grammar?}
-To create a rigid grammar, we focused on how to make the grammar as simple and succinct as possible. 
-It was important to use verbiage that came naturally as well. 
-For example, instead of having two commands to either move a block above/below another block, we only supply the user to moving a block below another one. 
-Reducing the grammar by even one command simplifies tasks, because instead of saying, ``move block 1 above block 2'' the user can simply use the opposite command and say ``move block 2 below block 1''.
+
+To create a rigid grammar, we focused on making the grammar as simple as
+possible. We employed a guiding principle of \textbf{syntactic parsimony}. That,
+there ought only be one command in the grammar per action in the workspace. For
+this reason, the grammar includes no optional or choice elements. No synonyms
+are allowed for the main verbs (get, delete, change, connect, separate) of the
+sentences of the grammar. We also disallowed variability on prepositional phrase
+location. For example, we only allow ``Change left in block 1 to right'' and not
+``Change left to right in block 1.'' We were also guided by a principle of
+\textbf{semantic parsimony}. The commands ``Move block 2 under block 1'' and
+``Move block 1 under block 2'' for example might be equivalent operations, but
+due to semantic parsimony, we only allow moving blocks \emph{under} one another.
 
 %\subsection{What commands are available in that grammar?}
 %Users must refer to blocks as the block number that is shown on the block\\
@@ -143,11 +182,9 @@ The user has the following commands:
   \item Next level - ``go to the next level''
   \item Stay on level - ``stay on this level''
 \end{itemize}
+\subsection{How do the user interface commands described earlier map to the
+commands in the grammar?}
 
-%\subsection{How do the user interface commands described earlier map to the commands in the grammar?}
-In order to execute the above commands, we use a parser to map interface commands to commands in the grammar. The parser extracts information on which action to execute and which blocks to manipulate if necessary, and passes the structured information to the workspace controller.
-% TODO This sentence is a bit vague
-\subsection{How do the user interface commands described earlier map to the commands in the grammar?}
 
 \section{Turtle}
 
@@ -386,9 +423,27 @@ blocks individually via Algorithm~\ref{alg:relayout}.
 
 \section{Related Work}
 
-\subsection{What is the related work in speech interfaces for programming?}
+Speech interfaces for programming tasks have a long history, dating back to the
+beginning of speech recognition research.
 
-\subsection{What is the related work in speech interfaces for computer science education?}
+The bulk of work aims to improve the productivity of professional developers
+using IDEs. The first body of work here tends to specify its method to a
+particular programming language. For example, \cite{Begel05programmingby}
+creates a grammar for a language, Spoken Java, which is syntactically similar to
+Java, with a goal of disambiguating natural language utterances.
+\cite{desilets2006voicecode} uses a set of rules to trasncribe dictation results
+into fragments of code.
+
+The second group uses voice and other modalities, such as gesture and
+eye-tracking, to control aspects of the IDE which need not be language-specific.
+\cite{delimarschi2014enabling} maps human voice and gestures are mapped to IDE
+commends using hardware sensors for Microsoft Kinect. \cite{glucker2014eyede}
+adds eye-tracking control to IDEs.
+
+% \subsection{What is the related work in speech interfaces for programming?}
+
+% \subsection{What is the related work in speech interfaces for computer science education?}
+
 
 
 \section{Future Work}
