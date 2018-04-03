@@ -54,8 +54,8 @@
 % \subsection{Who is meant to benefit?}
 
 There is tremendous interest in computer science education.
-% cite our of code
-\sg is a platform
+% cite hour of code
+\sg~is a platform
 that may be used to explore topics in computer science education for children
 who may be suffering from disabilities by means of a voice interface to the
 Blockly coding environment. The may help children who are unable to use a mouse
@@ -75,19 +75,45 @@ and keyboard interface.
 
 % TODO We need something more experiential
 
+In this technical report, we shall first describe our design principles for
+$\sg$, following guidelines proposed by cognitive load theory worked out in
+educational psychology and computer science education. Then we will go on to
+describe components of our architecture, from the programming environment to the
+speech recognition interface. After we've described the building blocks, we will
+detail algorithmic work to improve usability. And then we will proceed to
+discuss related and future work.
+
 \section{HCI Principles}
 % \subsection{What HCI principles were kept in mind in the design of our system?}
 % \subsection{How did those HCI principles influence our design decisions?}
-Cognitive load, the amount of thinking required to complete a task, was a main focus when
-% Can we get a citation to a definition?
-making design decisions. According to ``The Limits of Speech Recognition'' by Ben Shneiderman, certain
-applications of speech recognition can be successful as long as the designers of the application 
-focus on creating an efficient and reduced grammar. Our grammar is the structure of language that is 
-recognized by our speech recognition and it is built to be as simple as possible. Simplicity for the
-speech recognition aims at reducing cognitive load by reducing redundancy. In ``Cognitive Load Theory''
-by John Sweller, the redundancy effect is when redundant information causes a user to understand the content
-less than if the redundant content was removed; therefore, using a simple grammar without redundancy,
-should decrease the amount of cognitive load needed to use voice programming in computer science education.
+Cognitive load is the total amount of mental effort being used in the working
+memory~\cite{sweller1988cognitive}. Reducing cognitive load has been linked to
+improved educational outcomes~\cite{kalyuga2010facilitating}, and hence was a
+guiding principle in designing our educational platform.
+
+Cognitive load theory distingusihes between three different types of load:
+
+\begin{itemize}
+  \item \textbf{Intrinsic load.}
+  \item \textbf{Extraneous load.}
+  \item \textbf{Germane load.}
+\end{itemize}
+% TODO Define these and point out relevance for what we're doing (germane load:
+% motivation and interest)
+
+\cite{rebetez2006control} further identifies a series of effects to serve as
+guidelines for creating learning materials:
+
+\begin{itemize}
+  \item \textbf{Redundancy effect}
+  % TODO
+\end{itemize}
+   
+Speech recognition presents particular challenges for designing effective
+educational materials. \cite{Shneiderman:2000:LSR:348941.348990} argues that
+speech input/output consumes cognitive resources in short-term and working
+memory, these effects being mitigated in applications with a limited vocabulary
+and constrained semantics.
 
 \section{Blockly}
 % \subsection{What is the Blockly environment?}
@@ -114,14 +140,18 @@ has a customizable API.
 
 \fig{workspaceDiagram.jpg}{Google Blockly workspace diagram}{width=7cm}
 
-Let us introduce some terminology here that would be used extensively in the paper moving forward.
-Blockly has the concept of a ``workspace''(See figure\ref{fig:workspaceDiagram.jpg}). This is the space where all the blocks that need to be executed in the program are located.
-A ``chain of blocks'' (See figure \ref{fig:workspaceDiagram.jpg}) is used to refer to a series of vertically-connected blocks in the workspace that are executed sequentially. 
-In Google Blockly, it is also possible to several independent chains of blocks in the workspace. 
-The order of execution causes the topmost chain of blocks to be executed first. 
-The topmost chain is decided based on the highest vertical location of the first block in the chain. 
-Normally, users interact with Blockly by looking at the workspace and adding blocks to the it by using a menu that holds the allowed blocks for a program. We will refer to this menu of allowed blocks as the  ``toolbox'' (See figure \ref{fig:workspaceDiagram.jpg}). 
-In order to move blocks from the toolbox to the workspace, users must click and drag using a mouse in a traditional Blockly setting.
+Let us introduce some terminology here that would be used extensively in the
+paper moving forward. Blockly has the concept of a \textbf{workspace}, as shown
+in \textbf{Figure~\ref{fig:workspaceDiagram.jpg}}. This is the space where all
+the blocks that need to be executed in the program are located. A \textbf{chain
+  of blocks} refers to a series of vertically connected blocks in the workspace.
+Vertically connected blocks are executed sequentially. In Google Blockly, it is
+also possible to several unconnected chains of blocks in the workspace. These
+chains are executed in order of the coordinates of their topmost block. A menu
+to the left of the workspace holds the available block types for a program. We
+will refer to this menu of available block types as the \textbf{toolbox}. In
+order to move blocks from the toolbox to the workspace, users must click and
+drag using a mouse in a traditional Blockly setting.
 
 The toolbox is where all the allowed blocks for a particular program can be found. Google Blockly has a large library of blocks, which can be grouped as:
 \begin{itemize}
