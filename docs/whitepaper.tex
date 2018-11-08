@@ -42,20 +42,18 @@
 \begin{document}
 \maketitle
 
-\begin{abstract}
-  We introduce the $\sg$ platform for exploring topics in computer science
-  education.
-  % TODO
-\end{abstract}
+% \begin{abstract}
+%   We introduce the $\sg$ platform for exploring topics in computer science
+%   education.
+% \end{abstract}
 
 \section{Introduction}
 
 % \subsection{What is the goal of the project? What problem does it solve?}
 % \subsection{Who is meant to benefit?}
 
-There is tremendous interest in computer science education.
-% cite hour of code
-\sg~is a platform
+% cite our of code
+\sg is a platform
 that may be used to explore topics in computer science education for children
 who may be suffering from disabilities by means of a voice interface to the
 Blockly coding environment. The may help children who are unable to use a mouse
@@ -88,6 +86,8 @@ Speech Recognition and Suggestions) culminates into a user interface depicted in
 \fig{ResearchOverview.jpg}{Speech games workspace diagram}{width=10cm}
 \textbf{Figure~\ref{fig:ResearchOverview.jpg}}.
 
+% TODO Show the whole thing!
+
 \section{HCI Principles}
 % \subsection{What HCI principles were kept in mind in the design of our system?}
 % \subsection{How did those HCI principles influence our design decisions?}
@@ -119,6 +119,10 @@ educational materials. \cite{Shneiderman:2000:LSR:348941.348990} argues that
 speech input/output consumes cognitive resources in short-term and working
 memory, these effects being mitigated in applications with a limited vocabulary
 and constrained semantics.
+
+% Clarify that we are talking about the germane load
+% Schneiderman points out limitations of speech interfaces
+% Introduce our decisions in the context of Schneiderman's criticism
 
 \section{Blockly}
 % \subsection{What is the Blockly environment?}
@@ -249,6 +253,15 @@ In order to implement the voice-programming interface using Blockly, we decided 
 Turtle is a Blockly game, that contains a turtle that can be moved around using a small subset of commands (blocks). 
 The objective of the game is to make the turtle trace a particular path shown to the user, using only the provided blocks in the toolbox.
 Turtle is one of many Blockly games that we could have chosen in combination with Google Blockly and our speech recognition, but chose it for its simplistic design.
+% % http://edutechwiki.unige.ch/en/Cognitive_load Cite Rebetez
+% % Worked examples effect (for levels)
+% % Problem completion effect (for progressive difficulty)
+% % Guidance fading effect
+% Turtle, is a Blockly game, that has a turtle that can be moved with a small
+% set of commands in the Google Blockly library. The objective of the game is to trace the path shown to the
+% user with the provided blocks in the toolbox. Turtle is one of many Blockly games
+% that we could have chosen in combination with Google Blockly and our speech recognition,
+% but chose it for its simplistic design.
 
 \begin{itemize}
   \item $\textbf{move}$: moves the turtle forward
@@ -518,7 +531,7 @@ in game-like environments.
 
 
 
-\section{Future Work}
+% \section{Future Work}
 
 \bibliographystyle{unsrt}
 \bibliography{whitepaper}
